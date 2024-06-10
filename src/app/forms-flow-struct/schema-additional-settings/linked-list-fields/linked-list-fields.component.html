@@ -1,0 +1,22 @@
+<ng-container *ngIf="parentListFields?.length && view; else noFields">
+  <ng-container *ngFor="let link of view.links">
+    <form class="mt-4" [formGroup]="link.form">
+      <formly-form class="d-flex" [form]="link.form" [fields]="link.fields" [model]="link.model"></formly-form>
+    </form>
+  </ng-container>
+
+  <button
+    class="mt-2 mb-2"
+    mat-stroked-button
+    color="primary"
+    matRipple
+    (click)="addLinkFormly()"
+    matTooltip="{{ 'Add Relation' | translate }}"
+  >
+    <app-icon [name]="'add'"></app-icon>
+    {{ 'Add Lists Relation' | translate }}
+  </button>
+</ng-container>
+<ng-template #noFields>
+  <p>{{ 'No Parent/Child fields found in schema' | translate }}</p>
+</ng-template>

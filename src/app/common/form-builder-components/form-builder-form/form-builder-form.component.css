@@ -1,0 +1,1 @@
+.cdk-drag-placeholder{opacity:0}.app-list-item{display:block}.app-list-item:last-child{border:none}::ng-deep .schema-selector{min-width:500px !important}@media(max-width: 540px){::ng-deep .schema-selector{min-width:300px !important}}.list-container.cdk-drop-list-dragging .app-list-item:not(.cdk-drag-placeholder){transition:transform 300ms cubic-bezier(0, 0, 0.2, 1)}

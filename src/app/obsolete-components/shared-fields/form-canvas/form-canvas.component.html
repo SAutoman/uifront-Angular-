@@ -1,0 +1,38 @@
+<!-- <div class="form-preview-wrapper">
+  <mat-card>
+    <h2>{{ name }} Preview</h2>
+
+    <form [formGroup]="createFormForm" (ngSubmit)="onSubmit(createFormForm.value)">
+      <div *ngFor="let item of formFields">
+        <mat-form-field *ngIf="item.listItems">
+          <mat-label>{{ item.name }}</mat-label>
+          <mat-select [id]="'select_' + componentId">
+            <mat-option [id]="field.item + '_' + componentId" *ngFor="let field of item.listItems" [value]="field.item">
+              {{ field.item }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!item.listItems">
+          <input [id]="'inputText_' + componentId" matInput [placeholder]="item.name" type="text" #formName />
+        </mat-form-field>
+      </div>
+
+      <div class="btn-submit-wrapper">
+        <button [id]="'copy_' + componentId" *ngIf="isEditUrl" mat-raised-button color="primary" type="button" (click)="onCopy()">
+          Copy
+        </button>
+        <button
+          [id]="'save_' + componentId"
+          mat-raised-button
+          class="copy"
+          color="primary"
+          type="submit"
+          [disabled]="createFormForm.invalid"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div> -->

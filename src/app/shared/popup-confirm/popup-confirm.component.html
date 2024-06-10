@@ -1,0 +1,13 @@
+<!-- data.title and data.message are  already passed translated -->
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content class="confirm-dialog-content">
+  {{ data.message }}
+</div>
+<mat-dialog-actions class="actions" align="end">
+  <button mat-stroked-button color="primary" [mat-dialog-close]="false">
+    <app-icon name="close"></app-icon> {{ 'Cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" style="margin: 0px 10px" [mat-dialog-close]="true">
+    <app-icon name="check"></app-icon> {{ 'Confirm' | translate }}
+  </button>
+</mat-dialog-actions>

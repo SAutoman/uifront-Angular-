@@ -1,0 +1,25 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Process Steps Relocation' | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="mt-3 grid">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Select Workflow' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedWorkflow" (ngModelChange)="onWorkflowChange()">
+        <mat-option *ngFor="let workflow of workflowsList" [value]="workflow.id">{{ workflow?.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox *ngIf="selectedWorkflow" [(ngModel)]="disableRelocation">
+      {{ 'Disable process step relocation' | translate }}
+    </mat-checkbox>
+  </div>
+  <div class="mat-expansion-panel-footer">
+    <button mat-flat-button color="primary" [disabled]="!selectedWorkflow && !disableRelocation" (click)="onSubmit()">
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+</mat-expansion-panel>

@@ -1,0 +1,11 @@
+::ng-deep {
+  .mat-tab-body-wrapper {
+    overflow: clip;
+    .mat-tab-body {
+      overflow: clip;
+      .mat-tab-body-content {
+        overflow: clip;
+      }
+    }
+  }
+}

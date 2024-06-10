@@ -1,0 +1,27 @@
+<div class="k-i-loading" *ngIf="data.cmd.fields[0] === undefined"></div>
+<div *ngIf="data.cmd.fields[0] !== undefined">
+  <h2 [id]="'header_' + componentId" mat-dialog-title>{{ 'Update name' | translate }}</h2>
+  <mat-dialog-content class="mat-typography">
+    <mat-form-field class="example-form-field">
+      <mat-label>{{ 'Update name' | translate }}</mat-label>
+      <input matInput type="text" [(ngModel)]="data.cmd.fields[0].value" />
+      <button mat-button *ngIf="data.cmd.fields[0]" matSuffix mat-icon-button aria-label="Clear" (click)="data.cmd.fields[0].value = ''">
+        <app-icon [name]="'close'"></app-icon>
+      </button>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      [id]="createId('update')"
+      mat-flat-button
+      color="primary"
+      cdkFocusInitial
+      (click)="update()"
+      [disabled]="!data.cmd.fields[0]"
+      class="mr-2"
+    >
+      {{ 'Update' | translate }}
+    </button>
+    <button [id]="createId('cancel')" mat-stroked-button color="primary" [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+  </mat-dialog-actions>
+</div>

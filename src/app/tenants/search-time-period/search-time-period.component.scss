@@ -1,0 +1,30 @@
+.col-lg-12 {
+  padding: 0 10px;
+}
+
+.submit-wrapper {
+  text-align: right;
+}
+
+.time-period-buttons {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.time-period-btn-radio {
+  padding: 5px;
+  width: fit-content;
+}
+
+.date-wrapper {
+  display: flex;
+}
+
+.from-to-date {
+  padding: 15px;
+}
+
+.row table tr td {
+  width: 20%;
+}

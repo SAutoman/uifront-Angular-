@@ -1,0 +1,66 @@
+@import '../../../assets/styles/variable.scss';
+
+:host {
+  display: block;
+  background-color: $white;
+  height: 100%;
+  position: relative;
+  .wrapper {
+    padding: 16px 16px 0;
+  }
+  ::ng-deep {
+    app-form-builder-form-preview {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+    }
+    .mat-dialog-container .mat-dialog-content .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
+  }
+  .button-wrapper {
+    position: sticky;
+    bottom: 0;
+    padding: 16px;
+    background-color: white;
+    z-index: 100;
+    border-top: solid thin $dark-dividers;
+    margin-left: -16px;
+    margin-right: -16px;
+    width: calc(100% + 32px);
+  }
+  .close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+  }
+}
+
+/*----29-07-2021----*/
+.title-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.title-header button {
+  line-height: 36px !important;
+}
+
+.k-i-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(3px);
+  color: gray;
+  z-index: 10;
+}

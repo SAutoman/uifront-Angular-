@@ -1,0 +1,85 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
+    <button mat-icon-button disabled></button>
+    <div *ngIf="!isReportGrid || !node?.allowNameEdit">
+      <mat-checkbox
+        *ngIf="multipleSelection; else radioButtonTemplate"
+        class="checklist-leaf-node"
+        [checked]="checklistSelection.isSelected(node)"
+        (change)="leafItemSelectionToggle(node)"
+        >{{ node.additionalData?.datasourceField?.customReportTitle ? node.additionalData.datasourceField.customReportTitle : node.item }}
+        <span class="badge" *ngIf="node.additionalData?.fieldType">{{ getFieldTypeLabel(node.additionalData?.fieldType) }}</span>
+      </mat-checkbox>
+    </div>
+
+    <ng-container *ngIf="isReportGrid && checklistSelection.isSelected(node)">
+      <button *ngIf="!node?.allowNameEdit" mat-icon-button color="primary" class="btn btn-sm" (click)="toggleEditMode(node)">
+        <app-icon [name]="'edit'" [matTooltip]="'Add Custom Title' | translate" matTooltipPosition="above"></app-icon>
+      </button>
+      <button
+        *ngIf="!node?.allowNameEdit && node.additionalData?.datasourceField?.customReportTitle"
+        mat-icon-button
+        color="warn"
+        class="btn btn-sm"
+        (click)="resetCustomTitle(node)"
+      >
+        <app-icon [name]="'trash'" [matTooltip]="'Reset Custom Title' | translate" matTooltipPosition="above"></app-icon>
+      </button>
+      <div *ngIf="node?.allowNameEdit && node.additionalData?.datasourceField?.customReportTitle" class="d-flex">
+        <mat-form-field>
+          <mat-label>{{ 'Custom Title' | translate }}</mat-label>
+          <input type="text" matInput #name required [value]="node.additionalData.datasourceField.customReportTitle" />
+          <mat-hint *ngIf="isEmpty(name.value)">{{ 'Required' | translate }}</mat-hint>
+        </mat-form-field>
+        <span class="badge" *ngIf="node.additionalData?.fieldType">{{ getFieldTypeLabel(node.additionalData?.fieldType) }}</span>
+        <button mat-icon-button color="primary" class="btn btn-sm mt-3" (click)="onFieldNameUpdate(name.value, node)">
+          <app-icon [name]="'check'" [matTooltip]="'Save' | translate" matTooltipPosition="above"></app-icon>
+        </button>
+        <button mat-icon-button color="primary" class="btn btn-sm mt-3" (click)="toggleEditMode(node)">
+          <app-icon [name]="'close'" [matTooltip]="'Cancel' | translate" matTooltipPosition="above"></app-icon>
+        </button>
+      </div>
+      <ng-container *ngIf="showAggregationSelectbox && node.additionalData?.datasourceField">
+        <mat-select
+          required
+          class="aggregateSelect"
+          placeholder="{{ Aggregation | translate }}"
+          [(ngModel)]="node.additionalData.datasourceField.aggregationType"
+          (selectionChange)="emitToParent()"
+        >
+          <mat-option *ngFor="let aggType of aggregationTypes" [value]="aggType.value">
+            {{ aggType.viewValue | translate }}
+          </mat-option>
+        </mat-select>
+      </ng-container>
+    </ng-container>
+    <ng-template #radioButtonTemplate>
+      <mat-radio-button
+        class="checklist-leaf-node"
+        [checked]="checklistSelection.isSelected(node)"
+        (change)="leafItemSelectionToggle(node)"
+        [name]="radioButtonGroupName"
+        >{{ node.item }}
+        <span class="badge" *ngIf="node.additionalData?.fieldType">{{ getFieldTypeLabel(node.additionalData?.fieldType) }}</span>
+      </mat-radio-button>
+    </ng-template>
+  </mat-tree-node>
+
+  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.item">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+      </mat-icon>
+    </button>
+    <span *ngIf="!parentSelectionAllowed">{{ node.item }} </span>
+    <mat-checkbox
+      *ngIf="parentSelectionAllowed"
+      [checked]="descendantsAllSelected(node)"
+      [indeterminate]="descendantsPartiallySelected(node)"
+      (change)="itemSelectionToggle(node)"
+    >
+      {{ node.item }}
+      <span class="badge" *ngIf="node.additionalData?.fieldType">{{ getFieldTypeLabel(node.additionalData.fieldType) }}</span>
+    </mat-checkbox>
+  </mat-tree-node>
+</mat-tree>

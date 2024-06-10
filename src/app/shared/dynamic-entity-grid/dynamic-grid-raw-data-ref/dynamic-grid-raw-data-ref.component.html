@@ -1,0 +1,13 @@
+<app-dynamic-entity-creator
+  [fields]="fields"
+  [allowActionsFor]="allowActionsFor"
+  [deItem]="deItem"
+  [schemaId]="schemaId"
+  [areaTypeFromGrid]="areaTypeFromGrid"
+  [isEdit]="isEdit"
+  [schema]="schema"
+  (operationEmitter)="onCreate($event)"
+  [isChildRawData]="true"
+  (close)="close($event)"
+>
+</app-dynamic-entity-creator>

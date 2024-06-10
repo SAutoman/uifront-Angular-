@@ -1,0 +1,61 @@
+<div class="list-item border mb-2" [class.border-primary]="!disabledDragEndDrop && !disabledAll">
+  <div class="flex-column w-100">
+    <div class="d-flex w-100 align-items-center">
+      <button
+        class="move"
+        *ngIf="useDragEndDrop"
+        mat-icon-button
+        color="primary"
+        [cdkDragHandleDisabled]="disabledAll || disabledDragEndDrop"
+        cdkDragHandle
+      >
+        <app-icon [name]="'drag-indicator'"></app-icon>
+      </button>
+
+      <span class="px-2 list-item-content">{{ name }}</span>
+
+      <span>
+        <small class="mx-1 text-muted" *ngIf="nameParam">({{ nameParam }})</small>
+      </span>
+      <!-- External Identifier Field -->
+      <span *ngIf="showExtIdentifierLabel">
+        <small class="mx-1 text-muted">({{ 'External Identifier' }})</small>
+      </span>
+      <div class="d-flex flex-grow-1 justify-content-end">
+        <ng-container *ngFor="let validator of validators">
+          <span class="badge red ml-2" *ngIf="validator?.validatorType">{{ getValidatorName(validator.validatorType) }}</span></ng-container
+        >
+      </div>
+
+      <button
+        *ngIf="useRemove"
+        mat-icon-button
+        color="warn"
+        (click)="onRemove($event)"
+        matTooltip="{{ 'Remove' | translate }}"
+        matTooltipPosition="before"
+        [disabled]="disabledAll || disabledRemove"
+      >
+        <app-icon [name]="'trash'" class="danger"></app-icon>
+      </button>
+
+      <button
+        *ngIf="useEdit"
+        mat-icon-button
+        color="primary"
+        (click)="onEdit($event)"
+        matTooltip="{{ 'Edit' | translate }}"
+        matTooltipPosition="after"
+        [disabled]="disabledAll || disabledEdit"
+      >
+        <app-icon [name]="'edit'" class="primary"></app-icon>
+      </button>
+    </div>
+
+    <div class="d-flex w-100 chips-div" *ngIf="additionalInfo && additionalInfo.length">
+      <mat-chip-list>
+        <mat-chip class="mat-custom-chip" *ngFor="let text of additionalInfo">{{ text | translate }}</mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+</div>

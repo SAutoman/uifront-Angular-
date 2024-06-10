@@ -1,0 +1,112 @@
+<!-- <mat-form-field>
+  <mat-label>Select field Validators</mat-label>
+  <mat-select
+    [id]="'selectFile_' + componentId"
+    *ngIf="fieldType === FieldTypeIds.FileField; else notFile"
+    class="select"
+    (selectionChange)="onValidatorSelected($event)"
+    [(ngModel)]="selectedValidator"
+    matTooltip="You will have to upload a document later when processing case"
+    matTooltipPosition="above"
+  >
+    <mat-option
+      [id]="validatorTypeConverter(validator) + '_' + componentId"
+      *ngFor="let validator of allowedValidatorTypes"
+      [value]="validator"
+    >
+      {{ validatorTypeConverter(validator) }} Validator
+    </mat-option>
+  </mat-select>
+
+  <ng-template #notFile>
+    <mat-select
+      [id]="'selectField_' + componentId"
+      class="select"
+      (selectionChange)="onValidatorSelected($event)"
+      [(ngModel)]="selectedValidator"
+    >
+      <mat-option
+        [id]="validatorTypeConverter(validator) + '_' + componentId"
+        *ngFor="let validator of allowedValidatorTypes"
+        [value]="validator"
+      >
+        {{ validatorTypeConverter(validator) }} Validator
+      </mat-option>
+    </mat-select>
+  </ng-template>
+</mat-form-field>
+
+<div class="test" *ngFor="let validator of validators">
+  <app-string-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.MinMax && fieldType === FieldTypeIds.StringField"
+  ></app-string-field>
+
+  <app-string-email-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.Email && fieldType === FieldTypeIds.StringField"
+  ></app-string-email-field>
+
+  <app-string-regex-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.RegEx && fieldType === FieldTypeIds.StringField"
+  ></app-string-regex-field>
+
+  <app-int-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.MinMax && fieldType === FieldTypeIds.IntField"
+  ></app-int-field>
+
+  <app-decimal-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.MinMax && fieldType === FieldTypeIds.DecimalField"
+  ></app-decimal-field>
+
+  <app-date-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.MinMax && fieldType === FieldTypeIds.DateField"
+  ></app-date-field>
+
+  <app-list-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    [listItems]="listItems"
+    *ngIf="validator.validatorType === ValidatorType.List && fieldType === FieldTypeIds.ListField"
+  ></app-list-field>
+
+  <app-bool-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.Required"
+  ></app-bool-field>
+
+  <app-file-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.AllowedTypes && fieldType === FieldTypeIds.FileField"
+  ></app-file-field>
+
+  <app-textarea-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.MinMax && fieldType === FieldTypeIds.TextareaField"
+  ></app-textarea-field>
+
+  <app-time-field
+    (isChanged)="onChange($event)"
+    [model]="validator"
+    *ngIf="validator.validatorType === ValidatorType.MinMax && fieldType === FieldTypeIds.TimeField"
+  ></app-time-field>
+
+  <div class="remove-btn-wrapper">
+    <button [id]="'close_' + componentId" mat-icon-button color="warn" (click)="onRemove(validator)" matTooltip="Remove Validator">
+      <app-icon [name]="'close'"></app-icon>
+    </button>
+  </div>
+</div> -->

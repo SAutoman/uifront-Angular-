@@ -1,0 +1,24 @@
+app-avatar {
+  width: 40px;
+  height: 40px;
+}
+.user-name {
+  font-size: 14px;
+  @media (max-width: 540px) {
+    display: none;
+  }
+}
+.language-flex img {
+  margin-right: 10px;
+  height: 20px;
+}
+.round-flag-img {
+  margin-right: 10px;
+  height: 20px;
+  cursor: pointer;
+}
+:host {
+  @media (max-width: 540px) {
+    width: inherit;
+  }
+}

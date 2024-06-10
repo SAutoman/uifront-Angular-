@@ -1,0 +1,24 @@
+<div *ngIf="loading$ | async" class="w-100 h-100 d-flex justify-content-center align-items-center">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="table-wrapper">
+  <app-dynamic-entity-grid
+    [showToolButtons]="showToolButtons"
+    [loading]="false"
+    [showAll]="true"
+    [schemaId]="caseSchemaId"
+    [areaType]="areaType"
+    [actions]="actions"
+    [reloadDataSubject]="reloadDataSubject"
+    [workflow]="workflow"
+    [showCreateCaseButton]="showCreateCaseButton"
+    [showStatusChange]="true"
+    (actionEvent)="actionEvent($event)"
+    [allowedGridOperations]="allowedGridOperations"
+    [allowAddAndEditActionInChildGrid]="false"
+    (openCaseCreateDialogue)="onOpenCaseCreateDialogue()"
+    fileName="cases"
+  >
+  </app-dynamic-entity-grid>
+</div>

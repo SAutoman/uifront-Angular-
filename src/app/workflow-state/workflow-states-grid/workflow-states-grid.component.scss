@@ -1,0 +1,14 @@
+.k-i-loading {
+  margin-top: -44px;
+  margin-left: 280px;
+  float: left;
+  position: relative;
+}
+
+:host ::ng-deep {
+  app-dynamic-entity-grid {
+    .grid-container {
+      height: 100% !important;
+    }
+  }
+}

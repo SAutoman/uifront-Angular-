@@ -1,0 +1,45 @@
+<!-- <form [formGroup]="addToCaseForm" (ngSubmit)="onSubmit(addToCaseForm.value.case)">
+  <mat-card>
+    <p>
+      <strong>{{ 'Add' | translate }} {{ 'Select a case' | translate }} {{ 'Raw Data' | translate }} {{ 'to Case' | translate }}</strong>
+    </p>
+
+    <mat-form-field matTooltip="Select case to add raw data to (Cases with status Approved are excluded).">
+      <mat-label> {{ 'Select a case' | translate }}</mat-label>
+      <mat-select [id]="'select_' + componentId" formControlName="case" (selectionChange)="onCaseSelected($event.value)">
+        <mat-option [id]="case.name + i + '_' + componentId" *ngFor="let case of cases; let i = index" [value]="case">
+          {{ case.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <p>{{ 'Selected Items to Add' | translate }}</p>
+    <app-case-grid [dataColumns]="rawDataColumns" [itemsWithValues]="selectedRawDataRows"></app-case-grid>
+
+    <div class="btn-submit-container">
+      <button
+        [id]="'submit_' + componentId"
+        [disabled]="
+          addToCaseForm.invalid ||
+          isRawDataOnSingleCase ||
+          isItemsExist ||
+          isAddRawDataAllowedSupplier ||
+          isAddRawDataAllowedAdmin ||
+          isAddRawDataAllowedTenant ||
+          isDoneApproved
+        "
+        mat-raised-button
+        color="primary"
+        type="submit"
+      >
+        {{ 'Submit' | translate }}
+      </button>
+    </div>
+    <mat-error *ngIf="isRawDataOnSingleCase"><strong>You can't add raw data items that are already in other case.</strong></mat-error>
+    <mat-error *ngIf="isItemsExist"><strong>One or more items from the selected already exist on this case.</strong></mat-error>
+    <mat-error *ngIf="isAddRawDataAllowedSupplier"><strong>Supplier can't add raw data to case created by other user.</strong></mat-error>
+    <mat-error *ngIf="isAddRawDataAllowedAdmin"><strong>Admin can't add raw data to case created by other user.</strong></mat-error>
+    <mat-error *ngIf="isAddRawDataAllowedTenant"><strong>Tenant can't add raw data to case created by other user</strong></mat-error>
+    <mat-error *ngIf="isDoneApproved"><strong>Can't add raw data in case with status Done or Approved</strong></mat-error>
+  </mat-card>
+</form> -->

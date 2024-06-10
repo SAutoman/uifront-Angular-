@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ 'Invite Tenant Admin' | translate }}</h2>
+
+<mat-dialog-content class="mat-typography">
+  <mat-form-field>
+    <mat-label>{{ tenantName }}</mat-label>
+    <input [id]="'inputText_' + componentId" matInput color="primary" type="text" readonly />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ 'Email' | translate }}</mat-label>
+    <input matInput color="primary" type="email" [(ngModel)]="email" required />
+    <mat-error *ngIf="!email">{{ 'Email is required' | translate }}!</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button [id]="'send_' + componentId" mat-flat-button color="primary" cdkFocusInitial (click)="onSendInvitation(email)" class="mr-2">
+    {{ 'Send' | translate }}
+  </button>
+  <button [id]="'cancel_' + componentId" mat-stroked-button color="primary" [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

@@ -1,0 +1,49 @@
+<ng-container *ngIf="view$ | async as view">
+  <form [formGroup]="view.formDef.form">
+    <formly-form [form]="view.formDef.form" [fields]="view.formDef.fields" [model]="view.formDef.model"></formly-form>
+  </form>
+
+  <ng-container *ngIf="view.formFields$ | async as fields">
+    <div class="list-container" cdkDropList [cdkDropListData]="fields" (cdkDropListDropped)="onDrag($event)">
+      <app-list-item
+        *ngFor="let item of fields"
+        class="app-list-item"
+        cdkDrag
+        [cdkDragDisabled]="item.isLockedField"
+        [useDragEndDrop]="!item.isLockedField"
+        [disabledAll]="item.isLockedField"
+        name="{{ item?.viewName }} {{ item?.fieldName ? ' : ' + item?.fieldName : '' }}"
+        [nameParam]="createParamName(item)"
+        [useEdit]="item.type !== 16"
+        [validators]="item.configuration.validators"
+        (edit)="openDialogEditField($event, updateTenantFieldTmpl, item)"
+        (remove)="onRemove($event, item)"
+        [showExtIdentifierLabel]="item?.configuration?.isExternalIdentifier"
+      ></app-list-item>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #updateTenantFieldTmpl>
+  <h3 class="font-weight-bold" mat-dialog-title>{{ 'Update Field' | translate }}</h3>
+  <mat-dialog-content>
+    <app-field-editor
+      *ngIf="updateItem?.type !== connectorFieldType"
+      [isSchemaBuilder]="true"
+      [field]="updateItem"
+      [useApplyTo]="false"
+      [areaType]="areaType"
+      [allowExternalIdentifier]="!isExternalFieldIdentifierPresent"
+      (save)="onFieldUpdate($event)"
+    ></app-field-editor>
+
+    <app-connector-field-editor
+      [field]="updateItem"
+      [ownerSchemaFields$]="setFields$"
+      [ownerSchemaName]="schemaName"
+      [useApplyTo]="false"
+      *ngIf="updateItem?.type === connectorFieldType"
+      (save)="onFieldUpdate($event)"
+    ></app-connector-field-editor>
+  </mat-dialog-content>
+</ng-template>

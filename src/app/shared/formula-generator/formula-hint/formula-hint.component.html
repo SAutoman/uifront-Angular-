@@ -1,0 +1,14 @@
+<mat-card *ngIf="formulaDetails">
+  <div class="formula">{{ formulaDetails.formula }}</div>
+  <div class="description">{{ formulaDetails.description }}</div>
+
+  <div>
+    <b>{{ 'Example' | translate }} - </b>
+    <span class="code">{{ formulaDetails.example }}</span>
+  </div>
+  <hr />
+  <ng-container *ngFor="let param of formulaDetails.params">
+    <div class="param">{{ param.name }}</div>
+    <small>{{ param.information }}</small>
+  </ng-container>
+</mat-card>

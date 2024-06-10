@@ -1,0 +1,10 @@
+<app-wfm-grid
+  #invitationGrid
+  [gridConfiguration]="invitationsGridSettingsConf"
+  [gridData]="gridData"
+  gridAreaType="invitations"
+  pageTitle="Invitations"
+  [actions]="gridActions"
+  (actionEvent)="onActionClick($event)"
+>
+</app-wfm-grid>

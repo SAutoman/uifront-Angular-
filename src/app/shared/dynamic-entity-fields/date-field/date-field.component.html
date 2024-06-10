@@ -1,0 +1,14 @@
+<p class="font-16 font-medium my-2" *ngIf="model">{{ model?.displayName || model?.fieldName }}</p>
+<div *ngIf="showDynamicViewOption">
+  <mat-radio-group class="example-radio-group" [(ngModel)]="model.viewOption" (ngModelChange)="onViewChange($event)">
+    <mat-radio-button [value]="pickerViewEnum?.STATIC" class="example-radio-button">{{ 'Static' | translate }}</mat-radio-button>
+    <mat-radio-button [value]="pickerViewEnum?.DYNAMIC" class="example-radio-button">{{ 'Dynamic' | translate }}</mat-radio-button>
+  </mat-radio-group>
+</div>
+<form [formGroup]="view.form">
+  <formly-form class="w-100" [form]="view.form" [fields]="view.fields" [model]="view.model" (modelChange)="onChange()"></formly-form>
+  <mat-error *ngIf="model.viewOption === pickerViewEnum?.STATIC && !model.isValid && !model.from && !model.to">
+    {{ 'At least one of the fields is required' | translate }}</mat-error
+  >
+  <mat-error *ngIf="showIncorrectDateRangeError">{{ 'Invalid date range' | translate }}</mat-error>
+</form>

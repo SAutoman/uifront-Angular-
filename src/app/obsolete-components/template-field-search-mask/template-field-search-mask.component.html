@@ -1,0 +1,213 @@
+<!-- <div style="margin-bottom: 20px">
+  <mat-accordion>
+    <mat-expansion-panel
+      [id]="'oanelSearchMask' + componentId"
+      (opened)="loadData(); loadUserSearchProfiles()"
+      [expanded]="expanded"
+      class="field-info mat-elevation-z0 mb-3"
+    >
+      <mat-expansion-panel-header (click)="expandedState()">
+        <mat-panel-description>
+          <mat-icon class="material-icons"> search </mat-icon>
+          Search
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="search-wrapper">
+        <mat-card class="selectedFields">
+          <mat-card-content>
+            <div>
+              <div class="search-select">
+                <mat-form-field>
+                  <mat-label>Select field</mat-label>
+                  <mat-select [id]="'selectField_' + componentId" (selectionChange)="onFieldSelected($event)" [(ngModel)]="selectedValue">
+                    <mat-option [id]="field.name + i + '_' + componentId" *ngFor="let field of fields; let i = index" [value]="field">
+                      {{ field.displayName }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div *ngIf="selectedFields.length" class="search-preview">
+              <div class="filters" *ngFor="let item of selectedFields; let i = index">
+                <app-template-field [field]="item" (isFieldChanged)="onFieldChanged($event)"></app-template-field>
+
+                <div>
+                  <button
+                    [id]="'close_' + i + '_' + componentId"
+                    class="right"
+                    mat-icon-button
+                    color="warn"
+                    (click)="onRemove(item)"
+                    matTooltip="Remove Filter"
+                    matTooltipPosition="before"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <div class="search-btn-wrapper">
+                <button [id]="'search_' + componentId" mat-raised-button color="primary" [disabled]="!isSearchValid" (click)="onSearch()">
+                  Search
+                </button>
+                <button
+                  [id]="'reset_' + componentId"
+                  mat-raised-button
+                  color="warn"
+                  class="ml"
+                  (click)="onReset()"
+                  matTooltip="Resets Data to Initial State"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="myFields">
+          <mat-card-content>
+            <div class="field-wrapper">
+              <div *ngIf="length" class="myFields">
+                <mat-form-field>
+                  <mat-label>My Search Profiles</mat-label>
+                  <mat-select
+                    [id]="'selectMine_' + componentId"
+                    (selectionChange)="applyProfile($event.value)"
+                    [(ngModel)]="selectedProfileValue"
+                  >
+                    <mat-option
+                      [id]="field.name + i + '_' + componentId"
+                      *ngFor="let field of searchProfiles; let i = index"
+                      [value]="field"
+                    >
+                      <div class="search-profile-name">
+                        <span>{{ field.name }} </span>
+                        <span class="search-profile-name-info" *ngIf="field.fromUser">(Shared with user)</span>
+                        <span class="search-profile-name-info" *ngIf="field.fromGroup">(Shared with group)</span>
+                      </div>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="add">
+                <div *ngIf="!length">
+                  <span>You don't have any created or shared profiles</span>
+                </div>
+
+                <button
+                  [id]="'menu_' + componentId"
+                  mat-icon-button
+                  [disableRipple]="true"
+                  matTooltip="actions"
+                  matTooltipPosition="above"
+                  [matMenuTriggerFor]="menu"
+                >
+                  <mat-icon class="icon">more_horiz</mat-icon>
+                </button>
+
+                <mat-menu #menu="matMenu" class="menu">
+                  <button [id]="'create_' + componentId" mat-menu-item (click)="onSaveProfileClicked()" [disableRipple]="true">
+                    <mat-icon class="theme-icon">add_circle</mat-icon>
+                    create search profile
+                  </button>
+
+                  <button
+                    [id]="'edit_' + componentId"
+                    mat-menu-item
+                    *ngIf="selectedProfile"
+                    [disableRipple]="true"
+                    (click)="onUpdateClicked(selectedProfileValue)"
+                  >
+                    <mat-icon class="info">create</mat-icon>
+                    edit search profile
+                  </button>
+
+                  <button
+                    [id]="'delete_' + componentId"
+                    mat-menu-item
+                    *ngIf="selectedProfile"
+                    (click)="deleteSearchProfile()"
+                    [disableRipple]="true"
+                  >
+                    <mat-icon color="warn">delete</mat-icon>
+                    delete search profile
+                  </button>
+
+                  <button
+                    [id]="'share_' + componentId"
+                    mat-menu-item
+                    *ngIf="selectedProfile"
+                    [disableRipple]="true"
+                    (click)="onShareClicked(selectedProfileValue)"
+                  >
+                    <mat-icon class="reply">reply</mat-icon>
+                    share search profile
+                  </button>
+
+                  <button [id]="'refresh_' + componentId" mat-menu-item *ngIf="length" [disableRipple]="true" (click)="refreshData()">
+                    <mat-icon class="loop">loop</mat-icon>
+                    refresh raw data
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+
+            <div *ngIf="showNameInput">
+              <form class="name" [formGroup]="searchProfileGroup" (ngSubmit)="onSaveButtonClicked(searchProfileGroup.value)">
+                <mat-form-field>
+                  <mat-label>Search Profile Name</mat-label>
+                  <input [id]="'inputNameCreate_' + componentId" matInput color="primary" formControlName="name" />
+                  <mat-error>Name is required!</mat-error>
+                </mat-form-field>
+
+                <button
+                  [id]="'saveSearchProfile_' + componentId"
+                  color="primary"
+                  [disabled]="searchProfileGroup.invalid"
+                  type="submit"
+                  mat-icon-button
+                >
+                  <mat-icon class="icon"> save </mat-icon>
+                </button>
+              </form>
+            </div>
+
+            <div class="update" *ngIf="showUpdateName">
+              <form
+                class="updateProfile"
+                [formGroup]="updateSearchProfileGroup"
+                (ngSubmit)="onUpdateButtonClicked(updateSearchProfileGroup.value, selectedProfileValue)"
+              >
+                <mat-form-field>
+                  <mat-label>Search Profile Name</mat-label>
+                  <input
+                    [id]="'inputNameUpdate_' + componentId"
+                    matInput
+                    color="primary"
+                    formControlName="updateName"
+                    [(ngModel)]="updateName"
+                  />
+                  <mat-error>Name is required!</mat-error>
+                </mat-form-field>
+
+                <button
+                  [id]="'updateSearchProfile_' + componentId"
+                  color="primary"
+                  [disabled]="updateSearchProfileGroup.invalid"
+                  type="submit"
+                  mat-icon-button
+                >
+                  <mat-icon class="icon"> save </mat-icon>
+                </button>
+              </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div> -->

@@ -1,0 +1,18 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<form *ngIf="numberFieldForm" [formGroup]="numberFieldForm">
+  <mat-form-field hideRequiredMarker appearance="outline">
+    <mat-label>{{ 'From' | translate }}</mat-label>
+    <input [id]="'inputFrom_' + componentId" matInput type="number" formControlName="from" #fromVal />
+    <mat-error *ngIf="numberFieldForm?.get('from')?.touched && numberFieldForm?.get('from')?.errors?.maxLength">
+      {{ 'Max allowed length is 50' | translate }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field hideRequiredMarker appearance="outline">
+    <mat-label>{{ 'To' | translate }}</mat-label>
+    <input [id]="'inputTo_' + componentId" matInput type="number" formControlName="to" #toVal />
+    <mat-error *ngIf="numberFieldForm?.get('to')?.touched && numberFieldForm?.get('to')?.errors?.maxLength">
+      {{ 'Max allowed length is 50' | translate }}
+    </mat-error>
+  </mat-form-field>
+  <mat-error *ngIf="showInvalidRangeError">{{ 'Invalid range' }}</mat-error>
+</form>

@@ -1,0 +1,31 @@
+<!-- <form [formGroup]="stepForm" *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <mat-form-field>
+    <input
+      [id]="'inputString_' + componentId"
+      matInput
+      [placeholder]="fieldControlApiData.fieldMetadata.name"
+      type="text"
+      [formControlName]="controlName"
+      (change)="onChange()"
+      [readonly]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+      #value
+      [required]="stepForm.controls[controlName].errors?.required"
+    />
+
+    <mat-hint>{{ fieldControlApiData.fieldMetadata.funcFieldProps.hintMessage }}</mat-hint>
+
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.required">This field is required.</mat-error>
+
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.email">Not a correct email address.</mat-error>
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.minlength"
+      >Min length of {{ getValidatorValueForErrorMessage(ValidatorType.MinMax).min }} is required.
+    </mat-error>
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.maxlength"
+      >Max length of {{ getValidatorValueForErrorMessage(ValidatorType.MinMax).max }} is allowed.
+    </mat-error>
+
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.pattern"
+      >Field value does not match RegEx <strong>{{ getValidatorValueForErrorMessage(ValidatorType.RegEx).regEx }}</strong> !</mat-error
+    >
+  </mat-form-field>
+</form> -->

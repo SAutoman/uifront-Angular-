@@ -1,0 +1,16 @@
+<ng-container *ngIf="view">
+  <form [formGroup]="view.form">
+    <formly-form class="row" [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+  </form>
+</ng-container>
+
+<div *ngIf="view?.model?.defaultValueType === defaultValueType.computed">
+  <mat-card>
+    <ng-container *ngIf="computedFormula">
+      <button color="primary" class="edit-btn" (click)="openFormulaBuilder(i)">
+        <app-icon [name]="'edit'"></app-icon>
+      </button>
+      {{ computedFormula.expression }}
+    </ng-container>
+  </mat-card>
+</div>

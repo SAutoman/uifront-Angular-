@@ -1,0 +1,178 @@
+<!-- <div style="text-align: center">
+  <h1 class="display-4">Create Process Step</h1>
+</div>
+
+<mat-card>
+  <div class="field-selector-container">
+    <h2>Select Field</h2>
+    <mat-form-field class="example-full-width">
+      <input
+        [id]="'inputProcessStepName_' + componentId"
+        matInput
+        placeholder="Process name"
+        [(ngModel)]="processName"
+        #formNameInput="ngModel"
+        required
+        class="process-name"
+      />
+      <mat-error *ngIf="formNameInput.invalid && (formNameInput.dirty || formNameInput.touched)">Name is required.</mat-error>
+    </mat-form-field>
+
+    <div class="search">
+      <div style="width: 100%; padding: 0 3% 0 0">
+        <ng-container *ngIf="isSupportedSearchControl(selectedType)">
+          <mat-form-field *ngIf="getSearchControl(selectedType)">
+            <input
+              [id]="'search_' + componentId"
+              matInput
+              type="text"
+              placeholder="Search"
+              [formControl]="getSearchControl(selectedType)"
+            />
+          </mat-form-field>
+        </ng-container>
+      </div>
+      <div>
+        <mat-button-toggle-group class="btn-toggle-group" [value]="selectType.Forms" (change)="onSelectType($event.value)">
+          <mat-button-toggle [id]="'toggleForms_' + componentId" [value]="selectType.Forms">Forms</mat-button-toggle>
+          <mat-button-toggle [id]="'toggleFields_' + componentId" [value]="selectType.Fields">Fields</mat-button-toggle>
+          <mat-button-toggle [id]="'toggleLists_' + componentId" [value]="selectType.Lists">Lists</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+
+    <div
+      cdkDropList
+      #selectList="cdkDropList"
+      [cdkDropListData]="interChangeableFields"
+      [cdkDropListConnectedTo]="[selectedList]"
+      class="fields-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div cdkDrag [cdkDragData]="item" class="fields-box" *ngFor="let item of interChangeableFields; let i = index">
+        {{ item.name }}
+        <div class="remove-btn-wrapper">
+          <button [id]="'add_' + i + '_' + componentId" mat-icon-button color="warn" (click)="onSelectableFieldsAdd(item)">
+            <app-icon [name]="'add'"></app-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+    </mat-paginator>
+    <div *ngIf="selectedType === selectType.Fields">
+      <app-custom-field [isNew]="true" (onFieldCreated)="onCreate($event)"></app-custom-field>
+    </div>
+  </div>
+
+  <div class="field-selector-container">
+    <h2>Selected process fields</h2>
+
+    <div
+      [id]="selectedFormFieldsId"
+      cdkDropList
+      #selectedList="cdkDropList"
+      [cdkDropListData]="selectedFields"
+      [cdkDropListConnectedTo]="[selectList]"
+      class="fields-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="fields-box" *ngFor="let item of selectedFields; let i = index" cdkDrag [cdkDragData]="item">
+        <div class="name" *ngIf="item.name.length < 35; else longName">{{ item.name }}</div>
+        <ng-template #longName>
+          <div class="name" [matTooltip]="item.name" matTooltipPosition="before">{{ item.name.slice(0, 20) }}..... details</div>
+        </ng-template>
+        <mat-accordion>
+          <mat-expansion-panel [id]="'panelFieldInfo_' + i + '_' + componentId" class="field-info mat-elevation-z0 mb-3">
+            <mat-expansion-panel-header>
+              <mat-panel-title *ngIf="fieldTypeViewMap.hasValue(item.type)">{{ fieldTypeViewMap.getValue(item.type) }}</mat-panel-title>
+              <mat-panel-description> Enter details for this field </mat-panel-description>
+            </mat-expansion-panel-header>
+
+   
+
+            <app-render-field-wrapper
+              [fieldType]="item.type"
+              (currentFieldId)="onFieldEdited(item)"
+              [model]="item.field"
+              [renderType]="item.field.renderType"
+              [fieldId]="item.id"
+              *ngIf="
+                item.processStepType === selectType.Fields ||
+                item.processStepType === selectType.Lists ||
+                item.processStepType === selectType.CustomField
+              "
+            ></app-render-field-wrapper>
+
+            <app-custom-field
+              [listItems]="listItems"
+              (onFieldUpdated)="onFieldChanged($event)"
+              *ngIf="
+                item.processStepType === selectType.Fields ||
+                item.processStepType === selectType.Lists ||
+                item.processStepType === selectType.CustomField
+              "
+              [field]="mapProcessStepModel(item)"
+              [isNew]="false"
+              [isCustom]="item.field.isCustom"
+            ></app-custom-field>
+
+            <app-form-field
+              [model]="item.form"
+              (currentFormId)="onFieldEdited(item)"
+              *ngIf="item.processStepType === selectType.Forms"
+            ></app-form-field>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div class="remove-btn-wrapper">
+          <button
+            [id]="'close_' + i + '_' + componentId"
+            mat-icon-button
+            color="warn"
+            (click)="onSelectedFieldRemove(item)"
+            matTooltip="Remove Field"
+            matTooltipPosition="after"
+          >
+            <app-icon [name]="'close'"></app-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-accordion *ngIf="functionFields.length > 0">
+    <mat-expansion-panel
+      [id]="'panelFunctions_' + componentId"
+      (opened)="isFuncBuilderExpanded = true"
+      (closed)="isFuncBuilderExpanded = false"
+      [expanded]="isFuncBuilderExpanded"
+      class="mat-elevation-z0 mb-3"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>Build Functions</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <app-function-builder-wrapper
+        *ngIf="isFuncBuilderExpanded"
+        [items]="functionFields"
+        [tenant]="tenant"
+        [functions]="functions"
+      ></app-function-builder-wrapper>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card>
+
+<mat-card>
+  <mat-tab-group>
+    <mat-tab label="Process Preview">
+      <app-form-canvas
+        [name]="processName"
+        [formFields]="selectedFields"
+        *ngIf="selectedFields.length > 0 && processName"
+        (isFormSubmited)="onFormSubmited()"
+        (isCopySubmited)="onCopySubmited()"
+      ></app-form-canvas>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card> -->

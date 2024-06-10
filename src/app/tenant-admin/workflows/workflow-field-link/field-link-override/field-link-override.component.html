@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ 'Set Rules For' | translate }} {{ field }}</h2>
+
+<mat-dialog-content>
+  <ng-container *ngIf="view">
+    <form [formGroup]="view.form">
+      <formly-form [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+    </form>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()" color="primary"><app-icon name="close"></app-icon>{{ 'Cancel' | translate }}</button>
+  <button mat-flat-button color="primary" (click)="save()" [disabled]="!view.form.valid">
+    <app-icon name="save"></app-icon>{{ 'Save' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,24 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<form [formGroup]="decimalFieldForm">
+  <mat-form-field hideRequiredMarker appearance="outline">
+    <mat-label>{{ 'From' | translate }}</mat-label>
+    <input [id]="'inputFrom_' + componentId" matInput type="number" formControlName="from" />
+    <mat-error *ngIf="decimalFieldForm?.get('from')?.touched && decimalFieldForm?.get('from')?.errors?.maxLength">
+      {{ 'Max allowed length is 50' | translate }}
+    </mat-error>
+    <mat-error *ngIf="decimalFieldForm?.get('from')?.touched && decimalFieldForm?.get('from')?.errors?.decimalPlacesLengthExceed">
+      {{ 'Allowed up to 2 places of decimal' }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field hideRequiredMarker appearance="outline">
+    <mat-label>{{ 'To' | translate }}</mat-label>
+    <input [id]="'inputTo_' + componentId" matInput type="number" formControlName="to" />
+    <mat-error *ngIf="decimalFieldForm?.get('to')?.touched && decimalFieldForm?.get('to')?.errors?.maxLength">
+      {{ 'Max allowed length is 50' | translate }}
+    </mat-error>
+    <mat-error *ngIf="decimalFieldForm?.get('from')?.touched && decimalFieldForm?.get('from')?.errors?.decimalPlacesLengthExceed">
+      {{ 'Allowed up to 2 places of decimal' }}
+    </mat-error>
+  </mat-form-field>
+  <mat-error *ngIf="showInvalidRangeError">{{ 'Invalid range' }}</mat-error>
+</form>

@@ -1,0 +1,98 @@
+<div *ngIf="cascadeSelectsForm; else noCascade" [formGroup]="cascadeSelectsForm" class="cascade-wrapper">
+  <button
+    type="button"
+    *ngIf="formControl.value && to.canResetSelection"
+    class="reset-button"
+    mat-icon-button
+    color="warn"
+    (click)="resetValueForCascadeSelects($event)"
+  >
+    <app-icon [name]="'close'"></app-icon>
+  </button>
+  <div formArrayName="cascadeSelectGroups">
+    <ng-container *ngFor="let group of cascadeSelectGroups.controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-label>{{ getSelectName(i) }}</mat-label>
+        <mat-select
+          class="cascadeSelect"
+          formControlName="selectControl"
+          [disabled]="to.disabled || !getSelectOptions(i)?.length"
+          (keyup)="checkForResetEvent($event)"
+        >
+          <mat-option *ngFor="let option of getSelectOptions(i)" [value]="option.value" [disabled]="option.disabled">
+            {{ option.key }}
+          </mat-option>
+        </mat-select>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #noCascade>
+  <button
+    type="button"
+    *ngIf="formControl.value && to.canResetSelection"
+    class="reset-button"
+    mat-icon-button
+    color="warn"
+    [disabled]="to.disableButtons || to.readonly || to.disabled"
+    (click)="resetValue($event)"
+  >
+    <app-icon [name]="'close'"></app-icon>
+  </button>
+  <mat-select
+    [id]="id"
+    [formControl]="formControl"
+    [formlyAttributes]="field"
+    [placeholder]="to.placeholder"
+    [tabIndex]="to.tabindex"
+    [required]="required"
+    [multiple]="to.multiple"
+    (selectionChange)="change($event)"
+    [errorStateMatcher]="errorStateMatcher"
+    [aria-label]="_getAriaLabel()"
+    [aria-labelledby]="_getAriaLabelledby()"
+    [disableOptionCentering]="to.disableOptionCentering"
+    [typeaheadDebounceInterval]="to.typeaheadDebounceInterval"
+    [disabled]="to.disabled"
+    (keyup)="checkForResetEvent($event)"
+    [matTooltip]="tooltip$ | async"
+  >
+    <ng-container *ngIf="filteredOptions$ | async as selectOptions">
+      <ng-container
+        *ngIf="to.multiple && to.selectAllOption"
+        [ngTemplateOutlet]="selectAll"
+        [ngTemplateOutletContext]="{ selectOptions: selectOptions }"
+      >
+      </ng-container>
+      <ng-container *ngIf="to.showSearchInput">
+        <input
+          class="searchInput"
+          type="text"
+          placeholder="Search"
+          matInput
+          autocomplete="off"
+          [formControl]="searchTerm"
+          (click)="$event.stopPropagation()"
+          (keydown)="ignoreSpaceKey($event)"
+        />
+      </ng-container>
+      <ng-container *ngFor="let item of selectOptions">
+        <mat-optgroup *ngIf="item.group" [label]="item.label">
+          <mat-option *ngFor="let child of item.group" [value]="child.value" [disabled]="child.disabled">
+            {{ child.label }}
+          </mat-option>
+        </mat-optgroup>
+
+        <mat-option *ngIf="!item.group" [value]="item.value" [disabled]="item.disabled">{{ item.label }}</mat-option>
+      </ng-container>
+    </ng-container>
+  </mat-select>
+</ng-template>
+
+<ng-template #selectAll let-selectOptions="selectOptions">
+  <mat-option (click)="toggleSelectAll(selectOptions)">
+    <mat-pseudo-checkbox class="mat-option-pseudo-checkbox" [state]="getSelectAllState(selectOptions)"> </mat-pseudo-checkbox>
+    {{ to.selectAllOption }}
+  </mat-option>
+</ng-template>

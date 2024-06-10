@@ -1,0 +1,65 @@
+<mat-expansion-panel
+  *ngIf="!isDialog; else gridComponent"
+  class="mat-elevation-z0 m-b-16"
+  [id]="createId('case-raw-data')"
+  [expanded]="false"
+>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="component-title">
+        <div class="title-flex">
+          <span class="material-icons"> article </span>
+          {{ title | translate }}
+        </div>
+      </div>
+      <div *ngIf="!areAllLoaded()" class="k-i-loading"></div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngTemplateOutlet="gridComponent"></ng-container>
+</mat-expansion-panel>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" *ngIf="isDialog" (click)="dialogRef.close()">
+    <app-icon name="close"></app-icon> {{ 'Close' | translate }}
+  </button>
+</mat-dialog-actions>
+
+<ng-template #addDataTmpl>
+  <mat-dialog-content>
+    <app-form-builder-form-preview
+      [fields$]="schemaFields$"
+      [schema]="schema"
+      [systemFields]="row?.systemFields"
+    ></app-form-builder-form-preview>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="close(true)"><app-icon name="close"></app-icon>{{ 'Cancel' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>
+<ng-template #gridComponent>
+  <mat-dialog-content>
+    <ng-container *ngIf="rawDataDetails?.length">
+      <div *ngFor="let articleData of rawDataDetails; let i = index" class="modal-grid-container">
+        <p>{{ articleData.displayName }} - {{ articleData.dynamicEntityIds.length }} items</p>
+
+        <app-dynamic-entity-grid
+          *ngIf="articleData.dynamicEntityIds.length"
+          [allowedGridOperations]="detailGridOperations"
+          [loading]="false"
+          [showAll]="showAll"
+          [showInfoBtnInSubGrid]="true"
+          [schemaId]="articleData.schemaId"
+          [dynamicEntityIds]="articleData.dynamicEntityIds"
+          [actions]="actions"
+          (actionEvent)="actionEvent($event, i)"
+          (loaded)="dataLoaded($event, i)"
+          [areaType]="areatypeEnum.rawData"
+          [allowAddAndEditActionInChildGrid]="false"
+          [isPaginationOptional]="true"
+          [isPreviewModule]="true"
+          [workflowStateId]="articleData.wfStateId"
+          [workflow]="workflow"
+        ></app-dynamic-entity-grid>
+      </div>
+    </ng-container>
+  </mat-dialog-content>
+</ng-template>

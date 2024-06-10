@@ -1,0 +1,41 @@
+li {
+  list-style-type: none;
+}
+
+.card {
+  display: inline-block;
+  max-width: 468px;
+  width: 100%;
+}
+
+.scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 370px;
+}
+
+.actions {
+  text-align: right;
+}
+
+.actions button {
+  margin-right: 5px;
+}
+
+.btn-edit,
+.btn-delete {
+  margin: 5px;
+}
+
+.search-icon {
+  margin-top: 7px;
+}
+
+.search-field {
+  background-color: white;
+  padding: 20px;
+
+  input {
+    padding-bottom: 7px;
+  }
+}

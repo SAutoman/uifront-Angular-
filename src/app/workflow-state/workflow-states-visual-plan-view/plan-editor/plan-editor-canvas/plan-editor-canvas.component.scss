@@ -1,0 +1,69 @@
+@import '../../../../../assets/styles/variable';
+.data-mapper {
+  margin: 10px;
+}
+
+.mappings {
+  padding: 5px 10px;
+}
+
+.canvas-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  .sidebar {
+    margin-right: 5px;
+    width: 335px;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    overflow-y: auto;
+    max-height: calc(100% - 100px);
+  }
+
+  .toolbox {
+    background: $white;
+    border-right: 1px solid $border;
+    flex: 1 1 42px;
+    max-width: 42px;
+    min-width: 42px;
+    width: 42px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    .saveBtn {
+      margin-top: auto;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    position: absolute;
+    z-index: 10;
+    bottom: 5px;
+    right: 10px;
+  }
+  canvas {
+    height: 90%;
+    flex: 2 1 auto;
+    width: 100%;
+  }
+}
+
+.colorOption {
+  height: 30px;
+
+  .colorIndicator {
+    margin-right: 5px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    border: 1px solid grey;
+  }
+}

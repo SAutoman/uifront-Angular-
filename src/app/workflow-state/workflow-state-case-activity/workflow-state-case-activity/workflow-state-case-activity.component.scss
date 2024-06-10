@@ -1,0 +1,140 @@
+@import '../../../../assets/styles/variable.scss';
+.mat-button {
+  padding-left: 0;
+}
+
+.title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid thin $dark-dividers;
+  height: 48px;
+  padding: 0 16px;
+  button {
+    line-height: 36px !important;
+  }
+}
+:host {
+  ::ng-deep {
+    .mat-tab-group {
+      height: calc(100% - 54px);
+      position: relative;
+      .mat-tab-body-wrapper {
+        height: 100% !important;
+        .mat-tab-body-content {
+          padding: 16px;
+          .comments-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+            button {
+              position: absolute;
+              top: -12px;
+              right: -12px;
+              width: 24px;
+              height: 24px;
+              border-radius: 24px;
+              border: solid thin $dark-dividers;
+              background-color: $white;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              app-icon {
+                width: 18px;
+                height: 18px;
+              }
+              &:hover {
+                background-color: $bodycolor;
+              }
+              &.delete-btn {
+                right: 4px;
+                app-icon {
+                  stroke: $danger;
+                }
+              }
+              &.edit-btn {
+                right: 32px;
+                app-icon {
+                  stroke: $themecolor;
+                }
+              }
+            }
+          }
+        }
+      }
+      app-dynamic-entity-creator {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        border: solid thin $dark-dividers;
+        height: auto;
+        width: calc(100% - 48px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        justify-self: start;
+        border-radius: 8px;
+      }
+    }
+  }
+}
+.activity-msg {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 !important;
+  .cell {
+    padding: 8px;
+    border-bottom: solid thin $dark-dividers;
+    border-right: solid thin $dark-dividers;
+    margin-right: -1px;
+    flex-grow: 1;
+    label {
+      width: 100%;
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+    p {
+      margin: 8px 0 0;
+    }
+
+    .link-btn {
+      margin-top: 6px;
+    }
+    &.document {
+      order: 999;
+    }
+    &.content {
+      order: 1000;
+      width: 100%;
+      border-bottom: none;
+      border-right: none;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+  }
+}
+
+/*----11-08-2021----*/
+.loader-process {
+  position: relative;
+  max-height: 100%;
+  height: calc(100% - 48px);
+  .mat-tab-group {
+    height: 100%;
+  }
+}
+.loader-process .mat-progress-spinner-indeterminate-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  z-index: 11;
+}
+
+.loader-process ::ng-deep .mat-tab-body-content {
+  height: calc(100vh - 15vh);
+  overflow: auto !important;
+}

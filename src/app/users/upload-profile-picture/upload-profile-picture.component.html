@@ -1,0 +1,34 @@
+<mat-card class="outline mat-elevation-z0 m-b-16">
+  <mat-card-header class="header">
+    <mat-card-title>{{ 'Upload Profile Picture' | translate }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="d-flex align-items-center">
+      <app-avatar [avatar_url]="image" class="mr-4"></app-avatar>
+      <!-- <div  class="user-avatar">
+        <img *ngIf="image" [src]="image" alt="" />
+      </div> -->
+
+      <button [id]="'upload_' + componentId" *ngIf="!fileName" class="mr-3" mat-flat-button color="primary" (click)="file.click()">
+        {{ isUserLogo ? ('Edit' | translate) : ('Add' | translate) }}
+      </button>
+
+      <button *ngIf="image && !fileName" class="mr-3" mat-flat-button color="warn" (click)="delete()">
+        {{ 'Delete' | translate }}
+      </button>
+
+      <button class="mr-3" [id]="'save_' + componentId" *ngIf="fileName" mat-flat-button color="primary" (click)="onSaveClicked()">
+        {{ 'Save' | translate }}
+      </button>
+      <button [id]="'remove_' + componentId" *ngIf="fileName" class="mr-3" mat-flat-button color="warn" (click)="onRemove()">
+        {{ 'Remove' | translate }}
+      </button>
+
+      <input #file hidden type="file" accept=".jpg, .jpeg, .png" (change)="onUpload($event)" (click)="$event.target.value = null" />
+    </div>
+    <div class="info-box error mt-3" *ngIf="!isValid">
+      {{ 'File type not allowed! Allowed types are' | translate }}: <strong>.png, .jpg, .jpeg</strong>
+    </div>
+  </mat-card-content>
+</mat-card>

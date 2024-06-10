@@ -1,0 +1,55 @@
+<div class="container-fluid h-100 overflow-auto" *ngIf="!(loading$ | async); else loading">
+  <div class="row py-3">
+    <mat-card class="col-lg-6 mx-auto">
+      <mat-card-header class="ml-0">
+        <mat-card-title> {{ 'Notification Template' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="mt-3">
+        <form [formGroup]="templateForm">
+          <div class="mb-2">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'Notification name' | translate }}</mat-label>
+              <input matInput type="text" matInput formControlName="name" />
+            </mat-form-field>
+          </div>
+          <div class="mb-2">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'Notification Template' | translate }}</mat-label>
+              <textarea matInput [placeholder]="'Template' | translate" formControlName="template" rows="20"></textarea>
+            </mat-form-field>
+          </div>
+        </form>
+
+        <h3>{{ 'Add template logo' | translate }}</h3>
+        <div class="d-flex align-items-center">
+          <app-avatar [avatar_url]="imageURL" class="mr-4"></app-avatar>
+          <button [id]="'upload_' + componentId" *ngIf="!logoId" class="mr-3" mat-flat-button color="primary" (click)="file.click()">
+            {{ isUserLogo ? ('Edit logo' | translate) : ('Add logo' | translate) }}
+          </button>
+
+          <button [id]="'remove_' + componentId" *ngIf="logoId" class="mr-3" mat-flat-button color="warn" (click)="onRemove()">
+            {{ 'Remove' | translate }}
+          </button>
+
+          <input #file hidden type="file" accept=".jpg, .jpeg, .png" (change)="onFileSelect($event)" (click)="$event.target.value = null" />
+        </div>
+        <div class="info-box error mt-3" *ngIf="!isValid">
+          {{ 'File type not allowed! Allowed types are' | translate }}: <strong>.png, .jpg, .jpeg</strong>
+        </div>
+
+        <div class="mt-3">
+          <button [disabled]="templateForm.invalid" mat-flat-button color="primary" type="button" (click)="onSubmit()">
+            <app-icon [name]="'save'"></app-icon>
+            {{ 'Save' | translate }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

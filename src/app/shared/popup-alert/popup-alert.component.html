@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{ 'Alert' | translate }}</h1>
+<div mat-dialog-content class="confirm-dialog-content">
+  <div mat-dialog-content>
+    {{ data.message }}
+  </div>
+  <mat-dialog-actions class="actions" align="end">
+    <button mat-stroked-button color="primary" [mat-dialog-close]="true">
+      <app-icon name="check"></app-icon>
+      {{ 'Ok' | translate }}
+    </button>
+  </mat-dialog-actions>
+</div>

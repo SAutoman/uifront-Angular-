@@ -1,0 +1,101 @@
+<div [formGroup]="form" *ngIf="form">
+  <div formArrayName="areaForms" *ngFor="let nestedForm of areaForms.controls; let areaIndex = index">
+    <mat-card [formGroupName]="areaIndex" class="outline mat-elevation-z0 m-b-16">
+      <h3 class="m-0 pb-2">{{ uiAreas[areaIndex].viewValue | translate }}</h3>
+      <mat-divider></mat-divider>
+      <br />
+      <mat-card-content>
+        <div class="row">
+          <mat-form-field appearance="outline" class="col-md-4">
+            <mat-label>{{ 'Select Fields' | translate }}</mat-label>
+            <mat-select multiple formControlName="fields">
+              <mat-option *ngFor="let field of fieldOptions" [value]="field.value" (onSelectionChange)="optionChanged($event, areaIndex)">
+                {{ field.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-md-4">
+            <mat-label>{{ 'Select Separator For Key/Value pairs' | translate }}</mat-label>
+            <input matInput type="text" formControlName="keyValueSeparator" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-md-4">
+            <mat-label>{{ 'Select Separator between fields' | translate }}</mat-label>
+            <mat-select formControlName="fieldsSeparator">
+              <mat-option *ngFor="let separator of fieldSeparators" [value]="separator">
+                {{ separator }}
+              </mat-option>
+            </mat-select>
+            <mat-hint *ngIf="nestedForm?.controls?.fieldsSeparator?.value === 'New Line'">{{
+              'Each field shown on a new line' | translate
+            }}</mat-hint>
+          </mat-form-field>
+        </div>
+        <div
+          formArrayName="fieldsAdditionalSettings"
+          *ngIf="fieldsAdditionalSettings(areaIndex)?.controls?.length"
+          cdkDropList
+          [cdkDropListData]="fieldsAdditionalSettings(areaIndex)"
+          (cdkDropListDropped)="onDrag($event, areaIndex)"
+        >
+          <h4 class="m-0">{{ 'Additional settings (optional)' | translate }}</h4>
+          <ng-container *ngFor="let settingForm of fieldsAdditionalSettings(areaIndex).controls; let settingIndex = index">
+            <mat-expansion-panel class="mat-elevation-z0 my-3" cdkDrag>
+              <mat-expansion-panel-header class="pl-0">
+                <mat-panel-title>
+                  <button class="move" mat-icon-button color="primary" (click)="$event.stopPropagation()">
+                    <app-icon [name]="'drag-indicator'"></app-icon>
+                  </button>
+                  <p>{{ settingForm?.controls['displayName']?.value }}</p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="row" [formGroupName]="settingIndex" (mousedown)="stopDrag($event)">
+                <mat-form-field appearance="outline" class="col-md-6">
+                  <mat-label>{{ 'FieldName: number of visible symbols' | translate }}</mat-label>
+                  <input matInput type="number" formControlName="numberOfSymbolsFieldName" />
+                  <mat-hint>0: {{ 'Full FieldName' | translate }}, -1: {{ 'FieldName Hidden' | translate }}</mat-hint>
+                  <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldName?.errors?.isInteger">
+                    {{ 'Please provide integer' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldName?.errors?.required">
+                    {{ 'Required field' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldName?.errors?.min">
+                    {{ 'Number must be equal or greater than -1' | translate }}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="col-md-6">
+                  <mat-label>{{ 'Value: number of visible symbols' | translate }}</mat-label>
+                  <input matInput type="number" formControlName="numberOfSymbolsFieldValue" />
+                  <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldValue?.errors?.isInteger">
+                    {{ 'Please provide integer' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldValue?.errors?.min">
+                    {{ 'Number must be equal or greater than 0' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+        </div>
+        <div class="d-flex justify-content-end" *ngIf="fieldsAdditionalSettings(areaIndex)?.controls?.length">
+          <button mat-stroked-button color="warn" (click)="resetSettings(areaIndex)" class="btn-sm">
+            <app-icon [name]="'delete'"></app-icon>
+            {{ 'Reset Settings' | translate }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="tile-formatter-footer">
+    <button [disabled]="form?.invalid" mat-stroked-button color="warn" (click)="deleteSettings()" class="mr-3">
+      <app-icon [name]="'trash'"></app-icon>
+      {{ 'Remove' | translate }}
+    </button>
+    <button [disabled]="form?.invalid" mat-flat-button color="primary" (click)="onSubmit()">
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+</div>

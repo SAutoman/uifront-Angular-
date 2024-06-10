@@ -1,0 +1,32 @@
+<!-- <form [formGroup]="stepForm" *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <div class="break-word">
+    {{ fieldControlApiData.fieldMetadata.name }}
+  </div>
+
+  <mat-checkbox
+    [id]="'checkbox_' + componentId"
+    color="primary"
+    [formControlName]="controlName"
+    (change)="onChange()"
+    *ngIf="fieldControlApiData.fieldMetadata.renderType === RenderType.Checkbox"
+    [disabled]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+  >
+  </mat-checkbox>
+
+  <mat-radio-group
+    [id]="'radio_' + componentId"
+    [formControlName]="controlName"
+    [required]="stepForm.controls[controlName].errors?.required"
+    class="start-page-buttons"
+    (change)="onChange()"
+    [disabled]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+    *ngIf="fieldControlApiData.fieldMetadata.renderType === RenderType.RadioButton || !fieldControlApiData.fieldMetadata.renderType"
+  >
+    <mat-radio-button [id]="'yes_' + componentId" color="primary" [value]="true" class="start-page-btn-radio">Yes</mat-radio-button>
+    <mat-radio-button [id]="'no_' + componentId" color="primary" [value]="false" class="start-page-btn-radio">No</mat-radio-button>
+  </mat-radio-group>
+
+  <mat-hint>{{ fieldControlApiData.fieldMetadata.funcFieldProps.hintMessage }}</mat-hint>
+
+  <mat-error *ngIf="stepForm.controls[controlName].errors?.required"> This field is required. </mat-error>
+</form> -->

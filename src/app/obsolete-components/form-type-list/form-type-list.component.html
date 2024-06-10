@@ -1,0 +1,7 @@
+<mat-form-field>
+  <mat-chip-list class="d-flex" aria-label="Form type selection">
+    <mat-chip *ngFor="let chip of chips" [selected]="chip.selected" [color]="chip.selected ? 'accent' : ''" (click)="select(chip)">
+      {{ chip.name | translate }}
+    </mat-chip>
+  </mat-chip-list>
+</mat-form-field>

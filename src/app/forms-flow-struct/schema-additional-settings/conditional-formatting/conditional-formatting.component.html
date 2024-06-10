@@ -1,0 +1,44 @@
+<div [formGroup]="form">
+  <mat-slide-toggle class="mb-3" formControlName="isEnabled">
+    <span *ngIf="form.get('isEnabled').value">{{ 'Enabled' | translate }}</span>
+    <span *ngIf="!form.get('isEnabled').value">{{ 'Disabled' | translate }}</span>
+  </mat-slide-toggle>
+  <mat-card class="mat-elevation-z0 outline mb-3">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Name' | translate }}</mat-label>
+      <input type="text" matInput formControlName="name" />
+    </mat-form-field>
+    <h4>Condition</h4>
+    <app-formula-generator
+      [isDialog]="false"
+      [fields]="fields"
+      [formulaDto]="formula"
+      [targetFieldType]="fieldType"
+      (formulaDataUpdate)="formulaDataUpdate($event)"
+    ></app-formula-generator>
+  </mat-card>
+  <mat-card class="mat-elevation-z0 outline">
+    <h4>{{ 'Formatting' | translate }}</h4>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Apply Formatting' | translate }}</mat-label>
+      <mat-select multiple formControlName="formattingArea">
+        <mat-option *ngFor="let formattingArea of formattingAreas" [value]="formattingArea.key">
+          {{ formattingArea.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'How to style' | translate }}</mat-label>
+      <mat-select formControlName="formattingClass">
+        <mat-optgroup *ngFor="let styleType of styleTypes" [label]="styleType.name">
+          <mat-option *ngFor="let className of styleType.items" [value]="className.key" class="state-item" [ngClass]="[className.key]">
+            <div>
+              {{ className.label | translate }}
+            </div>
+          </mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+  </mat-card>
+</div>

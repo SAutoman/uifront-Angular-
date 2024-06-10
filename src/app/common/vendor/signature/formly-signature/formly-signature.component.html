@@ -1,0 +1,17 @@
+<div class="pt-4">
+  <kendo-signature
+    #signature
+    [formControl]="formControl"
+    [formlyAttributes]="field"
+    [maximizable]="false"
+    [required]="to.required"
+    [readonly]="to.readonly"
+    [disabled]="to.disabled || to.readonly || field?.defaultValue"
+    [strokeWidth]="2"
+  ></kendo-signature>
+  <div *ngIf="formControl.value" class="mt-2 text-right">
+    <button mat-raised-button color="warn" (click)="clear()" [disabled]="to.disableButtons || to.readonly || to.disabled">
+      {{ 'Clear' | translate }}
+    </button>
+  </div>
+</div>

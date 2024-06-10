@@ -1,0 +1,198 @@
+<ng-container>
+  <div class="grid-container">
+    <div class="search-wrapper">
+      <ng-container *ngIf="isSearchActive && !noColumnsSelected">
+        <app-dynamic-entity-search-mask
+          [hidden]="!isSearchBarOpen"
+          *ngIf="caseSchemaId"
+          [schemaId]="caseSchemaId"
+          [searchBarOpen$]="searchBarOpenSubject$"
+          [areaType]="areaTypeEnum.workflowState"
+          (searchEvent)="onSearch($event)"
+          (searchClose)="closeSearchBar($event)"
+        >
+        </app-dynamic-entity-search-mask>
+      </ng-container>
+
+      <div *ngIf="loading$ | async" class="k-i-loading"></div>
+
+      <div class="d-flex justify-content-center" *ngIf="noColumnsSelected">
+        {{ 'Select fields to generate a report' | translate }}
+      </div>
+
+      <ng-container class="report-wrapper" *ngIf="gridData && !noColumnsSelected">
+        <kendo-grid
+          #grid
+          class="grid"
+          [data]="gridData"
+          [pageSize]="gridSettings?.state.take"
+          [skip]="gridSettings?.state.skip"
+          [sort]="uiSorting"
+          [sortable]="allowLayoutChange && allowSorting ? { mode: 'multiple' } : false"
+          [columnMenu]="allowLayoutChange ? { sort: false } : false"
+          [groupable]="allowedGridOperations.enableGrouping ? { showFooter: true } : false"
+          (groupChange)="onGroupChange($event)"
+          [group]="groups"
+          [pageable]="true"
+          [scrollable]="true"
+          [resizable]="allowLayoutChange"
+          [reorderable]="allowLayoutChange"
+          [rowClass]="rowClassCheckCallback"
+          (sortChange)="onSortChange($event)"
+          (dataStateChange)="onDataStateChanged($event)"
+          (columnReorder)="onReorder($event)"
+          (columnResize)="onResize($event)"
+          (columnMenuOpen)="columnMenu()"
+          (columnVisibilityChange)="onVisibilityChange($event)"
+          kendoGridSelectBy="publicId"
+          (dataStateChange)="dataStateChange($event)"
+          (cellClick)="onCellClick($event)"
+        >
+          <kendo-grid-messages
+            noRecords="{{ 'There are no items to display' | translate }}"
+            pagerPage="{{ 'Page' | translate }}"
+            pagerOf="{{ 'of' | translate }}"
+            pagerItems="{{ 'items' | translate }}"
+            pagerItemsPerPage="{{ 'items per page' | translate }}"
+          >
+          </kendo-grid-messages>
+          <ng-template kendoPagerTemplate>
+            <div class="d-flex">
+              <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+              <kendo-pager-numeric-buttons [buttonCount]="pagerButtonCount"></kendo-pager-numeric-buttons>
+              <kendo-pager-info></kendo-pager-info>
+              <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            </div>
+            <kendo-pager-page-sizes *ngIf="allowLayoutChange" [pageSizes]="pageSize"></kendo-pager-page-sizes>
+          </ng-template>
+          <ng-template kendoGridToolbarTemplate position="top">
+            <div class="title-bar pl-3">
+              <h5>{{ source?.name }}</h5>
+              <div class="tools">
+                <app-grid-layout-options
+                  [type]="layoutTypeEnum.ReportGrid"
+                  [grid]="grid"
+                  [datasourceId]="source.id"
+                  [allowExports]="true"
+                  [gridSettingsName]="gridSettingsName"
+                  [allowSharing]="allowedGridOperations.allowSharing"
+                  [gridChange$]="gridChanges$"
+                  [groups]="groups"
+                  [aggregates]="aggregates"
+                  [gridSettings]="gridSettings"
+                  [allowLayoutChange]="allowLayoutChange"
+                  (resetGrid)="resetGridLayoutHandler()"
+                  (csvDownloadEmitter)="onDownloadButtonClicked()"
+                >
+                </app-grid-layout-options>
+
+                <button
+                  mat-menu-item
+                  class="tool-button"
+                  matRipple
+                  (click)="addAggregate()"
+                  matTooltip="Aggregates"
+                  (click)="$event.stopPropagation(); $event.preventDefault()"
+                >
+                  <app-icon [name]="'raw-data'"></app-icon>
+                </button>
+
+                <button class="tool-button" matRipple (click)="toggleSearchBar()" [ngClass]="{ 'search-active': isSearchBarOpen }">
+                  <app-icon [name]="'search'"></app-icon>
+                </button>
+
+                <button
+                  matRipple
+                  [class]="isEditActivated ? 'selected' : ''"
+                  class="tool-button"
+                  (click)="toggleEdit()"
+                  matTooltip="{{ 'Edit' | translate }}"
+                  matTooltipPosition="below"
+                >
+                  <app-icon [name]="'edit'"></app-icon>
+                </button>
+                <button
+                  matRipple
+                  [class]="isViewModeActivated ? 'selected' : ''"
+                  class="tool-button"
+                  (click)="toggleView()"
+                  matTooltip="{{ 'View' | translate }}"
+                  matTooltipPosition="below"
+                >
+                  <app-icon [name]="'eye'"></app-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  class="tool-button rounded-0"
+                  (click)="removeDatasource()"
+                  matTooltip="{{ 'Remove' | translate }}"
+                  matTooltipPosition="below"
+                >
+                  <app-icon [name]="'trash'"></app-icon>
+                </button>
+              </div>
+            </div>
+          </ng-template>
+
+          <ng-container *ngFor="let col of gridSettings?.columnsConfig">
+            <kendo-grid-column
+              *ngIf="col.title"
+              [columnMenu]="col.columnMenu"
+              [field]="col.field"
+              [title]="col.title"
+              [width]="col._width"
+              [reorderable]="col.reorderable"
+              [sortable]="col.sortable"
+              [hidden]="col.hidden"
+              [headerClass]="col.headerClass"
+              class="actions"
+            >
+              <ng-template *ngIf="hasGroupAggregate(col.field)" kendoGridGroupFooterTemplate let-aggregates="aggregates">
+                <div *ngIf="aggregates[col.field]?.sum || aggregates[col.field]?.sum === 0">
+                  <b>{{ 'Sum' | translate }}:</b>
+                  {{ aggregates[col.field]?.sum | customNumberFormat: col.field:schema }}
+                </div>
+                <div *ngIf="aggregates[col.field]?.count || aggregates[col.field]?.count === 0">
+                  <b>{{ 'Count' | translate }}:</b> {{ aggregates[col.field]?.count }}
+                </div>
+                <div *ngIf="aggregates[col.field]?.min || aggregates[col.field]?.min === 0">
+                  <b>{{ 'Min' | translate }}:</b>
+                  <span>
+                    {{ aggregates[col.field]?.min }}
+                  </span>
+                </div>
+                <div *ngIf="aggregates[col.field]?.max || aggregates[col.field]?.max === 0">
+                  <b>{{ 'Max' | translate }}:</b>
+                  <span>
+                    {{ aggregates[col.field]?.max }}
+                  </span>
+                </div>
+                <div *ngIf="aggregates[col.field]?.average || aggregates[col.field]?.average === 0">
+                  <b>{{ 'Average' | translate }}: </b> {{ aggregates[col.field]?.average | customNumberFormat: col.field:schema }}
+                </div>
+              </ng-template>
+
+              <!-- Aggregate value in grid footer -->
+              <ng-template kendoGridFooterTemplate *ngIf="hasTotalAggregate(col.field)">
+                <span *ngIf="total[col?.field]?.average">
+                  {{ 'Total Average' | translate }}: {{ total[col?.field]?.average | customNumberFormat: col.field:schema }}
+                </span>
+                <span *ngIf="total[col?.field]?.sum || total[col?.field]?.sum === 0"
+                  >{{ 'Total Sum' | translate }}: {{ total[col?.field]?.sum | customNumberFormat: col.field:schema }}</span
+                >
+                <span *ngIf="total[col?.field]?.count">{{ 'Total Count' | translate }}: {{ total[col?.field]?.count }}</span>
+                <span *ngIf="total[col?.field]?.min || total[col?.field]?.min == 0">
+                  {{ 'Total Min' | translate }}: {{ total[col.field].min }}
+                </span>
+                <span *ngIf="total[col?.field]?.max || total[col?.field]?.max == 0">
+                  {{ 'Total Max' | translate }}: {{ total[col.field].max }}
+                </span>
+              </ng-template>
+            </kendo-grid-column>
+          </ng-container>
+        </kendo-grid>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

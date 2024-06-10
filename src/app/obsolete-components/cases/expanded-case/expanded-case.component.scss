@@ -1,0 +1,99 @@
+// .cases-container {
+//   display: flex;
+//   flex-wrap: wrap;
+//   height: 90vh;
+// }
+
+// mat-card {
+//   margin: 20px 20px 20px 20px;
+//   padding: 20px !important;
+//   flex: 0 0 30%;
+// }
+
+// .btn-submit-wrapper {
+//   padding-top: 0.5rem;
+//   text-align: right;
+// }
+
+// .process {
+//   margin-right: 5px;
+// }
+
+// .cases-list {
+//   border: solid 1px #ccc;
+//   min-height: 60px;
+//   background: white;
+//   border-radius: 4px;
+//   overflow: hidden;
+//   display: block;
+// }
+
+// .cdk-drag-preview {
+//   box-sizing: border-box;
+//   border-radius: 4px;
+//   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+// }
+
+// .cdk-drag-placeholder {
+//   opacity: 0;
+// }
+
+// .cdk-drag-animating {
+//   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// .cases-list.cdk-drop-list-dragging .fields-box:not(.cdk-drag-placeholder) {
+//   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// .box {
+//   border: 1px solid lightgray;
+// }
+
+// .box:hover {
+//   background-color: rgba(200, 200, 200, 0.171);
+// }
+
+// .settings {
+//   margin-right: 5px;
+// }
+
+// .case {
+//   padding: 12px 0px 12px 12px;
+//   display: flex;
+//   margin-bottom: 1px;
+//   align-items: baseline;
+//   background-color: white;
+//   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.096), 0 8px 10px 1px rgba(0, 0, 0, 0.096), 0 3px 14px 2px rgba(0, 0, 0, 0.041);
+//   border-radius: 3px;
+//   border-bottom: 1px solid rgb(163, 163, 163);
+//   border-left: 1px solid rgb(228, 228, 228);
+//   border-top: 1px solid rgb(236, 236, 236);
+//   border-right: 1px solid rgb(228, 228, 228);
+//   justify-content: space-between;
+// }
+
+// .case:hover {
+//   background-color: rgb(240, 240, 240);
+// }
+
+// .info {
+//   color: steelblue;
+// }
+
+// .load {
+//   display: flex;
+//   align-items: center;
+// }
+
+// .span {
+//   margin-left: 10px;
+// }
+
+// .title-wrap {
+//   display: inline-block;
+//   width: 100%;
+//   white-space: nowrap;
+//   overflow: hidden !important;
+//   text-overflow: ellipsis;
+// }

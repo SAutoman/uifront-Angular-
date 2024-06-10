@@ -1,0 +1,46 @@
+@import '../../../assets/styles/variable.scss';
+:host {
+  display: block;
+  max-width: 600px;
+  position: fixed;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  @media (max-width: 540px) {
+    top: 51px;
+    width: calc(100% - 32px);
+  }
+}
+.message {
+  padding: 8px 32px;
+  background-color: rgba($info, 0.1);
+  border-radius: 8px;
+  border: solid thin;
+  @media (max-width: 540px) {
+    background-color: lighten($info, 40%);
+  }
+  p {
+    margin: 0;
+  }
+  button {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    mat-icon {
+      font-size: 16px;
+      color: darken($info, 20%);
+    }
+  }
+  &.info {
+    border-color: $info;
+    p {
+      color: darken($info, 20%);
+    }
+    button {
+      mat-icon {
+        color: darken($info, 20%);
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<input
+  matInput
+  *ngIf="formControl"
+  [id]="id"
+  [matDatepicker]="datePicker"
+  [placeholder]="to.placeholder"
+  [formControl]="formControl"
+  [formlyAttributes]="field"
+  [tabindex]="to.tabindex"
+  [required]="to.required"
+  [readonly]="to.disableManualInput || to.disabled"
+  (dateChange)="onChange($event)"
+  (keyup)="checkForResetEvent($event)"
+/>
+<div class="picker-buttons">
+  <button
+    type="button"
+    *ngIf="formControl.value"
+    color="warn"
+    mat-icon-button
+    (click)="resetValue()"
+    [disabled]="to.disableButtons || to.readonly || to.disabled"
+  >
+    <app-icon [name]="'close'"></app-icon>
+  </button>
+  <mat-datepicker-toggle matSuffix [for]="datePicker" [disabled]="to.readonly || to.disabled"></mat-datepicker-toggle>
+</div>
+<mat-datepicker #datePicker [disabled]="formControl.disabled"></mat-datepicker>

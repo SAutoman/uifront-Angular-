@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{ 'Raw Data' | translate }} in {{ 'Cases' | translate }}</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="mat-typography">
+  <h3 class="pt-3 font-weight-bold">{{ 'Raw Data' | translate }} Status</h3>
+  <span class="badge lg {{ rawData.statusConfig?.color || 'gray' }}">{{ rawData.status }}</span>
+  <!-- {{ workflowState?.currentStatus?.configuration?.color }} -->
+  <!-- <p mat-line> {{note.updated | date}} </p> -->
+
+  <div *ngIf="isLoading" class="spinner">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <div *ngIf="!isLoading">
+    <h3 class="pt-3 font-weight-bold">{{ 'Cases' | translate }}</h3>
+    <mat-expansion-panel class="mat-elevation-z0 mb-3" style="position: relative; max-height: 100%" *ngFor="let wf of casesByWorkflow">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h4>{{ wf?.workflowName }}</h4>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ul *ngIf="wf?.caseDetails?.length; else noData" class="case-list">
+        <li *ngFor="let case of wf?.caseDetails" class="d-flex justify-content-between align-items-center">
+          <div mat-line class="newline-enabled" [matTooltip]="case?.titleHint" [innerHTML]="case.name | sanitize: 'html'"></div>
+          <button
+            [id]="case.name + i + '_' + componentId"
+            class="link"
+            mat-icon-button
+            color="primary"
+            (click)="onCaseClick(case)"
+            matTooltip="{{ 'Go to Case' | translate }}"
+            matTooltipPosition="above"
+          >
+            <app-icon [name]="'arrow-tail-right'">link</app-icon>
+          </button>
+        </li>
+      </ul>
+    </mat-expansion-panel>
+  </div>
+
+  <ng-template #noData>
+    <mat-list-item>
+      <h4>{{ 'Raw Data not used in any case' | translate }}</h4>
+    </mat-list-item>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="py-4">
+  <button id="'ok_' + componentId" mat-flat-button color="primary" [mat-dialog-close]="false">
+    <app-icon name="check"></app-icon>{{ 'OK' | translate }}
+  </button>
+</mat-dialog-actions>

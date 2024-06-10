@@ -1,0 +1,24 @@
+<ng-container *ngIf="view$ | async as view">
+  <form [formGroup]="view.formly.form">
+    <formly-form class="row row-cols-2 px-2" [form]="view.formly.form" [fields]="view.formly.fields" [model]="view.formly.model">
+    </formly-form>
+  </form>
+  <ng-container *ngIf="fieldsTreeNodes && hasFields">
+    <mat-expansion-panel class="mt-1 mb-2 mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-bold">
+          {{ fieldLabel }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-tree-selectbox
+        [selectedItems]="selectedFieldForTree"
+        [rawDatasource]="fieldsTreeNodes"
+        [parentSelectionAllowed]="false"
+        [multipleSelection]="false"
+        (selectionEmitter)="fieldSelectionEmitted($event)"
+      >
+      </app-tree-selectbox>
+    </mat-expansion-panel>
+  </ng-container>
+  <p *ngIf="!hasFields">{{ 'No Fields can be used for this post action' | translate }}</p>
+</ng-container>

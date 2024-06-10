@@ -1,0 +1,161 @@
+<!-- <div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title-group class="card-title">
+        <mat-card-title [id]="'caseName_' + componentId">
+          {{ caseName }}
+        </mat-card-title>
+      </mat-card-title-group>
+      <button [id]="'renameCase_' + componentId" mat-icon-button (click)="renameCase()">
+        <mat-icon> edit </mat-icon>
+      </button>
+      <button [id]="'menuToggle_' + componentId" mat-icon-button (click)="drawer.toggle()">
+        <mat-icon> menu </mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content class="case-container">
+      <mat-drawer-container class="step-drawer" style="min-height: 700px">
+        <mat-drawer #drawer mode="side" position="end" [opened]="true">
+          <div class="step-container">
+            <div
+              class="centered"
+              cdkDropList
+              #availableStep="cdkDropList"
+              [cdkDropListConnectedTo]="[selectedStep]"
+              (cdkDropListDropped)="drop($event)"
+            >
+              <mat-form-field class="search" *ngIf="searchField" appearance="outline">
+                <mat-label>Search in Process Steps</mat-label>
+                <input [id]="'search_' + componentId" matInput #search type="text" [formControl]="searchField" />
+                <mat-icon matSuffix *ngIf="search.value" color="warn" class="clear" (click)="clear()">clear</mat-icon>
+              </mat-form-field>
+
+              <div class="box-step flex" *ngFor="let step of sliced" cdkDrag [cdkDragData]="step" [cdkDragDisabled]="!canEditCase">
+                <div [id]="'name_' + componentId" class="step-box-padding-width">
+                  {{ step.name }}
+                </div>
+                <div>
+                  <button
+                    *ngIf="canEditCase"
+                    [id]="step.name + '_' + componentId"
+                    mat-icon-button
+                    color="warn"
+                    (click)="onProcessStepAddClicked(step)"
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="!sliced.length && searchField" style="text-align: center; color: gray">
+                <span [id]="'noResult_' + componentId">No results found for "{{ searchField.value }}"</span>
+              </div>
+
+              <div *ngIf="length">
+                <mat-paginator
+                  [length]="length"
+                  [pageSize]="pageSize"
+                  [pageSizeOptions]="pageSizeOptions"
+                  (page)="onPageChange($event)"
+                  [disabled]="length <= 6"
+                ></mat-paginator>
+              </div>
+            </div>
+          </div>
+        </mat-drawer>
+        <mat-drawer-content class="step-drawer">
+          <mat-accordion>
+            <div class="toggles-wrapper">
+              <button
+                [id]="'done_' + componentId"
+                [disabled]="doneDisabled || !canEditCase"
+                (click)="onChangedStatus(caseStatusTypes.Done)"
+                mat-button
+                mat-flat-button
+                color="primary"
+                class="toggles-wrapper-button"
+              >
+                Done
+              </button>
+
+              <button
+                [id]="'reopen_' + componentId"
+                [disabled]="disabled || reopenDisabled"
+                (click)="onChangedStatus(caseStatusTypes.ReOpen)"
+                mat-button
+                mat-flat-button
+                color="primary"
+                class="toggles-wrapper-button"
+              >
+                Reopen
+              </button>
+
+              <button
+                [id]="'approve_' + componentId"
+                [disabled]="approveDisabled"
+                (click)="onChangedStatus(caseStatusTypes.Approved)"
+                mat-button
+                mat-flat-button
+                color="primary"
+                class="toggles-wrapper-button"
+              >
+                Approve
+              </button>
+            </div>
+
+            <mat-expansion-panel *ngIf="items">
+              <mat-expansion-panel-header>
+                <mat-panel-title> {{ 'Raw Data' | translate }} in this Case </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="scroll">
+                <kendo-grid [data]="gridData" scrollable="scrollable" [resizable]="true">
+                  <ng-container *ngFor="let item of items">
+                    <kendo-grid-column field="{{ item.name }}" title="{{ item.nameUI }}" width="190"></kendo-grid-column>
+                  </ng-container>
+
+                  <kendo-grid-column title="Actions" width="190">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                      <button class="info" mat-icon-button (click)="onRawDataInfo(dataItem, dataItem.article_name)">
+                        <mat-icon>info</mat-icon>
+                      </button>
+                      <button *ngIf="canEditCase" mat-icon-button color="warn" (click)="onRawDataDelete(dataItem)">
+                        <mat-icon>remove</mat-icon>
+                      </button>
+                    </ng-template>
+                  </kendo-grid-column>
+                </kendo-grid>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <div
+            [id]="'selectedStep_' + componentId"
+            style="margin-top: 5px"
+            cdkDropList
+            #selectedStep="cdkDropList"
+            [cdkDropListData]="stepData"
+            [cdkDropListConnectedTo]="[availableStep]"
+            (cdkDropListDropped)="drop($event)"
+            class="drop-container"
+          >
+            <ng-container>
+              <div *ngFor="let item of stepData; trackBy: trackByStepID" cdkDrag [cdkDragDisabled]="!canEditCase">
+                <mat-accordion>
+                  <app-case-process-step
+                    [currentProcessStep]="item"
+                    [caseId]="caseId"
+                    [canEditCase]="canEditCase"
+                    [canEditCaseError]="canEditCaseError"
+                    (isChangedFields)="onFieldChanged($event)"
+                    (isChangedFormFields)="onFormFieldsChanged($event)"
+                    (emitProcessStep)="onProcessStepRemove($event)"
+                  ></app-case-process-step>
+                </mat-accordion>
+              </div>
+            </ng-container>
+          </div>
+        </mat-drawer-content>
+      </mat-drawer-container>
+    </mat-card-content>
+  </mat-card>
+</div> -->

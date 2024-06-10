@@ -1,0 +1,18 @@
+<h1 mat-dialog-title class="m-0">{{ data.title | translate }}</h1>
+<div mat-dialog-content>
+  <p>{{ data.message | translate }}</p>
+
+  <mat-card class="mb-3 mat-elevation-z0 outline" *ngIf="data.dynamicMessage">
+    <b><u [innerHTML]="data.dynamicMessage | sanitize: 'html'"></u></b>
+  </mat-card>
+
+  <mat-checkbox [(ngModel)]="checked"> {{ 'Remember my choice' | translate }} </mat-checkbox>
+</div>
+<mat-dialog-actions align="end">
+  <button [id]="'cancel_' + componentId" mat-stroked-button color="primary" (click)="onResponse(false)" class="mr-2">
+    {{ 'No' | translate }}
+  </button>
+  <button [id]="'yes_' + componentId" mat-flat-button color="primary" cdkFocusInitial (click)="onResponse(true)" class="mr-2">
+    {{ 'Yes' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,94 @@
+<div class="form-group-container d-flex flex-column w-100">
+  <ng-container *ngIf="useApplyTo && useInView">
+    <div class="row">
+      <small class="col mb-0 text-muted">{{ 'Select Field Area' | translate }}</small>
+    </div>
+    <form class="mb-2" [formGroup]="useInView.form">
+      <formly-form
+        class="row use-in-form-group"
+        [form]="useInView.form"
+        [fields]="useInView.fields"
+        [model]="useInView.model"
+        (modelChange)="onModelChange($event, view)"
+      ></formly-form>
+    </form>
+  </ng-container>
+  <form [formGroup]="view.form" *ngIf="view">
+    <formly-form class="row" [form]="view.form" [fields]="view.fields" [model]="view.model"> </formly-form>
+  </form>
+
+  <ng-container *ngIf="schema$ | async as schema">
+    <mat-expansion-panel class="mb-3 mat-elevation-z0 outline">
+      <mat-expansion-panel-header>
+        {{ 'Labels For Options (required)' | translate }}
+        <app-icon
+          [name]="'info'"
+          class="info-icon ml-2"
+          matTooltip="{{ 'Options Are The Cases Created With The Selected Workflow' | translate }}"
+          matTooltipPosition="below"
+        ></app-icon>
+      </mat-expansion-panel-header>
+      <app-connector-field-option-label-settings
+        [schema]="schema"
+        (labelSettingsEmitter)="labelSettingsUpdated($event)"
+        [labelSettings]="labelSettings"
+      ></app-connector-field-option-label-settings>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="mb-3 mat-elevation-z0 outline">
+      <mat-expansion-panel-header> {{ 'Options Sorting (optional)' | translate }}</mat-expansion-panel-header>
+      <app-connector-field-options-sorting
+        [schema]="schema"
+        [sortingRules]="sortingRules"
+        (optionSortingEmitter)="sortingRulesUpdated($event)"
+      >
+      </app-connector-field-options-sorting>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="mb-3 mat-elevation-z0 outline">
+      <mat-expansion-panel-header>{{ 'Show Option Rules (optional)' | translate }}</mat-expansion-panel-header>
+      <app-connector-field-option-rules
+        [schema]="schema"
+        [ownerSchemaFields$]="ownerSchemaFields$"
+        [ownerSchemaName]="ownerSchemaName"
+        [statuses]="workflowSchemaStatuses"
+        [fieldOptionRules]="filterRules"
+        (optionRulesEmitter)="filterRulesUpdated($event)"
+      >
+      </app-connector-field-option-rules>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="mb-3 mat-elevation-z0 outline">
+      <mat-expansion-panel-header> {{ 'Disable Option Rules  (optional)' | translate }}</mat-expansion-panel-header>
+      <app-connector-field-option-rules
+        [schema]="schema"
+        [ownerSchemaFields$]="ownerSchemaFields$"
+        [ownerSchemaName]="ownerSchemaName"
+        [statuses]="workflowSchemaStatuses"
+        [fieldOptionRules]="disableRules"
+        (optionRulesEmitter)="disableRulesUpdated($event)"
+      >
+      </app-connector-field-option-rules>
+    </mat-expansion-panel>
+
+    <app-field-highlights [field]="field" (update)="highlightsConfigUpdated($event)"> </app-field-highlights>
+
+    <app-field-validators [field]="field" [fieldType]="connectorFieldType$" (update)="onValidatorsUpdate($event)"> </app-field-validators>
+  </ng-container>
+  <div class="button-wrapper">
+    <button class="mr-3" mat-stroked-button color="primary" (click)="onClose()">
+      <app-icon [name]="'close'"></app-icon>
+      {{ 'Cancel' | translate }}
+    </button>
+    <button mat-flat-button color="primary" [disabled]="!isValidForm()" (click)="onSaveForm()">
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

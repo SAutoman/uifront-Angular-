@@ -1,0 +1,34 @@
+<!-- <h1 mat-dialog-title>{{ 'Camera' | translate }}</h1> -->
+<div *ngIf="isCameraAllowed" class="position-relative">
+  <div [ngStyle]="{ display: !isImageTaken ? 'block' : 'none' }" class="overflow-hidden">
+    <video #video autoplay playsinline></video>
+  </div>
+  <div [ngStyle]="{ display: isImageTaken ? 'block' : 'none' }" class="overflow-hidden">
+    <canvas #canvas id="canvas" [width]="canvasWidth" [height]="canvasHeight"></canvas>
+  </div>
+  <!-- <div class="text-center mt-3">
+        <mat-radio-group *ngIf="isCameraAllowed" [(ngModel)]="camView" (change)="changeCameraView($event)">
+          <mat-radio-button value="environment">
+            {{ 'Rear' | translate }}
+          </mat-radio-button>
+          <mat-radio-button class="ml-3" value="user">
+            {{ 'Front' | translate }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div> -->
+  <ng-container [ngStyle]="{ display: isImageTaken ? 'block' : 'none' }">
+    <button
+      *ngIf="isCameraAllowed && !isImageTaken"
+      class="capture-button"
+      matRipple
+      (click)="takePicture()"
+      matTooltip="{{ 'Capture' | translate }}"
+    >
+      <app-icon name="camera"></app-icon>
+    </button>
+    <button class="close-button" matRipple (click)="closeDialog()" matTooltip="{{ 'Close' | translate }}">
+      <app-icon name="close"></app-icon>
+    </button>
+  </ng-container>
+</div>
+<p *ngIf="!isCameraAllowed">{{ 'Camera permission denied' | translate }}.</p>

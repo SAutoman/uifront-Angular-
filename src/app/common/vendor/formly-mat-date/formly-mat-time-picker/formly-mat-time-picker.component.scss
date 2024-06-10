@@ -1,0 +1,26 @@
+.buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: -8px;
+}
+
+.button {
+  margin-right: 5px;
+}
+
+.mat-icon-button {
+  &:disabled {
+    color: grey !important;
+    cursor: default !important;
+  }
+}
+
+button.ngx-material-timepicker-toggle {
+  &:disabled {
+    cursor: default !important;
+    opacity: 0.5;
+  }
+}

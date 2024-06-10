@@ -1,0 +1,109 @@
+<div *ngIf="sidebarMenu && (sidebarData.menuType === menuTypeEnum.UserMenu || sidebarData.menuType === menuTypeEnum.UserMenuActivated)">
+  <ng-container *ngFor="let menuItem of sidebarMenu">
+    <mat-nav-list *ngIf="menuItem.type === 'sub'" [ngClass]="{ active: menuItem.opened, 'sub-parent-opened': menuItem.isSelected }">
+      <!--RawData/Workflow header menus -->
+      <mat-list-item *ngIf="menuItem.type === 'sub'" [ngClass]="{ 'parent-active': menuItem.isSelected }">
+        <a
+          *ngIf="menuItem.name === 'Articles' && showRawDataMenu && hasRawDataSchemas"
+          class=""
+          href="javascript:;"
+          (click)="toggleParentMenu(menuItem)"
+        >
+          <app-icon name="{{ menuItem.icon }}"></app-icon>
+          <span>{{ 'Raw Data' | translate }}</span>
+          <span class="d-flex"></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }} </span>
+          <app-icon [name]="'arrow-down'" class="dd-icon"></app-icon>
+        </a>
+
+        <a *ngIf="menuItem.name == 'Cases' && hasWorkflows" class="" href="javascript:;" (click)="toggleParentMenu(menuItem)">
+          <app-icon name="{{ menuItem.icon }}"></app-icon>
+          <span>{{ 'Cases' | translate }}</span>
+          <span class="d-flex"></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }} </span>
+          <app-icon [name]="'arrow-down'" class="dd-icon"></app-icon>
+        </a>
+
+        <a *ngIf="menuItem.name == 'Reports'" class="" href="javascript:;" (click)="toggleParentMenu(menuItem)">
+          <app-icon name="{{ menuItem.icon }}"></app-icon>
+          <span>{{ 'Reports' | translate }}</span>
+          <span class="d-flex"></span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">{{ badge.value }} </span>
+          <app-icon [name]="'arrow-down'" class="dd-icon"></app-icon>
+        </a>
+      </mat-list-item>
+
+      <!--RawData/Workflow item menus -->
+
+      <mat-nav-list class="sub-item" *ngFor="let childItem of menuItem.children">
+        <!--  RawData/Articles -->
+        <mat-list-item
+          *ngIf="childItem?.type === 'schema' && menuItem.name === 'Articles' && showRawDataMenu"
+          [ngClass]="{
+            selected: activeSchemaId == childItem.setting.id && !activeSearchProfileId,
+            'child-active': activeSchemaId == childItem.setting.id && activeSearchProfileId
+          }"
+        >
+          <a (click)="applySchema(childItem, menuItem)" title="{{ childItem.name }}">
+            <app-icon [name]="'data-schema'"></app-icon>
+            <span>{{ childItem.name }}</span>
+          </a>
+        </mat-list-item>
+        <!-- workflows -->
+        <mat-list-item
+          *ngIf="childItem?.type === 'workflow' && menuItem.name === 'Cases'"
+          [ngClass]="{
+            selected: activeSchemaId == childItem.setting.caseSchemaId && !activeSearchProfileId,
+            'child-active': activeSchemaId == childItem.setting.caseSchemaId && activeSearchProfileId
+          }"
+        >
+          <a (click)="applyWorkflow(childItem, menuItem)" style="font-size: small" title="{{ childItem.name }}">
+            <app-icon [name]="'workflow'"></app-icon>
+            <span>{{ childItem.name }}</span>
+          </a>
+        </mat-list-item>
+        <!-- datasource reports -->
+
+        <mat-list-item
+          *ngIf="childItem?.type === 'report' && childItem.setting.id && menuItem.name === 'Reports'"
+          [ngClass]="{
+            selected: activeSchemaId == childItem.setting.id && !activeSearchProfileId,
+            'child-active': activeSchemaId == childItem.setting.id && activeSearchProfileId
+          }"
+        >
+          <a (click)="applyReport(childItem, menuItem)" style="font-size: small" title="{{ childItem.name }}">
+            <app-icon [name]="'grid-view'"></app-icon>
+            <span>{{ childItem.name }}</span>
+          </a>
+        </mat-list-item>
+
+        <!--create  datasource report -->
+        <mat-list-item
+          *ngIf="childItem?.type === 'report-create' && menuItem.name === 'Reports'"
+          [ngClass]="{
+            selected: !activeSchemaId
+          }"
+        >
+          <a (click)="createReport()" style="font-size: small" title="{{ childItem.name }}">
+            <app-icon [name]="'add'"></app-icon>
+            <span>{{ childItem.name }}</span>
+          </a>
+        </mat-list-item>
+
+        <!--profiles under articles/workflows -->
+        <ng-container *ngIf="childItem?.child">
+          <mat-list-item
+            class="workflow-profiles"
+            *ngFor="let it of childItem.child"
+            [ngClass]="{ selected: it.setting.id === activeSearchProfileId }"
+          >
+            <a class="workflow-profiles-link" (click)="profileClicked(it, childItem, menuItem)">
+              <app-icon [name]="'search-profile'"></app-icon>
+              <span>{{ it.name }}</span>
+            </a>
+          </mat-list-item>
+        </ng-container>
+      </mat-nav-list>
+    </mat-nav-list>
+  </ng-container>
+</div>

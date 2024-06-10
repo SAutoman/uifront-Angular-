@@ -1,0 +1,76 @@
+<mat-card>
+  <h5>
+    {{ 'Destination (where to copy the aggregation)' | translate }}
+  </h5>
+  <form [formGroup]="form">
+    <mat-form-field>
+      <mat-label>{{ 'Select Destination' | translate }}</mat-label>
+      <mat-select formControlName="entitySelector">
+        <mat-option *ngFor="let ent of entities" [value]="ent.value">
+          {{ ent.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngIf="isSingleGroup">
+      <mat-card *ngIf="fieldsTreeNodes">
+        <app-tree-selectbox
+          [selectedItems]="singleSelection"
+          [rawDatasource]="fieldsTreeNodes"
+          [parentSelectionAllowed]="false"
+          [multipleSelection]="false"
+          (selectionEmitter)="singleFieldPathUpdated($event)"
+        >
+        </app-tree-selectbox>
+      </mat-card>
+    </ng-container>
+
+    <ng-container *ngIf="!isSingleGroup">
+      <mat-card *ngIf="rangeTreeNodes">
+        <ng-container *ngIf="!isNodesEmpty(rangeTreeNodes); else noNodes">
+          <h5>{{ 'Range Definition' | translate }}</h5>
+          <mat-expansion-panel class="mat-elevation-z0 mb-2">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="font-bold">
+                {{ fromFieldLabel }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <app-tree-selectbox
+              [selectedItems]="fromSelection"
+              [rawDatasource]="rangeTreeNodes"
+              [parentSelectionAllowed]="false"
+              [multipleSelection]="false"
+              (selectionEmitter)="rangeFromPathUpdated($event)"
+            >
+            </app-tree-selectbox>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="mat-elevation-z0 mb-2">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="font-bold">
+                {{ toFieldLabel }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <app-tree-selectbox
+              [selectedItems]="toSelection"
+              [rawDatasource]="rangeTreeNodes"
+              [parentSelectionAllowed]="false"
+              [multipleSelection]="false"
+              (selectionEmitter)="rangeToPathUpdated($event)"
+            >
+            </app-tree-selectbox>
+          </mat-expansion-panel>
+        </ng-container>
+
+        <ng-template #noNodes>
+          <small class="col-lg-12"
+            >{{ 'No fields matching range type' | translate }}
+            <b>{{ rangeTypeLabel }}</b>
+          </small>
+        </ng-template>
+      </mat-card>
+    </ng-container>
+  </form>
+</mat-card>

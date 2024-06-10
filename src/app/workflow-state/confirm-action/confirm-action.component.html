@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>{{ data.title | translate }}</h1>
+<div mat-dialog-content>
+  {{ data.message | translate }}
+  <br />
+  <b *ngIf="data.dynamicText">{{ data.dynamicText }}</b>
+</div>
+<mat-dialog-actions align="end">
+  <button *ngIf="!data?.hideCancelBtn" [id]="'cancel_' + componentId" mat-stroked-button color="primary" (click)="onResponse(false)">
+    <app-icon name="close"></app-icon>{{ 'Cancel' | translate }}
+  </button>
+  <button
+    *ngIf="data?.showProceedBtn"
+    [id]="'yes_' + componentId"
+    mat-flat-button
+    color="primary"
+    cdkFocusInitial
+    (click)="onResponse(true)"
+    class="mr-2"
+  >
+    {{ 'Proceed' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,40 @@
+<ng-container>
+  <mat-button-toggle-group
+    class="mb-3"
+    name="Toggle mode"
+    [(ngModel)]="showVideoPreview"
+    *ngIf="formControl.value && !to.disabled && !to.readonly"
+  >
+    <mat-button-toggle [value]="false" matTooltip="{{ 'Edit' | translate }}" matTooltipPosition="below">
+      <app-icon [name]="'edit'"></app-icon>
+    </mat-button-toggle>
+
+    <mat-button-toggle [value]="true" matTooltip="{{ 'View' | translate }}" matTooltipPosition="below" [disabled]="!formControl.valid">
+      <app-icon [name]="'eye'"></app-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <div [hidden]="showVideoPreview" class="w-100">
+    <input
+      matInput
+      type="text"
+      [placeholder]="'Please Enter Youtube Video URL' | translate"
+      [formControl]="formControl"
+      [formlyAttributes]="field"
+      [required]="to.required"
+      [readonly]="to.readonly"
+      [disabled]="to.disabled || to.readonly"
+      [tabIndex]="to.tabindex"
+      [errorStateMatcher]="errorStateMatcher"
+    />
+  </div>
+  <div *ngIf="showVideoPreview" class="w-100">
+    <iframe
+      height="200"
+      [src]="safeResourceUrl"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    >
+    </iframe>
+  </div>
+</ng-container>

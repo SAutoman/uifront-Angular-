@@ -1,0 +1,18 @@
+<ng-container>
+  <mat-expansion-panel *ngIf="fieldsTreeNodes && hasFields" class="mat-elevation-z0" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="font-bold">
+        {{ (title ? title : 'Select Fields') | translate }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-tree-selectbox
+      [selectedItems]="selectedFieldsForTree"
+      [rawDatasource]="fieldsTreeNodes"
+      [parentSelectionAllowed]="false"
+      [multipleSelection]="true"
+      (selectionEmitter)="onFieldSelect($event)"
+    >
+    </app-tree-selectbox>
+  </mat-expansion-panel>
+  <p *ngIf="!hasFields">{{ 'No Fields can be used for this post action' | translate }}</p>
+</ng-container>

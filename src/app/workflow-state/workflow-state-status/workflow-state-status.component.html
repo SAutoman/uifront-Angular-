@@ -1,0 +1,14 @@
+<div class="toggles-wrapper">
+  <ng-container *ngFor="let status of statuses">
+    <button
+      *ngIf="status.enabled"
+      [id]="createId('btn_status')"
+      mat-stroked-button
+      [ngStyle]="{ color: status.configuration?.color || 'green' }"
+      class="btn-sm ml-3"
+      (click)="onStatusClicked(status)"
+    >
+      {{ status.configuration?.label || status.name }}
+    </button>
+  </ng-container>
+</div>

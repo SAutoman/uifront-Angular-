@@ -1,0 +1,9 @@
+<app-wfm-grid
+  #emailAuditGrid
+  [gridConfiguration]="emailAuditGridSettingsConf"
+  [gridData]="gridData"
+  gridAreaType="emailAudit"
+  [pageTitle]="header"
+  (openSearchFilters)="onOpenFilters($event)"
+  (paginationChange)="onPaginationChange($event)"
+></app-wfm-grid>

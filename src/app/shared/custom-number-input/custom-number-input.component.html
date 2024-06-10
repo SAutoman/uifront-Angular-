@@ -1,0 +1,13 @@
+<mat-form-field appearance="outline">
+  <mat-label>{{ label }}</mat-label>
+
+  <input type="number" class="form-control" matInput [formControl]="control" autocomplete="off" />
+  <div class="d-flex flex-direction-column" matSuffix>
+    <button mat-button matSuffix mat-icon-button (click)="increment()">+</button>
+    <button mat-button matSuffix mat-icon-button (click)="decrement()">-</button>
+  </div>
+
+  <mat-error *ngIf="hasError('pattern') || hasError('min')"
+    >{{ 'Please provide an integer greater than or equal to 1' | translate }}
+  </mat-error>
+</mat-form-field>

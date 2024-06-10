@@ -1,0 +1,24 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Tenant Raw Data Setting' | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="mt-3 grid">
+    <h5 class="mb-3 mt-0">{{ 'Show Raw Data in menu:' | translate }}</h5>
+    <form class="add-form" [formGroup]="rolesForm">
+      <div class="mb-3 roles">
+        <mat-checkbox color="primary" formControlName="tenantAdmin" class="mr-4 my-1">{{ 'TenantAdmin' | translate }} </mat-checkbox>
+        <mat-checkbox color="primary" class="mr-4 my-1" formControlName="tenant">{{ 'Tenant' | translate }} </mat-checkbox>
+        <mat-checkbox color="primary" class="mr-4 my-1" formControlName="auditor">{{ 'Auditor' | translate }} </mat-checkbox>
+        <mat-checkbox color="primary" class="mr-4 my-1" formControlName="supplier">{{ 'Supplier' | translate }} </mat-checkbox>
+      </div>
+    </form>
+    <div class="mat-expansion-panel-footer">
+      <button mat-flat-button color="primary" (click)="onSubmit(true)">
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+    </div>
+  </div>
+</mat-expansion-panel>

@@ -1,0 +1,79 @@
+:host {
+  display: flex;
+  ::ng-deep {
+    mat-select {
+      transform: translateY(0) !important;
+    }
+  }
+}
+.exports {
+  display: flex;
+}
+
+.add-layout {
+  display: flex;
+  max-width: 100px;
+}
+
+// .info {
+//   color: steelblue;
+// }
+
+// .k-button {
+//   box-shadow: none !important;
+// }
+
+// .btn {
+//   border: 1px solid lightgray;
+// }
+
+// .primary {
+//   color: #005e16;
+// }
+
+// .reply {
+//   color: rgba(0, 0, 0, 0.719);
+//   -webkit-transform: scaleX(-1);
+//   transform: scaleX(-1);
+// }
+
+// .container {
+//   display: flex;
+// }
+
+// .layouts {
+//   margin-right: 15px;
+//   width: 35%;
+// }
+
+// .create {
+//   display: flex;
+//   width: 100%;
+//   align-items: center;
+// }
+
+// .layout-name {
+//   display: flex;
+//   justify-content: space-between;
+// }
+
+// .layout-name-info {
+//   font-size: 12px;
+//   font-style: italic;
+//   color: gray;
+// }
+
+// .setting-name {
+//   padding-top: 13px;
+//   margin-right: 13px;
+// }
+
+// .add {
+//   text-align: left;
+//   justify-content: flex-start !important;
+// }
+.tool-button.distance {
+  max-width: 0;
+  min-width: 0;
+  width: 0;
+}

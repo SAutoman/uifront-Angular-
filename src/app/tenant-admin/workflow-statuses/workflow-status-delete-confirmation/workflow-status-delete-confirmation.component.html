@@ -1,0 +1,28 @@
+<h2 id="header" mat-dialog-title>
+  {{ getTitle() | translate }}
+</h2>
+<mat-dialog-content class="mat-typography">
+  <h3 *ngIf="isDeleteAllowed">{{ 'Are you sure you want to delete this item?' | translate }}</h3>
+  <p *ngIf="data?.workflowNames?.length > 0">{{ 'This status is being used in the following workflows:' | translate }}</p>
+  <ul>
+    <li *ngFor="let name of data?.workflowNames">
+      <b>{{ name | titlecase }}</b>
+    </li>
+  </ul>
+
+  <p *ngIf="data?.showDynamicEntityUsageMsg">This status is being used in:</p>
+  <ul>
+    <li>
+      <b>{{ 'Raw Data' | translate }} - {{ data?.rawDataCountForStatus }} {{ 'Raw Data' | translate | lowercase }}</b>
+    </li>
+    <li>
+      <b>{{ 'Cases' | translate }} - {{ data?.casesCountForStatus }} {{ 'Cases' | translate | lowercase }}</b>
+    </li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button *ngIf="isDeleteAllowed" id="ok" mat-flat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial class="mr-2">
+    {{ 'OK' | translate }}
+  </button>
+  <button id="cancel" mat-stroked-button color="primary" [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

@@ -1,0 +1,13 @@
+<app-wfm-grid
+  #mappingsGrid
+  [gridConfiguration]="mappingsGridSettingsConf"
+  [gridData]="model?.gridData"
+  [actions]="gridActions"
+  [callAddAggregate]="addAggregate$ | async"
+  [pageTitle]="title"
+  gridAreaType="mappings"
+  showCreateButton="true"
+  (actionEvent)="onActionClick($event)"
+  (createBtnEmitter)="toCreatePage($event)"
+>
+</app-wfm-grid>

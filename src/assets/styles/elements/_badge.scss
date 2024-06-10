@@ -1,0 +1,40 @@
+.badge {
+  font-size: 12px;
+  padding: 2px 6px;
+  line-height: 12px;
+  border-radius: 8px;
+  align-self: center;
+  color: $white;
+  background-color: $muted;
+  white-space: nowrap;
+  &.lg {
+    font-size: 14px;
+    padding: 4px 8px;
+    line-height: 14px;
+    border-radius: 16px;
+  }
+  &.green {
+    background-color: $success;
+    color: $white;
+  }
+  &.red {
+    background-color: $danger;
+    color: $white;
+  }
+  &.blue {
+    background-color: $themecolor;
+    color: $white;
+  }
+  &.gray {
+    background-color: $muted;
+    color: $white;
+  }
+  &.yellow {
+    background-color: $yellow;
+    color: $dark;
+  }
+  &.orange {
+    background-color: $warning;
+    color: $white;
+  }
+}

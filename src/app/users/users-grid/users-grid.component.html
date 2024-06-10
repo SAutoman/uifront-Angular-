@@ -1,0 +1,35 @@
+<app-users-grid-search
+  [loading]="loading"
+  (filtersEmitter)="doSearch($event)"
+  (searchClose)="searchClose($event)"
+  *ngIf="isSearchOpen"
+></app-users-grid-search>
+
+<app-wfm-grid
+  #useGrid
+  [gridConfiguration]="usersGridSettingsConf"
+  [gridData]="gridData"
+  [pageTitle]="'Users'"
+  (searchOpen)="searchOpen($event)"
+  gridAreaType="users"
+  [actions]="gridActions"
+  (actionEvent)="onActionClick($event)"
+>
+</app-wfm-grid>
+
+<ng-template #companyInfo>
+  <h3 mat-dialog-title>{{ 'Company Info' | translate }}</h3>
+  <mat-dialog-content>
+    <app-wfm-grid
+      [gridConfiguration]="companyInfoGridSettings"
+      [gridData]="rowData"
+      isModal="true"
+      gridAreaType="companyInfo"
+      (updateCompanyEmitter)="onCompanyChange($event)"
+    >
+    </app-wfm-grid>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="closeDialog()"><app-icon name="close"></app-icon> {{ 'Close' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>

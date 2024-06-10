@@ -1,0 +1,74 @@
+<div class="user-profile">
+  <!-- User profile image -->
+  <div class="logo-placeholder">
+    <!-- <img src="assets/images/background/ccx-page-logo-gdccm.png" alt="user" /> -->
+    <!-- <app-avatar [avatar_url]="image" isCompany="true"></app-avatar> -->
+    <span class="no-image" *ngIf="!image"></span>
+    <img *ngIf="image" [src]="image" alt="logo" />
+  </div>
+  <!-- timezone info -->
+  <div class="time-flex" *ngIf="timeZoneInfo">
+    <span class="time-info" #timeElement></span>
+    <span class="timezone-info"> {{ 'Timezone:' | translate }} {{ timeZoneInfo.name }} {{ timeZoneInfo.abbreviation }}</span>
+  </div>
+  <!-- User profile text-->
+  <!-- ============================================================== -->
+  <!-- Profile - style you can find in header.scss -->
+  <!-- ============================================================== -->
+  <!-- <div class="profile-text">
+    <a [matMenuTriggerFor]="sdprofile">
+      <div class="profile-text-wrap" matTooltip="{{ tenant.name }} {{ tenant.lastName }}">
+        {{ tenant.tenant.tenantName }} ({{ tenant.tenant.role }})<i class="ti-angle-down font-12 m-l-5"></i>
+      </div>
+    </a>
+  </div> -->
+  <mat-accordion>
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{ tenant.tenant.tenantName }} ({{ tenant.tenant.role | translate }}) </mat-panel-title>
+      </mat-expansion-panel-header>
+      <button
+        *ngFor="let item of tenant.rolesPerTenant"
+        mat-menu-item
+        (click)="onSwitchSystem(item)"
+        title="{{ item.tenantName }} ({{ item.role | translate }})"
+        [ngClass]="{ active: tenant.tenant.tenantId === item.tenantId }"
+      >
+        <app-icon *ngIf="tenant.tenant.tenantId === item.tenantId; else noColor" [name]="'user'"></app-icon>
+        <ng-template #noColor>
+          <app-icon #noColor [name]="'user'"></app-icon>
+        </ng-template>
+        <span>{{ item.tenantName }} ({{ item.role | translate }})</span>
+      </button>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- <mat-menu #sdprofile="matMenu" class="mymegamenu">
+    <button *ngFor="let item of tenant.rolesPerTenant" mat-menu-item  (click)="onSwitchSystem(item)">
+      <mat-icon *ngIf="tenant.tenant.tenantId === item.tenantId; else noColor" class="theme-icon"> account_circle </mat-icon>
+      <ng-template #noColor>
+        <mat-icon #noColor> account_circle </mat-icon>
+      </ng-template>
+      {{ item.tenantName }} ({{ item.role }})
+    </button>
+    <mat-divider style="border-top-width: 2px; border-top-color: rgb(170, 164, 164)"></mat-divider>
+    <div>
+      <div *ngIf="role === roles.TenantAdmin">
+        <button
+          class="ta"
+          mat-menu-item
+          *ngIf="tenant.menuType === menuType.UserMenu || tenant.menuType === menuType.UserMenuActivated"
+          (click)="changeMenuToAdmin()"
+        >
+          <mat-icon>settings</mat-icon> Tenant Settings
+        </button>
+      </div>
+    </div>
+    <button mat-menu-item *ngIf="tenant.menuType === menuType.AdminMenu" (click)="changeMenu()">
+      <mat-icon>table_chart</mat-icon> Workflow
+    </button>
+    <button class="profile" mat-menu-item routerLink="{{ userProfileLink }}"><mat-icon>account_box</mat-icon> Profile</button>
+    <button mat-menu-item><mat-icon>notifications_off</mat-icon> Disable notifications</button>
+    <button class="sign-out" mat-menu-item (click)="signOut()"><mat-icon>exit_to_app</mat-icon> Sign Out</button>
+  </mat-menu> -->
+</div>

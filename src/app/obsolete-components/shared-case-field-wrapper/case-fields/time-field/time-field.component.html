@@ -1,0 +1,20 @@
+<!-- <form [formGroup]="stepForm" *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <mat-form-field>
+    <input
+      [id]="'inputTime_' + componentId"
+      matInput
+      type="text"
+      [formControlName]="controlName"
+      [required]="stepForm.controls[controlName].errors?.required"
+      placeholder="Pick a time"
+      [min]="min"
+      [max]="max"
+      [ngxTimepicker]="pickerMin"
+      (ngModelChange)="onChange()"
+      [readonly]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+    />
+    <ngx-material-timepicker #pickerMin></ngx-material-timepicker>
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.required">{{ fieldControlApiData.fieldMetadata.name }} is required.</mat-error>
+    <mat-hint>{{ fieldControlApiData.fieldMetadata.funcFieldProps.hintMessage }}</mat-hint>
+  </mat-form-field>
+</form> -->

@@ -1,0 +1,25 @@
+<div>
+  <mat-form-field appearance="outline" class="col-md-6" *ngIf="validationsArray.length > 1">
+    <mat-label>{{ 'Condition' | translate }}</mat-label>
+    <mat-select [formControl]="conditionControl">
+      <mat-option [value]="conditionEnum.And"> {{ 'AND' | translate }} </mat-option>
+      <mat-option [value]="conditionEnum.Or"> {{ 'OR' | translate }} </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-card class="mat-elevation-z0 outline mb-3" *ngFor="let validation of validationsArray; let i = index; trackBy: trackFn">
+    <app-aggregation-expression-item
+      [rawDataReferences]="rawDataReferences"
+      [schema]="schema"
+      [validation]="validation.data"
+      (dataEmitter)="validationUpdate($event, i)"
+    ></app-aggregation-expression-item>
+    <button class="remove-btn btn-sm" (click)="removeValidation(i)" mat-icon-button color="warn">
+      <app-icon [name]="'trash'"></app-icon>
+    </button>
+  </mat-card>
+
+  <button class="mb-3 btn-sm" (click)="addValidation()" mat-stroked-button color="primary">
+    <app-icon [name]="'add'"></app-icon>
+    {{ 'Add Validation' | translate }}
+  </button>
+</div>

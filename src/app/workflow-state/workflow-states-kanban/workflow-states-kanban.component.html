@@ -1,0 +1,197 @@
+<div class="k-i-loading" *ngIf="loading$ | async"></div>
+
+<div class="title-bar" *ngIf="!loading">
+  <div class="tools" *ngIf="workflow">
+    <h4 class="px-3">{{ workflow?.name }}</h4>
+    <mat-form-field class="quick-search">
+      <mat-label>{{ 'Quick Search' | translate }}</mat-label>
+      <input matInput (input)="onQuickSearch()" [(ngModel)]="qsTerm" />
+      <app-icon [name]="'search'" matPrefix class="search-icon"></app-icon>
+      <button matSuffix mat-icon-button aria-label="Clear" *ngIf="qsTerm" (click)="onCloseQuickSearch()">
+        <app-icon [name]="'delete'" class="primary"></app-icon>
+      </button>
+    </mat-form-field>
+    <button
+      *ngIf="showCreateCaseButton"
+      class="tool-button"
+      matRipple
+      (click)="onOpenCaseCreateDialogue()"
+      matTooltip="{{ 'Create Case' | translate }}"
+    >
+      <app-icon [name]="'add'"></app-icon>
+    </button>
+  </div>
+
+  <div class="tools" *ngIf="!showToolButtons">
+    <button class="tool-button" matRipple [matMenuTriggerFor]="menuDropdowns">
+      <app-icon [name]="'more'"></app-icon>
+    </button>
+    <mat-menu #menuDropdowns="matMenu">
+      <app-grid-layout-options
+        [type]="layoutTypeEnum.Card"
+        [showToolButtons]="showToolButtons"
+        [ngClass]="{ showdropdown: !showToolButtons }"
+        [schemaId]="caseSchemaId"
+        [allowExports]="allowedGridOperations.exportActions"
+        [gridSettingsName]="gridSettingsName"
+        [allowSharing]="allowedGridOperations.allowSharing"
+        [schemaAreaType]="areaTypeEnum.case"
+        [cardConfig]="cardPostions"
+        (applyCardLayout)="onApplyCardLayout($event)"
+        [gridChange$]="gridChanges$"
+        (resetCardLayout)="resetLayout()"
+      >
+      </app-grid-layout-options>
+    </mat-menu>
+  </div>
+  <div class="tools" *ngIf="showToolButtons">
+    <app-grid-layout-options
+      [type]="layoutTypeEnum.Card"
+      [showToolButtons]="showToolButtons"
+      [schemaId]="caseSchemaId"
+      [allowExports]="allowedGridOperations.exportActions"
+      [gridSettingsName]="gridSettingsName"
+      [allowSharing]="allowedGridOperations.allowSharing"
+      [schemaAreaType]="areaTypeEnum.case"
+      [cardConfig]="cardPostions"
+      (applyCardLayout)="onApplyCardLayout($event)"
+      [gridChange$]="gridChanges$"
+      (resetCardLayout)="resetLayout()"
+    >
+    </app-grid-layout-options>
+  </div>
+</div>
+
+<div class="title-bar" data-area="status checkboxes" *ngIf="!loading">
+  <div class="tools pl-3">
+    <span class="py-3 pr-2">{{ viewSettingLabel }}</span>
+    <mat-checkbox
+      *ngFor="let group of kanbanCaseCardTitles"
+      [id]="group.id"
+      (change)="visibilityChanged($event, group)"
+      class="checkbox-status ml-2"
+      color="primary"
+      [checked]="group.visible"
+    >
+      <div [ngSwitch]="group?.type">
+        <span *ngSwitchDefault>{{ group.name }}</span>
+      </div>
+    </mat-checkbox>
+  </div>
+</div>
+
+<div class="status-card-wrapper" *ngIf="!loading">
+  <div class="search-wrapper">
+    <ng-container *ngIf="isSearchOpen">
+      <mat-dialog-container>
+        <app-dynamic-entity-search-mask
+          *ngIf="caseSchemaId"
+          [schemaId]="caseSchemaId"
+          [areaType]="caseAreaType"
+          (searchEvent)="onSearch($event)"
+          (searchClose)="toggleSearch($event)"
+        ></app-dynamic-entity-search-mask
+      ></mat-dialog-container>
+    </ng-container>
+    <div
+      class="status-card-container card-list"
+      [ngStyle]="{ width: calcWidth + 'px' }"
+      cdkDropList
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div *ngFor="let group of kanbanCaseCardTitles" class="column-wrapper card-box" cdkDrag>
+        <div
+          class="column"
+          [style.width]="group.settings.width"
+          *ngIf="group.visible"
+          mwlResizable
+          [validateResize]="validate"
+          [enableGhostResize]="true"
+          (resizeEnd)="onResizeEnd($event, group.name)"
+        >
+          <div class="resize-handle-right" [resizeEdges]="{ right: true }" mwlResizeHandle></div>
+          <mat-card class="status-card outline mat-elevation-z0">
+            <mat-card-header cdkDragHandle>
+              <mat-card-title [ngSwitch]="group?.type" class="pl-2">
+                <span *ngSwitchDefault>{{ group.name }}</span>
+              </mat-card-title>
+              <div class="dragable-symbol-container">
+                <app-icon [name]="'move'"></app-icon>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <div
+                *ngFor="let item of group.items"
+                class="state-item"
+                [ngClass]="[
+                  item.toBeHighlighted
+                    ? 'highlightClass'
+                    : item.formattingClassName
+                    ? item.formattingClassName
+                    : item.id == selectedCase
+                    ? 'active-case'
+                    : '',
+                  item.isMultiColumn ? 'multi-fileds' : ''
+                ]"
+              >
+                <div
+                  [ngClass]="{ 'title-wrap': true, 'multi-fileds': item.isMultiColumn }"
+                  [matTooltip]="item?.titleHint"
+                  matTooltipPosition="above"
+                  [innerHTML]="item.caseNameField | sanitize: 'html'"
+                ></div>
+                <div class="case-item-menu-button">
+                  <button mat-icon-button color="primary" [matMenuTriggerFor]="menu">
+                    <app-icon [name]="'more'"></app-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="goToQuickView(item)">
+                      <app-icon [name]="'info'"></app-icon>
+                      {{ 'Quick view' | translate }}
+                    </button>
+                    <button mat-menu-item (click)="openProcess(item)" *ngIf="showProcessButton">
+                      <app-icon [name]="'workflow'"></app-icon>
+                      {{ 'Process' | translate }}
+                    </button>
+
+                    <button mat-menu-item (click)="openEditCase(item)" *ngIf="!showProcessButton && schemaPermissions?.edit">
+                      <app-icon [name]="'edit'"></app-icon>
+                      {{ 'Edit' | translate }}
+                    </button>
+                    <button *ngIf="showDeleteBtn" mat-menu-item (click)="deleteDialog(item)">
+                      <app-icon [name]="'trash'"></app-icon>
+                      {{ 'Delete' | translate }}
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #viewDataTmpl>
+  <h4 mat-dialog-title class="table-header-span" *ngIf="quickinfoLoaded.caseFields">{{ 'Case' | translate }}</h4>
+  <mat-dialog-content>
+    <div>
+      <app-dynamic-entity-grid
+        [allowedGridOperations]="gridOperations"
+        [loading]="false"
+        [showAll]="false"
+        [schemaId]="caseSchemaId"
+        [areaType]="caseAreaType"
+        [pageable]="false"
+        [dynamicEntityIds]="caseId"
+        [useLayout]="false"
+        (loaded)="caseFieldsLoaded($event)"
+      ></app-dynamic-entity-grid>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="closeDialog()"><app-icon name="close"></app-icon>{{ 'Close' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>

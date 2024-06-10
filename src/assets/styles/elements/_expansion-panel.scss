@@ -1,0 +1,31 @@
+.mat-expansion-panel-header {
+  position: relative;
+  .dragable-symbol-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 48px;
+    width: 9px;
+    border-right: solid thin $dark-dividers;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: row-resize;
+    transition: height 0.3s;
+  }
+  &.mat-expanded {
+    border-bottom: solid thin $dark-dividers;
+    .dragable-symbol-container {
+      height: 64px;
+    }
+  }
+}
+
+.mat-expansion-panel-footer {
+  border-top: solid thin $dark-dividers;
+  padding: 16px 16px 0;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 -24px;
+  margin-top: 16px;
+}

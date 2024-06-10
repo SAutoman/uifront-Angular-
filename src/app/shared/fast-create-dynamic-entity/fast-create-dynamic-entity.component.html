@@ -1,0 +1,5 @@
+<div *ngIf="view" class="fast-create-wrapper">
+  <form [formGroup]="view.form">
+    <formly-form class="d-flex" [form]="view.form" [fields]="view.fields" [model]="view.model" [options]="options"></formly-form>
+  </form>
+</div>

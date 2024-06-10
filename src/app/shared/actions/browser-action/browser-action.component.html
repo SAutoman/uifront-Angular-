@@ -1,0 +1,11 @@
+<form [formGroup]="form">
+  <mat-form-field>
+    <mat-label>{{ 'Select Type Of Action' | translate }}</mat-label>
+    <mat-select formControlName="actionType">
+      <mat-option *ngFor="let actionType of browserActionTypes" [value]="actionType.value">
+        {{ actionType.key }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!-- Based on selected Action populate the necessary additional controls -->
+</form>

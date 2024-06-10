@@ -1,0 +1,18 @@
+<!-- <form [formGroup]="stepForm" *ngIf="list && fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <mat-form-field>
+    <mat-label>Select {{ fieldControlApiData.fieldMetadata.name }}</mat-label>
+    <mat-select
+      [id]="'select_' + componentId"
+      (selectionChange)="onChange()"
+      [formControlName]="controlName"
+      [disabled]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+      [required]="stepForm.controls[controlName].errors?.required"
+    >
+      <mat-option [id]="item.item + i + '_' + componentId" *ngFor="let item of list.listItems; let i = index" [value]="item.id">
+        {{ item.item }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.required">This field is required.</mat-error>
+    <mat-hint>{{ fieldControlApiData.fieldMetadata.funcFieldProps.hintMessage }}</mat-hint>
+  </mat-form-field>
+</form> -->

@@ -1,0 +1,24 @@
+<!-- <form [formGroup]="stepForm" *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <mat-form-field>
+    <textarea
+      [id]="'textarea_' + componentId"
+      matInput
+      [placeholder]="fieldControlApiData.fieldMetadata.name"
+      [formControlName]="controlName"
+      (change)="onChange()"
+      rows="5"
+      [readonly]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+      [required]="stepForm.controls[controlName].errors?.required"
+    ></textarea>
+
+    <mat-hint>{{ fieldControlApiData.fieldMetadata.funcFieldProps.hintMessage }}</mat-hint>
+
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.required">This field is required.</mat-error>
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.minlength"
+      >Min length of {{ getValidatorValueForErrorMessage(ValidatorType.MinMax).min }} is required.</mat-error
+    >
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.maxlength"
+      >Max length of {{ getValidatorValueForErrorMessage(ValidatorType.MinMax).max }} is allowed.</mat-error
+    >
+  </mat-form-field>
+</form> -->

@@ -1,0 +1,109 @@
+@import '../../../assets/styles/variable.scss';
+.title-bar {
+  .tools {
+    // &:first-of-type {
+    //   overflow-x: auto;
+    // }
+  }
+}
+.status-card-wrapper {
+  width: 100%;
+  overflow-x: scroll;
+  height: calc(100% - 144px);
+  @media (max-width: 768px) {
+    height: calc(100% - 96px);
+  }
+  @media only screen and (max-width: 1024px) and (max-height: 768px) {
+    height: calc(100% - 96px);
+  }
+  @media only screen and (max-width: 834px) and (max-height: 1112px) {
+    height: calc(100% - 96px);
+  }
+  @media only screen and (max-width: 1112px) and (max-height: 834px) {
+    height: calc(100% - 96px);
+  }
+  @media only screen and (max-width: 1024px) and (max-height: 768px) {
+    height: calc(100% - 96px);
+  }
+  @media only screen and (max-width: 1024px) and (max-height: 1366px) {
+    height: calc(100% - 96px);
+  }
+  .search-wrapper {
+    height: 100%;
+    .status-card-container {
+      display: flex;
+      height: 100%;
+    }
+  }
+}
+
+.resize-active {
+  z-index: 11;
+}
+.search-wrapper {
+  position: relative;
+  .card-list.cdk-drop-list-dragging .card-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.status-card-wrapper app-dynamic-entity-search-mask {
+  top: 0px !important;
+}
+.title-bar .search-active {
+  background: $themecolor !important;
+  app-icon {
+    stroke: #ffffff !important;
+  }
+}
+
+.state-item.active-case {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.state-item.highlightClass {
+  box-shadow: 0px 0px 10px 3px #989879;
+}
+
+.k-i-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(3px);
+  color: gray;
+  z-index: 20;
+}
+
+.column {
+  position: relative;
+  .resize-handle-right {
+    position: absolute;
+    height: calc(100vh - 250px);
+    cursor: col-resize;
+    width: 5px;
+    top: 27px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.149);
+    }
+  }
+}
+
+.resize-handle-right {
+  right: -6px;
+}
+
+.showdropdown {
+  display: block;
+}

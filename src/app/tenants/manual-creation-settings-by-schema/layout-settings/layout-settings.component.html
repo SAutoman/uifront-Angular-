@@ -1,0 +1,11 @@
+<div class="col-md-12 d-flex mt-2">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'Default Layout' | translate }}</mat-label>
+    <mat-select [formControl]="defaultLayoutSelector" [disabled]="!layouts?.length">
+      <mat-option *ngFor="let layout of layouts" [value]="layout?.id">{{ layout?.value?.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button *ngIf="defaultLayoutSelector?.value" mat-icon-button color="primary" class="mt-2" (click)="clearSelectedLayout()">
+    <app-icon [name]="'trash'"></app-icon>
+  </button>
+</div>

@@ -1,0 +1,13 @@
+.list-item {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.move {
+  cursor: move;
+}

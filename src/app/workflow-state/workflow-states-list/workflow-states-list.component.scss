@@ -1,0 +1,71 @@
+@import '../../../assets/styles/variable.scss';
+
+.column-devidation {
+  display: flex;
+  max-width: 100%;
+  min-width: 100%;
+  overflow: hidden;
+  height: 100%;
+  max-height: 100%;
+}
+.column-devidation .workflow {
+  min-width: 100%;
+  max-width: 100%;
+  width: 100%;
+}
+.column-devidation .workflow-open {
+  min-width: 200px;
+  width: calc(100% - 720px); //this width should become dynamic
+  @media (max-width: 991px) {
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+}
+.column-devidation .process-steps {
+  background-color: $white;
+  // min-width: 720px; //this width should become dynamic
+  // width: 720px; //this width should become dynamic
+  // max-width: 720px; //this width should become dynamic
+  flex: 1;
+  overflow: hidden;
+  border-left: solid thin $dark-dividers;
+  @media (max-width: 991px) {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    border-left: none;
+    z-index: 10;
+  }
+}
+
+.tool-button {
+  height: 48px;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  border: none;
+  background-color: transparent;
+  border-right: solid thin #e0e0e0;
+  border-left: solid thin #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.slide-toggle {
+  border-left: solid thin $dark-dividers;
+}
+
+:host ::ng-deep {
+  .mat-button-toggle-group {
+    border-radius: 0 !important;
+  }
+  .mat-button-toggle-button {
+    span {
+      display: flex;
+      align-items: center;
+      app-icon {
+        transform: translateY(-1px);
+        margin-right: 4px;
+      }
+    }
+  }
+}

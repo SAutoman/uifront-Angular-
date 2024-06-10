@@ -1,0 +1,36 @@
+app-connector-field-editor {
+  app-formly-right-button-addon {
+    width: 100%;
+  }
+  .form-group-container {
+    max-width: 420px;
+    min-height: 300px;
+    // todo overflow scroll
+  }
+  .use-in-form-group {
+    .mat-form-field-infix {
+      padding: 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    .mat-form-field-label-wrapper {
+      padding-top: 0;
+    }
+  }
+
+  app-formly-right-button-addon {
+    width: 100%;
+  }
+  .form-group-container {
+    max-width: 420px;
+    min-height: 300px;
+    // todo overflow scroll
+  }
+
+  .info-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+  }
+}

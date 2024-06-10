@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .actnBtn {
+    margin-top: 20px !important;
+  }
+}

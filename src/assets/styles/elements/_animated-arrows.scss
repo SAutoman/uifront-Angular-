@@ -1,0 +1,143 @@
+.arrow-a {
+  width: calc($size * 2);
+  height: calc($size * 2);
+  cursor: pointer;
+  position: relative;
+  display: block;
+
+  &:before,
+  &:after {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: $size;
+    height: $thickness;
+    border-radius: calc($thickness / 2);
+    background: $dark-text;
+    transition: all 0.3s ease;
+  }
+
+  &.left {
+    &:before {
+      content: '';
+      transform-origin: 0% 50%;
+      transform: translate(-50%, calc(-50% - 0px)) rotate($angle);
+    }
+
+    &:hover:before {
+      transform: translate(-50%, calc(-50% - 0px)) rotate($angleHover);
+    }
+
+    &:active:before {
+      transform: translate(-50%, calc(-50% - 0px)) rotate($angleActive);
+    }
+
+    &:after {
+      transform-origin: 0% 50%;
+      content: '';
+      transform: translate(-50%, calc(-50% + 0.5px)) rotate(-$angle);
+    }
+
+    &:hover:after {
+      transform: translate(-50%, calc(-50% + 0.5px)) rotate(-$angleHover);
+    }
+
+    &:active:after {
+      transform: translate(-50%, calc(-50% + 0.5px)) rotate(-$angleActive);
+    }
+
+    &[aria-disabled='true'] {
+      opacity: 0.3;
+      cursor: default;
+
+      &:before {
+        transform: translate(-10px, 0) rotate(0deg);
+      }
+
+      &:after {
+        transform: translate(-10px, 0) rotate(0deg);
+      }
+    }
+  }
+
+  &.right {
+    &:before {
+      content: '';
+      transform-origin: 100% 50%;
+      transform: translate(-50%, calc(-50% + 0px)) rotate($angle);
+    }
+
+    &:hover:before {
+      transform: translate(-50%, calc(-50% + 0px)) rotate($angleHover);
+    }
+
+    &:active:before {
+      transform: translate(-50%, calc(-50% + 0px)) rotate($angleActive);
+    }
+
+    &:after {
+      content: '';
+      transform-origin: 100% 50%;
+      transform: translate(-50%, calc(-50% - 0.5px)) rotate(-$angle);
+    }
+
+    &:hover:after {
+      transform: translate(-50%, calc(-50% - 0.5px)) rotate(-$angleHover);
+    }
+
+    &:active:after {
+      transform: translate(-50%, calc(-50% - 0.5px)) rotate(-$angleActive);
+    }
+
+    &[aria-disabled='true'] {
+      opacity: 0.3;
+      cursor: default;
+
+      &:before {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      &:after {
+        transform: translate(0, 0) rotate(0deg);
+      }
+    }
+  }
+
+  &.sm {
+    &:before,
+    &:after {
+      width: $size-sm;
+    }
+  }
+
+  &.lg {
+    &:before,
+    &:after {
+      width: $size-lg;
+    }
+  }
+
+  &.xxl {
+    &:before,
+    &:after {
+      width: $size-xxl;
+    }
+  }
+
+  &.thin {
+    &:before,
+    &:after {
+      height: $thickness-thin;
+    }
+  }
+
+  &.thick {
+    &:before,
+    &:after {
+      height: $thickness-thick;
+    }
+  }
+  &.primary {
+    background-color: $themecolor;
+  }
+}

@@ -1,0 +1,39 @@
+<form [formGroup]="form">
+  <mat-radio-group formControlName="groupType" class="range-type-group" id="groupType">
+    <mat-radio-button *ngFor="let option of groupTypes" [value]="option.value">{{ option.key | translate }} </mat-radio-button>
+  </mat-radio-group>
+
+  <mat-form-field *ngIf="form.get('groupType').value === aggregationType.Range">
+    <mat-label>{{ 'Select Range Type' | translate }}</mat-label>
+    <mat-select formControlName="rangeType">
+      <mat-option *ngFor="let rangeItem of rangeTypeOptions" [value]="rangeItem.value">
+        {{ rangeItem.viewValue | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+
+<ng-container *ngIf="form.get('groupType').value">
+  <app-aggregate-source
+    *ngIf="steps"
+    [sourceData]="sourceDataInput"
+    [rangeType$]="selectedRangeType$"
+    [entityType]="sourceType"
+    [selectedGroupType$]="selectedGroupType$"
+    [workflow]="workflow"
+    [steps]="steps"
+    [rawDataFields]="rawDataFields"
+    (emitter)="sourceEmitted($event)"
+  ></app-aggregate-source>
+
+  <app-aggregate-destination
+    *ngIf="steps"
+    [destinatioData]="destinationDataInput"
+    [rangeType$]="selectedRangeType$"
+    [entityType]="destinationType"
+    [steps]="steps"
+    [selectedGroupType$]="selectedGroupType$"
+    [workflow]="workflow"
+    (emitter)="destinationEmitted($event)"
+  ></app-aggregate-destination>
+</ng-container>

@@ -1,0 +1,126 @@
+@import '../../../assets/styles/variable.scss';
+:host {
+  .title-bar {
+    @media (max-width: 991px) {
+      .button-show-preview {
+        display: flex !important;
+      }
+    }
+  }
+}
+.mat-badge-content {
+  position: relative !important;
+  margin-top: 20px;
+}
+.button-show-preview {
+  display: none !important;
+}
+@media (max-width: 991px) {
+  .button-show-preview {
+    display: flex !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .builder-container {
+    height: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .cdk-overlay-connected-position-bounding-box {
+    height: 100% !important;
+    right: 10px !important;
+  }
+}
+
+.builder-container {
+  display: flex;
+  height: calc(100% - 48px);
+  .builder-section {
+    width: 60%;
+    background-color: $white;
+    border-right: solid thin $dark-dividers;
+    .scrollable-area {
+      height: calc(100% - 124px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: block;
+
+      button {
+        height: 50px;
+      }
+    }
+    app-form-builder-form.create-mode {
+      height: calc(100% - 235px) !important;
+    }
+    .title-bar {
+      .tools {
+        border-right-color: transparent !important;
+        button {
+          width: fit-content;
+          max-width: fit-content;
+          position: relative;
+        }
+        .notification-menu {
+          padding: 0;
+          position: absolute;
+          right: 10px;
+          top: -11px;
+          span {
+            width: 17px;
+            height: 17px;
+            top: -12px;
+            right: -8px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
+        &:first-of-type {
+          margin-left: auto;
+        }
+      }
+    }
+    .border-t {
+      border-top: solid thin $dark-dividers;
+    }
+    @media (max-width: 991px) {
+      width: 100%;
+      min-width: 100%;
+      max-width: 100%;
+      &.show-preview {
+        transform: translateX(-100%);
+      }
+    }
+  }
+  .builder-preview {
+    width: 40%;
+    padding: 24px;
+    @media (max-width: 991px) {
+      width: 100%;
+      min-width: 100%;
+      max-width: 100%;
+      transition: all 0.3s;
+      .mat-card {
+        width: calc(100% + 24px) !important;
+        height: calc(100% - 50px) !important;
+        transition: all 0.3s;
+        box-shadow: 0 2px 4px rgba($black, 0.2);
+        &.show-preview {
+          transform: translate(calc(-100% - 36px), 36px);
+        }
+      }
+    }
+    .mat-card {
+      width: 100%;
+    }
+    app-form-builder-form-preview {
+      display: block !important;
+      height: calc(100% - 21px);
+      overflow-y: auto;
+    }
+  }
+}

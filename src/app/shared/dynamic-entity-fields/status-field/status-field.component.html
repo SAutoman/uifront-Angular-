@@ -1,0 +1,9 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'Select status' | translate }}</mat-label>
+  <mat-select [id]="'selectStatus_' + componentId" multiple [(ngModel)]="model.items" (selectionChange)="onChange($event)" class="status">
+    <mat-option *ngFor="let status of statuses; let i = index" [value]="status.id" (click)="$event.stopPropagation()">{{
+      status.name
+    }}</mat-option>
+  </mat-select>
+</mat-form-field>

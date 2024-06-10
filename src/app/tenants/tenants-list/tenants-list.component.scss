@@ -1,0 +1,17 @@
+.btn-edit {
+  margin-right: 5px;
+}
+
+.btn-delete,
+.btn-invite {
+  margin-inline: 5px;
+}
+
+.k-grid {
+  height: 100%;
+}
+::ng-deep {
+  .k-grid-toolbar {
+    padding: 0 !important;
+  }
+}

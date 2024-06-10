@@ -1,0 +1,9 @@
+mat-card {
+  width: 400px;
+}
+
+@media only screen and (max-width: 540px) {
+  mat-card {
+    width: calc(100% - 32px);
+  }
+}

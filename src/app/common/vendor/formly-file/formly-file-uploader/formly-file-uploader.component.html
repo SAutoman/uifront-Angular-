@@ -1,0 +1,9 @@
+<form class="p-2" [formGroup]="form">
+  <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+</form>
+
+<ng-container *ngIf="usePreview">
+  <ng-container *ngIf="fileInfo$ | async as fi">
+    <img [src]="fi.url" alt="File preview" width="300px" />
+  </ng-container>
+</ng-container>

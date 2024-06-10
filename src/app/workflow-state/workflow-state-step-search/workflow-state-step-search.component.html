@@ -1,0 +1,8 @@
+<mat-form-field class="search">
+  <app-icon matPrefix [name]="'search'" class="search-icon"></app-icon>
+  <mat-label>{{ 'Search in Process Steps' | translate }}</mat-label>
+  <input id="workflow-state-steps-search-button" matInput type="text" [formControl]="searchField" />
+  <button mat-icon-button class="btn-clear" matSuffix *ngIf="searchField.value" (click)="clearInput()" matRipple>
+    <app-icon [name]="'delete'"></app-icon>
+  </button>
+</mat-form-field>

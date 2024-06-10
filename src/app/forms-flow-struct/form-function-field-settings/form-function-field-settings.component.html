@@ -1,0 +1,5 @@
+<ng-container *ngIf="form">
+  <form [formGroup]="form">
+    <formly-form class="row" [form]="form" [fields]="fields" [model]="model" (modelChange)="onModelChange()"></formly-form>
+  </form>
+</ng-container>

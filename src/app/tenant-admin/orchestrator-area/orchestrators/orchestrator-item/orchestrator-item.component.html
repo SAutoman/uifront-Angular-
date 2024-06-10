@@ -1,0 +1,84 @@
+<div class="row">
+  <div class="col-lg-6 mt-4">
+    <mat-card class="outline mat-elevation-z0" *ngIf="form">
+      <h3 class="mb-2" *ngIf="!orchestratorId">{{ 'Create Orchestrator' | translate }}</h3>
+      <h3 class="mb-2" *ngIf="orchestratorId">{{ 'Update Orchestrator' | translate }}</h3>
+
+      <mat-divider></mat-divider>
+      <form [formGroup]="form">
+        <mat-form-field class="mt-2">
+          <mat-label>{{ 'Name' | translate }}</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+      </form>
+      <div *ngIf="orchestratorId" class="d-flex justify-content-end">
+        <button mat-flat-button class="btn-sm mb-2" color="primary" (click)="updateOrchestrator()" [disabled]="!form.valid">
+          <app-icon name="save"></app-icon> {{ 'Update Name' | translate }}
+        </button>
+      </div>
+
+      <mat-card
+        class="outline mat-elevation-z0 mb-3 pb-0"
+        cdkDropList
+        [cdkDropListData]="actions"
+        (cdkDropListDropped)="onActionDrag($event, actions)"
+      >
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>{{ 'Orchestrator Actions' | translate }}</h5>
+          <button *ngIf="hideActionBuilder" mat-stroked-button class="btn-sm mb-3" color="primary" (click)="toggle()">
+            <app-icon name="add"></app-icon> {{ 'Add Action' | translate }}
+          </button>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="drag-wrapper" *ngIf="actions.length">
+          <div *ngFor="let action of actions; let i = index" cdkDrag class="d-flex justify-content-start align-items-center">
+            <button class="move" mat-icon-button color="primary" cdkDragHandle>
+              <app-icon [name]="'drag-indicator'"></app-icon>
+            </button>
+            <p class="flex-1">
+              <b>{{ i + 1 }}. {{ action.name }}</b>
+            </p>
+            <div class="d-flex justify-content-end pr-3">
+              <button mat-stroked-button color="primary" class="btn-icon mx-2 btn-sm" (click)="openAction(action, i)">
+                <app-icon [name]="'edit'"></app-icon>
+              </button>
+              <button mat-stroked-button color="warn" (click)="onRemoveClicked(action, i)" class="btn-icon btn-sm">
+                <app-icon [name]="'trash'"></app-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      <div *ngIf="!orchestratorId" class="d-flex justify-content-end">
+        <button mat-flat-button class="btn-sm" color="primary" (click)="createOrchestrator()" [disabled]="!form.valid">
+          <app-icon name="save"></app-icon> {{ 'Create' | translate }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+  <div *ngIf="!hideActionBuilder" class="col-lg-5 mt-4">
+    <mat-card class="outline mat-elevation-z0">
+      <div class="d-flex">
+        <div>
+          <h3>{{ 'Orchestrator Actions' | translate }}</h3>
+        </div>
+        <div class="ml-auto">
+          <button *ngIf="!hideActionBuilder" mat-stroked-button class="btn-sm actnBtn" color="primary" (click)="toggle()">
+            <app-icon name="close"></app-icon> {{ 'Cancel' | translate }}
+          </button>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <app-orchestrator-action-item
+          [events]="events"
+          [connectors]="connectors"
+          [order]="actionOrder"
+          [actionDto]="actionDto"
+          (OrchestratorActionEmitter)="onActionReceived($event)"
+        >
+        </app-orchestrator-action-item>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

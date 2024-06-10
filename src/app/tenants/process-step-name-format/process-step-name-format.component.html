@@ -1,0 +1,173 @@
+<!-- <mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>Process Step Name Format in Case</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-card class="mat-elevation-z0 outline mt-3 item">
+    <div class="item-head">
+      <div class="mr-2">
+        <p class="m-0">Show Name:</p>
+        <mat-radio-group color="primary" [(ngModel)]="showName" (change)="emitChangeStatus(true)">
+          <mat-radio-button [id]="'showNameYes_' + componentId" class="mr-3" [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [id]="'showNameNo_' + componentId" [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="mr-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Field Position</mat-label>
+          <input
+            [id]="'inputPosition_' + componentId"
+            color="primary"
+            matInput
+            type="number"
+            [(ngModel)]="fieldPosition"
+            required
+            (change)="emitChangeStatus(true)"
+          />
+          <mat-error>this field is required!</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="mr-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Truncate Symbols</mat-label>
+          <input
+            [id]="'inputTruncate_' + componentId"
+            color="primary"
+            matInput
+            type="number"
+            [(ngModel)]="truncateSymbols"
+            required
+            (change)="emitChangeStatus(true)"
+          />
+          <mat-error>this field is required!</mat-error>
+        </mat-form-field>
+      </div>
+      <button [id]="'add_' + componentId" class="btn-icon mt-1" mat-stroked-button color="primary" (click)="onAdd()">
+        <app-icon [name]="'add'"></app-icon>
+      </button>
+    </div>
+
+    <ng-container *ngIf="fields.length">
+      <mat-card class="mat-elevation-z0 outline d-flex justify-content-between my-3 created" *ngFor="let field of fields">
+        <div class="mr-2 w-50">
+          <p class="m-0">Show Name:</p>
+          <mat-radio-group class="radio" color="primary" [(ngModel)]="field.showFieldName" (change)="emitChangeStatus(true)">
+            <mat-radio-button [id]="'yes_' + componentId" class="mr-3" [value]="true">Yes</mat-radio-button>
+            <mat-radio-button [id]="'no_' + componentId" [value]="false">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <mat-form-field appearance="outline" class="mr-2 w-50 pb-0">
+          <mat-label>Field Index</mat-label>
+          <input
+            [id]="'inputIndex_' + componentId"
+            color="primary"
+            matInput
+            type="number"
+            [(ngModel)]="field.index"
+            required
+            (change)="emitChangeStatus(true)"
+          />
+          <mat-error>this field is required!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="mr-2 w-50 pb-0">
+          <mat-label>Truncate Symbols</mat-label>
+          <input
+            [id]="'inputSymbol_' + componentId"
+            color="primary"
+            matInput
+            type="number"
+            [(ngModel)]="field.truncateSymbols"
+            required
+            (change)="emitChangeStatus(true)"
+          />
+          <mat-error>this field is required!</mat-error>
+        </mat-form-field>
+
+        <button [id]="'remove_' + componentId" mat-stroked-button color="warn" class="btn-icon mt-1" (click)="onRemove(field)">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+      </mat-card>
+
+      <div class="mat-expansion-panel-footer">
+        <button [id]="'save_' + componentId" color="primary" mat-stroked-button (click)="onSave()">
+          <app-icon [name]="'save'"></app-icon>
+          Save
+        </button>
+      </div>
+    </ng-container>
+  </mat-card>
+
+  <div class="mat-expansion-panel-footer">
+    <button [id]="'save_' + componentId" color="primary" mat-flat-button (click)="onSave()">
+      <app-icon [name]="'save'"></app-icon>
+      Save
+    </button>
+  </div>
+</mat-expansion-panel>
+
+<!-- <mat-card class="card">
+  <mat-card-header class="header">
+    <mat-card-title>Process Step Name Format in Case</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="add-field">
+      <mat-radio-group color="primary" [(ngModel)]="showName" class="radio">
+        <mat-label>Show Name: </mat-label>
+        <mat-radio-button [id]="'showNameYes_' + componentId" class="right" [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [id]="'showNameNo_' + componentId" [value]="false">No</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field class="field">
+        <mat-label>Field Position</mat-label>
+        <input [id]="'inputPosition_' + componentId" color="primary" matInput type="number" [(ngModel)]="fieldPosition" required />
+        <mat-error>this field is required!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="field">
+        <mat-label>Truncate Symbols</mat-label>
+        <input [id]="'inputTruncate_' + componentId" color="primary" matInput type="number" [(ngModel)]="truncateSymbols" required />
+        <mat-error>this field is required!</mat-error>
+      </mat-form-field>
+
+      <div>
+        <button [id]="'add_' + componentId" mat-raised-button color="primary" (click)="onAdd()">Add</button>
+      </div>
+    </div>
+
+    <div *ngIf="fields.length">
+      <div class="selected-fields" *ngFor="let field of fields">
+        <mat-radio-group class="radio" color="primary" [(ngModel)]="field.showFieldName">
+          <mat-label>Show Name: </mat-label>
+          <mat-radio-button [id]="'yes_' + componentId" class="right" [value]="true">Yes</mat-radio-button>
+          <mat-radio-button [id]="'no_' + componentId" [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+
+        <mat-form-field class="field">
+          <mat-label>Field Index</mat-label>
+          <input [id]="'inputIndex_' + componentId" color="primary" matInput type="number" [(ngModel)]="field.index" required />
+          <mat-error>this field is required!</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="field">
+          <mat-label>Truncate Symbols</mat-label>
+          <input [id]="'inputSymbol_' + componentId" color="primary" matInput type="number" [(ngModel)]="field.truncateSymbols" required />
+          <mat-error>this field is required!</mat-error>
+        </mat-form-field>
+
+        <div>
+          <button [id]="'remove_' + componentId" mat-raised-button color="warn" (click)="onRemove(field)">Remove</button>
+        </div>
+      </div>
+
+      <div class="button-wrapper">
+        <button [id]="'save_' + componentId" color="primary" mat-raised-button (click)="onSave()">
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card> -->
+-->

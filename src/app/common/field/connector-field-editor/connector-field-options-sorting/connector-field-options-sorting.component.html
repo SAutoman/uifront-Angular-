@@ -1,0 +1,63 @@
+<form [formGroup]="form">
+  <div
+    formArrayName="sortRulesArray"
+    *ngIf="sortRulesArray()?.controls?.length"
+    cdkDropList
+    [cdkDropListData]="sortRulesArray()?.value"
+    (cdkDropListDropped)="onDrag($event)"
+  >
+    <div class="sort-wrapper" *ngFor="let ruleForm of sortRulesArray().controls; let settingIndex = index">
+      <button class="close-btn" (click)="removeFieldSettings(settingIndex)">
+        <app-icon [name]="'trash'"></app-icon>
+      </button>
+      <mat-expansion-panel class="mat-elevation-z0 my-3" cdkDrag>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <button class="move" mat-icon-button color="primary" (click)="$event.stopPropagation()">
+              <app-icon [name]="'drag-indicator'"></app-icon>
+            </button>
+            <div class="d-flex align-items-center">
+              <app-icon
+                class="order-direction"
+                [name]="'arrow-up'"
+                *ngIf="ruleForm?.controls['sort']?.value === sortDirection.asc"
+              ></app-icon>
+              <app-icon
+                class="order-direction"
+                [name]="'arrow-down'"
+                *ngIf="ruleForm?.controls['sort']?.value === sortDirection.desc"
+              ></app-icon>
+
+              <span> {{ ruleForm?.controls['field']?.value?.viewValue || 'Select Field' }}</span>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="row" [formGroupName]="settingIndex" (mousedown)="stopDrag($event)">
+          <mat-form-field appearance="outline" class="col-md-12">
+            <mat-label>{{ 'Select Field' | translate }}</mat-label>
+            <mat-select formControlName="field">
+              <mat-option *ngFor="let field of fieldOptions" [value]="field">
+                {{ field.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-radio-group class="col-md-12" aria-label="Sorting direction" formControlName="sort">
+            <mat-radio-button class="mr-3" [value]="sortDirection.asc">
+              {{ 'Ascending' | translate }}
+            </mat-radio-button>
+            <mat-radio-button class="mr-3" [value]="sortDirection.desc">
+              {{ 'Descending' | translate }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </mat-expansion-panel>
+    </div>
+  </div>
+
+  <button class="mb-3 btn-sm" (click)="addSortGroup()" mat-stroked-button color="primary">
+    <app-icon [name]="'add'"></app-icon>
+    {{ 'Add Sorting' | translate }}
+  </button>
+</form>

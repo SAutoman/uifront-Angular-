@@ -1,0 +1,39 @@
+<mat-card *ngIf="steps" [formGroup]="actionForm" class="outline mat-elevation-z0">
+  <mat-card class="outline mat-elevation-z0 mb-3">
+    <h5 class="m-0 mb-2 font-weight-bold">{{ 'Formula' | translate }}</h5>
+    <p>({{ minuend }} - {{ subtrahend }}) => {{ result }}</p>
+  </mat-card>
+
+  <h5 class="m-0 mb-2 font-weight-bold">{{ 'Minuend' | translate }}</h5>
+
+  <app-field-path-generator
+    [fieldPathInput]="minuendData"
+    [workflow]="workflow"
+    [steps]="steps"
+    [allowedFieldTypes]="allowedTypes"
+    (fieldPathEmitter)="fieldPathUpdated($event)"
+  >
+  </app-field-path-generator>
+
+  <h5 class="m-0 mb-2 font-weight-bold">{{ 'Subtrahend' | translate }}</h5>
+
+  <app-field-path-generator
+    [fieldPathInput]="subtrahendData"
+    [workflow]="workflow"
+    [steps]="steps"
+    [allowedFieldTypes]="allowedTypes"
+    (fieldPathEmitter)="fieldPathUpdated($event)"
+  >
+  </app-field-path-generator>
+
+  <h5 class="m-0 mb-2 font-weight-bold">{{ 'Result' | translate }}</h5>
+
+  <app-field-path-generator
+    [fieldPathInput]="resultData"
+    [workflow]="workflow"
+    [steps]="steps"
+    [allowedFieldTypes]="allowedTypes"
+    (fieldPathEmitter)="fieldPathUpdated($event)"
+  >
+  </app-field-path-generator>
+</mat-card>

@@ -1,0 +1,17 @@
+.grid {
+  overflow-x: auto;
+}
+
+.grid-container {
+  height: calc(100% - 65px);
+  kendo-grid {
+    max-height: 100%;
+  }
+}
+
+.wrapper {
+  position: relative;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 3px;
+}

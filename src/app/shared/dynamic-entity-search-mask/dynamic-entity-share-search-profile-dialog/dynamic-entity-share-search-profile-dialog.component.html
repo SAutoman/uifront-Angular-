@@ -1,0 +1,129 @@
+<h2 mat-dialog-title>{{ 'Share' | translate }} {{ header }} '{{ name }}'</h2>
+
+<div class="spinner-wrapper">
+  <mat-spinner [diameter]="25" *ngIf="!systemGroups.length"></mat-spinner>
+</div>
+
+<mat-dialog-content class="mat-typography" *ngIf="systemGroups?.length > 0">
+  <div class="content">
+    <div class="groups" *ngIf="showSystemGroups">
+      <h3>{{ 'System User Groups' | translate }}</h3>
+      <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let item of systemGroups; let i = index">
+          <mat-checkbox
+            *ngIf="item.isChecked"
+            [id]="item.group.name + i + '_g_' + componentId"
+            color="warn"
+            (change)="onGroupsCheckboxChecked(item.group.id, $event?.checked, item?.isShared)"
+            >{{ item.group.name }}</mat-checkbox
+          >
+          <mat-checkbox
+            *ngIf="!item.isChecked"
+            [id]="item.group.name + i + '_g_' + componentId"
+            color="primary"
+            (change)="onGroupsCheckboxChecked(item.group.id, $event?.checked, item?.isShared)"
+            >{{ item.group.name }}</mat-checkbox
+          >
+          <app-icon
+            *ngIf="item?.isShared"
+            matTooltip="{{ 'Already shared with' | translate }}"
+            matTooltipPosition="above"
+            class="ml-auto primary"
+            [name]="'check-circle'"
+          ></app-icon>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+    <div class="user-groups">
+      <h3 class="name">{{ 'Available User Groups' | translate }}</h3>
+      <mat-list class="list" role="list">
+        <mat-list-item role="listitem" *ngFor="let item of groups; let i = index">
+          <mat-checkbox
+            [id]="item.group.name + i + '_g_' + componentId"
+            color="warn"
+            *ngIf="item.isChecked"
+            (change)="onGroupsCheckboxChecked(item.group.id, $event?.checked, item?.isShared)"
+            >{{ item.group.name }}</mat-checkbox
+          >
+          <mat-checkbox
+            [id]="item.group.name + i + '_g_' + componentId"
+            color="primary"
+            *ngIf="!item.isChecked"
+            (change)="onGroupsCheckboxChecked(item.group.id, $event?.checked, item?.isShared)"
+            >{{ item.group.name }}</mat-checkbox
+          >
+          <app-icon
+            *ngIf="item?.isShared"
+            class="icon"
+            color="primary"
+            matTooltip="{{ 'Already shared with' | translate }}"
+            class="ml-auto primary"
+            [name]="'check-circle'"
+          ></app-icon>
+        </mat-list-item>
+      </mat-list>
+      <app-wfm-paginator [dataSource]="groupsDataSource"></app-wfm-paginator>
+    </div>
+
+    <div class="users" *ngIf="usersByTenant">
+      <h3 class="name">{{ 'Available Users' | translate }}</h3>
+      <mat-list class="list" role="list">
+        <mat-list-item role="listitem" *ngFor="let item of usersByTenant; let i = index">
+          <mat-checkbox
+            *ngIf="item.isChecked"
+            [id]="item.user.name + i + '_u_' + componentId"
+            color="warn"
+            (change)="onUsersCheckboxChecked(item.user.id, $event?.checked, item?.isShared)"
+          >
+            {{ item.user.name }} {{ item.user.lastName }} ({{ item.user.role }})
+          </mat-checkbox>
+          <mat-checkbox
+            *ngIf="!item.isChecked"
+            [id]="item.user.name + i + '_u_' + componentId"
+            color="primary"
+            (change)="onUsersCheckboxChecked(item.user.id, $event?.checked, item?.isShared)"
+          >
+            {{ item.user.name }} {{ item.user.lastName }} ({{ item.user.role }})
+          </mat-checkbox>
+          <app-icon
+            *ngIf="item?.isShared"
+            class="icon"
+            color="primary"
+            matTooltip="{{ 'Already shared with' | translate }}"
+            class="ml-auto primary"
+            [name]="'check-circle'"
+          ></app-icon>
+        </mat-list-item>
+      </mat-list>
+      <app-wfm-paginator [dataSource]="dataSource"></app-wfm-paginator>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions">
+  <button
+    [id]="'share_' + componentId"
+    [disabled]="(!groupIds?.length && !userIds?.length) || groupIdsForRemoval?.length > 0 || userIdsForRemoval?.length > 0"
+    mat-flat-button
+    color="primary"
+    [mat-dialog-close]="true"
+    cdkFocusInitial
+    (click)="onShare()"
+    class="mr-2"
+  >
+    {{ 'Share' | translate }}
+  </button>
+  <button
+    [id]="'remove_' + componentId"
+    [disabled]="(!groupIdsForRemoval?.length && !userIdsForRemoval?.length) || counter > 0"
+    mat-flat-button
+    color="warn"
+    [mat-dialog-close]="true"
+    (click)="onRemove()"
+    class="mr-2"
+  >
+    {{ 'Remove' | translate }}
+  </button>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

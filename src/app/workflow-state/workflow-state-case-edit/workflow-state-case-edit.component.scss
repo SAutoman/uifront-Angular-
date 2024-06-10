@@ -1,0 +1,12 @@
+.edit-container {
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  ::ng-deep {
+    app-form-builder-form-preview {
+      .button-wrapper {
+        bottom: 0 !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+<!-- <div>
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title> Configure field visibility </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content> -->
+<!-- <div *ngIf="items.length > 0; else noItems">
+				<div *ngFor="let field of items">
+					<div class="box">
+						<div>
+							<span>{{ field.name }}</span>
+						</div>
+						<div>
+							<mat-checkbox #details [checked]="field.details" class="checkbox" color="primary" (change)="onCheckboxClicked(field, details, overview)">Case Details
+							</mat-checkbox>
+							<mat-checkbox #overview [checked]="field.overview" class="checkbox" color="primary" (change)="onCheckboxClicked(field, details, overview)">Case
+								Overview</mat-checkbox>
+						</div>
+					</div>
+				</div>
+			</div> -->
+
+<!-- <div *ngIf="fieldsSettingsAll">
+        <div *ngFor="let field of fieldsSettingsAll">
+          <div class="box">
+            <div>
+              <span>{{ field.nameUI }}</span>
+            </div>
+            <div>
+              <mat-checkbox
+                [id]="field.nameUI + 'details_' + componentId"
+                #details
+                class="checkbox"
+                [checked]="field.setting.details"
+                color="primary"
+                (change)="onCheckboxClicked(field, details, overview)"
+                >Case Details
+              </mat-checkbox>
+              <mat-checkbox
+                [id]="field.nameUI + 'overview_' + componentId"
+                #overview
+                class="checkbox"
+                [checked]="field.setting.overview"
+                color="primary"
+                (change)="onCheckboxClicked(field, details, overview)"
+                >Case Overview</mat-checkbox
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-wrapper">
+        <button [id]="'save_' + componentId" mat-raised-button color="primary" (click)="onSubmit()">
+          <app-icon [name]="'save'"></app-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div> -->

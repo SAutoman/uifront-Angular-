@@ -1,0 +1,77 @@
+@import '../../../assets/styles/variable.scss';
+
+:host {
+  display: block;
+  background-color: $white;
+  height: 100%;
+  position: relative;
+  .close {
+    position: absolute;
+    right: 0;
+    top: 4px;
+    z-index: 10;
+  }
+  mat-tab-group {
+    z-index: 0;
+  }
+  .max-height {
+    max-height: 380px;
+  }
+  ::ng-deep {
+    .mat-tab-group {
+      height: 100%;
+      overflow: clip;
+      .mat-tab-body-wrapper {
+        height: calc(100% - 48px);
+        overflow-y: auto;
+      }
+    }
+    app-form-builder-form-preview {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+    }
+    .button-wrapper {
+      bottom: 0 !important;
+      position: sticky;
+      background-color: $white;
+      border-top: solid thin $border;
+      padding: 16px;
+      width: calc(100% + 32px);
+      margin-left: -16px;
+    }
+  }
+}
+
+/*----29-07-2021----*/
+.title-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.title-header button {
+  line-height: 36px !important;
+}
+
+.k-i-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(3px);
+  color: gray;
+  z-index: 10;
+}
+
+.no-workflow-message {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.failedRule {
+  margin: 5px 10px;
+}

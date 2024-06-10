@@ -1,0 +1,16 @@
+<div class="title-bar pl-3" *ngIf="isDeskTop">
+  <h3>{{ 'Raw Data' | translate }}</h3>
+</div>
+<div class="table-wrapper">
+  <app-dynamic-entity-grid
+    *ngIf="allowedGridOperations && schemaId"
+    [showAll]="true"
+    [showToolButtons]="isMobile || mainPanelWidth < 863 ? false : true"
+    [schemaId]="schemaId"
+    [allowedGridOperations]="allowedGridOperations"
+    [areaType]="areaType.rawData"
+    [isRawDataMainGrid]="true"
+    [allowAddAndEditActionInChildGrid]="true"
+    fileName="raw_data"
+  ></app-dynamic-entity-grid>
+</div>

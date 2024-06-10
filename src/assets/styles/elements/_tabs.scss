@@ -1,0 +1,41 @@
+.block {
+  .mat-tab-nav-bar,
+  .mat-tab-header {
+    // border-bottom: none !important;
+  }
+  .mat-tab-list {
+    mat-ink-bar {
+      display: none !important;
+    }
+    .mat-tab-labels {
+      background-color: $bodycolor;
+
+      .mat-tab-label {
+        padding: 0 64px 0 24px;
+        border-right: solid thin $dark-dividers;
+        &.mat-tab-label-active {
+          background: $white;
+          opacity: 1;
+          position: relative;
+          &:after {
+            content: '';
+            height: 2px;
+            width: 100%;
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            background: $white;
+            z-index: 100;
+          }
+        }
+        app-icon {
+          position: absolute;
+          right: 16px;
+          top: 14px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+@import '../../../assets/styles/variable.scss';
+:host {
+  display: block;
+  border: none;
+  &:last-child {
+    margin-bottom: none;
+  }
+  .bottom-buttons-wrapper {
+    position: sticky;
+    bottom: 0;
+    background-color: $white;
+    border-top: solid thin $dark-dividers;
+    z-index: 500;
+  }
+  .bg-gray {
+    padding: 1px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    background-color: lighten($bodycolor, 2%);
+    ::ng-deep {
+      app-dynamic-entity-creator {
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+.staus-icons {
+  &.warning {
+    stroke: $warning;
+  }
+  &.success {
+    stroke: $success;
+  }
+}
+.mat-expansion-panel-header {
+  position: relative;
+  .dragable-symbol-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 48px;
+    width: 9px;
+    border-right: solid thin $dark-dividers;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: row-resize;
+    transition: height 0.3s;
+  }
+  &.mat-expanded {
+    border-bottom: solid thin $dark-dividers;
+    .dragable-symbol-container {
+      height: 64px;
+    }
+  }
+}
+:host ::ng-deep {
+  .mat-expansion-panel-body {
+    position: relative;
+    padding: 16px 0 0 0 !important;
+    app-dynamic-entity-creator {
+      border-left: none !important;
+    }
+  }
+  app-dynamic-entity-creator {
+    app-form-builder-form-preview {
+      .button-wrapper {
+        padding: 0 !important;
+      }
+    }
+  }
+}

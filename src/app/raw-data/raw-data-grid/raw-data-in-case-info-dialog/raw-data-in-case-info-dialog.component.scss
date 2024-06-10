@@ -1,0 +1,28 @@
+@import '../../../../assets/styles/variable.scss';
+
+.link {
+  margin-left: 25px;
+}
+
+.case-list {
+  padding: 0;
+
+  li {
+    border-bottom: solid thin $dark-dividers;
+    padding: 4px 0;
+
+    span {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 16px;
+    }
+  }
+}
+
+.newline-enabled {
+  overflow: auto;
+  flex: 1;
+  white-space: nowrap;
+}

@@ -1,0 +1,16 @@
+<ng-container *ngIf="form">
+  <div [formGroup]="form">
+    <mat-checkbox color="primary" class="my-1" formControlName="enableCreateAnother">{{
+      'Enable Creating Another' | translate
+    }}</mat-checkbox>
+
+    <mat-form-field appearance="outline" class="mt-3" *ngIf="form?.get('enableCreateAnother')?.value">
+      <mat-label>{{ 'Which Fields Shall Be Kept' | translate }}</mat-label>
+      <mat-select multiple formControlName="persistingFields">
+        <mat-option *ngFor="let field of fieldOptions" [value]="field.value?.pathJoined">
+          {{ field.key }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>

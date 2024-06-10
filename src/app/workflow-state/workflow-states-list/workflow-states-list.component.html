@@ -1,0 +1,116 @@
+<div class="column-devidation">
+  <div [ngClass]="[openSidePanel ? 'workflow-open' : 'workflow']" id="main-area">
+    <div class="title-bar" *ngIf="isDeskTop">
+      <h3 class="title pl-3">{{ 'Cases' | translate }}</h3>
+      <div class="tools">
+        <mat-button-toggle-group
+          *ngIf="mainPanelWidth > 326 || !openSidePanel"
+          class="caseViewToggle"
+          name="caseView"
+          aria-label="Case View"
+          [(ngModel)]="selectedCaseView"
+          (change)="toggleSwitched()"
+        >
+          <mat-button-toggle value="grid">
+            <app-icon [name]="'grid-view'"></app-icon>
+            {{ 'Grid' | translate }}
+          </mat-button-toggle>
+          <mat-button-toggle value="kanban">
+            <app-icon [name]="'card-view'"></app-icon>
+            {{ 'Card' | translate }}</mat-button-toggle
+          >
+          <mat-button-toggle value="visualPlan" *ngIf="isVisualViewAllowed">
+            <app-icon [name]="'visual-view'"></app-icon> {{ 'Visual' | translate }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <button class="tool-button" matRipple [matMenuTriggerFor]="menuDropdowns" *ngIf="mainPanelWidth <= 326 && openSidePanel">
+          <app-icon [name]="'more'"></app-icon>
+        </button>
+        <mat-menu #menuDropdowns="matMenu">
+          <button mat-menu-item matRipple (click)="toggleSwitched('grid')">
+            <app-icon [name]="'grid-view'"></app-icon>
+            {{ 'Grid' | translate }}
+          </button>
+          <button mat-menu-item matRipple (click)="toggleSwitched('kanban')">
+            <app-icon [name]="'card-view'"></app-icon>
+            {{ 'Card' | translate }}
+          </button>
+          <button *ngIf="isVisualViewAllowed" mat-menu-item matRipple (click)="toggleSwitched('visualPlan')">
+            <app-icon [name]="'visual-view'"></app-icon> {{ 'Visual' | translate }}
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <app-workflow-states-grid
+      *ngIf="selectedCaseView === 'grid' && workflow"
+      [workflow]="workflow"
+      [showToolButtons]="areToolButtonsVisible()"
+      [tenantInfo]="tenantSystem"
+      [showRawData]="showRawDataArea"
+      [showCreateCaseButton]="showCreateCaseButton"
+      [showEditButton]="showEditButton"
+      [showPrintButton]="showPrintButton"
+      [showDownloadButton]="showDownloadButton"
+      [showProcessButton]="showProcessButton"
+      (openCaseCreateDialogue)="openCaseCreateDialogue()"
+    >
+    </app-workflow-states-grid>
+
+    <app-workflow-states-kanban
+      *ngIf="selectedCaseView === 'kanban' && workflow"
+      [workflow]="workflow"
+      [tenantInfo]="tenantSystem"
+      [showToolButtons]="areToolButtonsVisible()"
+      [showRawData]="showRawDataArea"
+      [showCreateCaseButton]="showCreateCaseButton"
+      [showProcessButton]="showProcessButton"
+      (openCaseCreateDialogue)="openCaseCreateDialogue()"
+    >
+    </app-workflow-states-kanban>
+
+    <app-workflow-states-visual-plan-view
+      *ngIf="selectedCaseView === 'visualPlan' && workflow && isVisualViewAllowed"
+      [workflow]="workflow"
+      [tenantInfo]="tenantSystem"
+      [showRawData]="showRawDataArea"
+      [showCreateCaseButton]="showCreateCaseButton"
+      [showProcessButton]="showProcessButton"
+      [showEditButton]="schemaPermissions?.edit"
+      (openCaseCreateDialogue)="openCaseCreateDialogue()"
+      [schema]="caseSchema"
+    ></app-workflow-states-visual-plan-view>
+  </div>
+  <div id="handler-left" #panelDragger class="resize-handler" cdkDragLockAxis="x" cdkDrag></div>
+  <div class="process-steps" id="process-step" *ngIf="openSidePanel">
+    <app-workflow-state
+      [isSidePanel]="true"
+      [showCaseButtons]="showCaseButtons"
+      [workflowStateId]="workflowStateId"
+      [workflowSchemaId]="workflowSchemaId"
+      (closeEvent)="closeWorkflowState($event)"
+    >
+    </app-workflow-state>
+  </div>
+</div>
+
+<ng-template #addCaseTemplate>
+  <h3 mat-dialog-title class="font-weight-bold">{{ 'Create Case' | translate }}</h3>
+  <mat-dialog-content>
+    <app-custom-number-input
+      *ngIf="!hideMultiCreationButton"
+      label="{{ 'Number Of Entities' | translate }}"
+      [control]="numberOfEntitiesControl"
+    >
+    </app-custom-number-input>
+    <app-form-builder-form-preview
+      [isUpdate]="false"
+      [fields$]="caseSchemaFields$"
+      [allowActionsFor]="areaTypes.case"
+      [createDirectly]="true"
+      [schema]="caseSchema"
+      (formValue)="createCaseWithNoRawData($event)"
+    >
+    </app-form-builder-form-preview
+  ></mat-dialog-content>
+</ng-template>

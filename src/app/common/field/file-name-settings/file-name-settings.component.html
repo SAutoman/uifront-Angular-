@@ -1,0 +1,9 @@
+<div>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'File Name Setting' | translate }}</mat-label>
+    <mat-select [formControl]="fileNameSettingControl">
+      <mat-option [value]="fileNameSetting.default">{{ 'File Name' | translate }} ({{ 'Default' | translate }})</mat-option>
+      <mat-option [value]="fileNameSetting.dateTime">{{ 'Date and Time of upload' | translate }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

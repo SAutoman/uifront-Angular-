@@ -1,0 +1,14 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'Search Term' | translate }}</mat-label>
+  <input
+    [id]="'searchTerm_' + componentId"
+    matInput
+    type="text"
+    [(ngModel)]="model.value"
+    #searchTerm="ngModel"
+    (ngModelChange)="onChange()"
+    required
+  />
+  <mat-error *ngIf="searchTerm.invalid">{{ 'Search Term is required' | translate }} </mat-error>
+</mat-form-field>

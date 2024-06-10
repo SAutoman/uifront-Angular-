@@ -1,0 +1,163 @@
+<div class="row">
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.IMAGE" appearance="outline" class="col-6">
+    <mat-label>{{ 'Crop Horizontally' | translate }}</mat-label>
+    <input matInput type="number" name="cropX" [ngModel]="selection.cropX" (ngModelChange)="updateProperty($event, 'cropX')" min="1" />
+  </mat-form-field>
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.IMAGE" appearance="outline" class="col-6">
+    <mat-label>{{ 'Crop Vertically' | translate }}</mat-label>
+    <input matInput type="number" name="cropY" [ngModel]="selection.cropY" (ngModelChange)="updateProperty($event, 'cropY')" min="1" />
+  </mat-form-field>
+
+  <mat-form-field
+    *ngIf="selection.type !== canvasObjectTypes.IMAGE && selection.type !== canvasObjectTypes.GROUP"
+    appearance="outline"
+    class="col-12"
+  >
+    <mat-label>{{ 'Stroke Width' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      name="strokeWidth"
+      [ngModel]="selection.strokeWidth"
+      (ngModelChange)="updateProperty($event, 'strokeWidth')"
+      step="0.1"
+      min="0"
+    />
+  </mat-form-field>
+
+  <ng-container *ngIf="selection.type === canvasObjectTypes.TEXT">
+    <mat-form-field appearance="outline" class="col-6">
+      <mat-label>{{ 'Stroke Color' | translate }}</mat-label>
+      <mat-select [ngModel]="selection.stroke" (ngModelChange)="updateSelection($event, 'stroke')">
+        <mat-option *ngFor="let colorItem of colorOptions" [value]="colorItem.key">
+          <span class="colorIndicator" [ngStyle]="{ backgroundColor: colorItem.key }"></span>
+
+          {{ colorItem.label | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-6">
+      <mat-label>{{ 'Fill Color' | translate }}</mat-label>
+      <mat-select [ngModel]="selection.fill" (ngModelChange)="updateSelection($event, 'fill')">
+        <mat-option *ngFor="let colorItem of colorOptions" [value]="colorItem.key">
+          <span class="colorIndicator" [ngStyle]="{ backgroundColor: colorItem.key }"></span>
+
+          {{ colorItem.label | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-6">
+      <mat-label>{{ 'Font Size' | translate }}</mat-label>
+      <input
+        matInput
+        type="number"
+        name="fontSize"
+        [ngModel]="selection.fontSize"
+        (ngModelChange)="updateProperty($event, 'fontSize')"
+        min="1"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-6">
+      <mat-label>{{ 'Font Style' | translate }}</mat-label>
+      <mat-select [ngModel]="selection.fontStyle" (ngModelChange)="updateSelection($event, 'fontStyle')">
+        <mat-option *ngFor="let style of fontStyleOptions" [value]="style">
+          <span [ngStyle]="{ fontStyle: style }">{{ style }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-12">
+      <mat-label>{{ 'Font Family' | translate }}</mat-label>
+      <mat-select [ngModel]="selection.fontFamily" (ngModelChange)="updateSelection($event, 'fontFamily')">
+        <mat-option *ngFor="let font of fontFamilyOptions" [value]="font">
+          <span data-ng-attr-style="{{ 'fontFamily: ' + fontFamily + ' !important' }}">{{ font }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
+
+  <mat-form-field appearance="outline" class="col-12">
+    <mat-label>{{ 'Opacity' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      name="opacity"
+      [ngModel]="selection.opacity"
+      (ngModelChange)="updateProperty($event, 'opacity')"
+      step="0.1"
+      min="0.1"
+      max="1"
+    />
+  </mat-form-field>
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.RECTANGLE" appearance="outline" class="col-6">
+    <mat-label>{{ 'Width' | translate }}</mat-label>
+    <input matInput type="number" name="width" [ngModel]="selection.width" (ngModelChange)="updateProperty($event, 'width')" min="1" />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.RECTANGLE" appearance="outline" class="col-6">
+    <mat-label>{{ 'Height' | translate }}</mat-label>
+    <input matInput type="number" name="height" [ngModel]="selection.height" (ngModelChange)="updateProperty($event, 'height')" min="1" />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.CIRCLE" appearance="outline" class="col-12">
+    <mat-label>{{ 'Radius' | translate }}</mat-label>
+    <input matInput type="number" name="radius" [ngModel]="selection.radius" (ngModelChange)="updateProperty($event, 'radius')" min="1" />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.CIRCLE" appearance="outline" class="col-6">
+    <mat-label>{{ 'Start Angle' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      name="startAngle"
+      [ngModel]="selection.startAngle"
+      (ngModelChange)="updateProperty($event, 'startAngle')"
+      min="0"
+      max="359"
+    />
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selection.type === canvasObjectTypes.CIRCLE" appearance="outline" class="col-6">
+    <mat-label>{{ 'End Angle' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      name="endAngle"
+      [ngModel]="selection.endAngle"
+      (ngModelChange)="updateProperty($event, 'endAngle')"
+      min="1"
+      max="360"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-6">
+    <mat-label>{{ 'Scale Horizontally' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      name="scaleX"
+      [ngModel]="selection.scaleX"
+      (ngModelChange)="updateProperty($event, 'scaleX')"
+      step="0.1"
+      min="0.1"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-6">
+    <mat-label>{{ 'Scale Vertically' | translate }}</mat-label>
+    <input
+      matInput
+      type="number"
+      name="scaleY"
+      [ngModel]="selection.scaleY"
+      (ngModelChange)="updateProperty($event, 'scaleY')"
+      step="0.1"
+      min="0.1"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-6">
+    <mat-label>{{ 'Skew Horizontally' | translate }}</mat-label>
+    <input matInput type="number" name="skewX" [ngModel]="selection.skewX" (ngModelChange)="updateProperty($event, 'skewX')" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-6">
+    <mat-label>{{ 'Skew Vertically' | translate }}</mat-label>
+    <input matInput type="number" name="skewY" [ngModel]="selection.skewY" (ngModelChange)="updateProperty($event, 'skewY')" />
+  </mat-form-field>
+</div>

@@ -1,0 +1,17 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'Time' | translate }}</mat-label>
+  <input
+    [id]="'inputTime_' + componentId"
+    matInput
+    [ngxTimepicker]="date"
+    [(ngModel)]="this.model.value"
+    #valueDate="ngModel"
+    [format]="24"
+    (ngModelChange)="onChange()"
+    required
+  />
+  <ngx-material-timepicker-toggle matSuffix [for]="date"></ngx-material-timepicker-toggle>
+  <ngx-material-timepicker #date [format]="24"></ngx-material-timepicker>
+  <mat-error *ngIf="valueDate.invalid"> {{ 'Time is required' | translate }} </mat-error>
+</mat-form-field>

@@ -1,0 +1,11 @@
+<!-- <form [formGroup]="fieldForm">
+  <mat-form-field>
+    <mat-label>Select Allowed List Items</mat-label>
+
+    <mat-select [id]="'select_' + componentId" (selectionChange)="onChange($event.value)" formControlName="allowedListItems" multiple>
+      <mat-option [id]="item.item + '_' + componentId" *ngFor="let item of listItems" [value]="item.id">{{ item.item }}</mat-option>
+    </mat-select>
+
+    <mat-error *ngIf="allowedListItems.errors?.required && allowedListItems.touched">Allowed list items is required.</mat-error>
+  </mat-form-field>
+</form> -->

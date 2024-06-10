@@ -1,0 +1,174 @@
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div class="main-container" [dir]="dir" [ngClass]="{ minisidebar: minisidebar, boxed: boxed }">
+  <app-notification-message></app-notification-message>
+  <!-- ============================================================== -->
+  <!-- Topbar - style you can find in header.scss -->
+  <!-- ============================================================== -->
+  <mat-toolbar class="topbar elative" color="white">
+    <button mat-icon-button (click)="snav.toggle()" value="sidebarclosed" *ngIf="!mobileQuery.matches" style="margin-left: -8px">
+      <app-icon [name]="'menu'"></app-icon>
+    </button>
+    <div class="app-title ml-3" *ngIf="!mobileQuery.matches">
+      <h3>{{ appBarData.title | translate }}</h3>
+    </div>
+    <div class="pl-3 d-flex align-items-center ml-auto mt-1" *ngIf="appBarData?.type == screenType?.CASES && !mobileQuery.matches">
+      <mat-button-toggle-group
+        class="caseViewToggle"
+        name="caseView"
+        aria-label="Case View"
+        [(ngModel)]="selectedCaseView"
+        (change)="toggleSwitch()"
+      >
+        <mat-button-toggle value="grid" matTooltip="{{ 'Grid' | translate }}" matTooltipPosition="below">
+          <app-icon [name]="'grid-view'"></app-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="kanban" matTooltip="{{ 'Card' | translate }}" matTooltipPosition="below">
+          <app-icon [name]="'card-view'"></app-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="visualPlan" matTooltip="{{ 'Visual' | translate }}" matTooltipPosition="below">
+          <app-icon [name]="'visual-view'"></app-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Logo - style you can find in header.scss -->
+    <!-- ============================================================== -->
+    <a style="direction: ltr" class="navbar-brand" href="/" *ngIf="mobileQuery.matches">
+      <app-logo></app-logo>
+    </a>
+
+    <!-- ============================================================== -->
+    <!-- Search - style you can find in header.scss -->
+    <!-- ============================================================== -->
+    <!-- <button mat-icon-button class="srh-btn">
+            <mat-icon>search</mat-icon>
+        </button> -->
+    <form class="app-search">
+      <input type="text" class="form-control" placeholder="Search &amp; enter" />
+      <a class="cl-srh-btn">
+        <i class="ti-close"></i>
+      </a>
+    </form>
+    <span class="d-flex"></span>
+    <!-- ============================================================== -->
+    <!-- app header component - style you can find in header.scss / header.component.ts-->
+    <!-- ============================================================== -->
+    <app-header #appHeader (toggleProfile)="profileMenu.toggle()" [isMobileView]="!mobileQuery.matches"></app-header>
+    <!-- ============================================================== -->
+    <!-- Right sidebar toggle - style you can find in rightsidebar.component.scss -->
+    <!-- ============================================================== -->
+    <!-- <button (click)="end.toggle()" mat-icon-button class="ml-xs overflow-visible">
+            <mat-icon>settings</mat-icon>
+        </button> -->
+  </mat-toolbar>
+  <!-- ============================================================== -->
+  <!-- End Topbar - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <mat-sidenav-container
+    class="example-sidenav-container"
+    [style.marginTop.px]="mobileQuery.matches ? 0 : 0"
+    [ngClass]="{ minisidebar: minisidebar }"
+    [hasBackdrop]="true"
+    (backdropClick)="snav.toggle()"
+  >
+    <!-- ============================================================== -->
+    <!-- Sidebar - style you can find in sidebar.scss -->
+    <!-- ============================================================== -->
+    <mat-sidenav
+      #snav
+      id="snav"
+      class="pl-xs"
+      [mode]="mobileQuery.matches ? 'side' : 'push'"
+      fixedTopGap="0"
+      [opened]="mobileQuery.matches"
+      [disableClose]="mobileQuery.matches"
+      (open)="sidebarOpened = true"
+      (close)="sidebarOpened = false"
+    >
+      <app-sidebar class="app-sidebar"></app-sidebar>
+    </mat-sidenav>
+    <!-- ============================================================== -->
+    <!-- Sidebar - style you can find in sidebar.scss -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right Sidebar - style you can find in rightsidebar.component.scss -->
+    <!-- ============================================================== -->
+    <!-- <mat-sidenav #end position="end" class="chat-panel" mode="over" opened="false">
+      <div class="scroll">
+        <mat-nav-list>
+          <h3 mat-subheader class="text-uppercase font-weight-bold">Settings</h3>
+          <mat-list-item>
+            <mat-slide-toggle color="warn" (change)="dir = dir == 'rtl' ? 'ltr' : 'rtl'">RTL</mat-slide-toggle>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-slide-toggle color="warn" [(ngModel)]="boxed">Boxed Layout</mat-slide-toggle>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <h3 mat-subheader class="text-uppercase font-weight-bold">Colors</h3>
+          <mat-list-item>
+            <mat-checkbox color="primary" [(ngModel)]="danger" (change)="darkgreen = green = blue = false" class="text-danger"
+              >Red</mat-checkbox
+            >
+          </mat-list-item>
+          <mat-list-item>
+            <mat-checkbox color="primary" [(ngModel)]="green" (change)="darkgreen = danger = blue = false" class="text-megna">
+              Teal Green
+            </mat-checkbox>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-checkbox color="primary" [(ngModel)]="blue" (change)="darkgreen = green = danger = false" class="text-info"
+              >Blue</mat-checkbox
+            >
+          </mat-list-item>
+          <mat-list-item>
+            <mat-checkbox color="primary" [(ngModel)]="darkgreen" (change)="green = danger = blue = false" class="text-dark-green"
+              >Green</mat-checkbox
+            >
+          </mat-list-item>
+          <mat-list-item>
+            <mat-checkbox color="primary" [(ngModel)]="dark" (change)="darkgreen = green = blue = danger = false">Dark</mat-checkbox>
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </mat-sidenav> -->
+
+    <mat-sidenav #profileMenu position="end" class="chat-panel" mode="push" opened="false" *ngIf="!mobileQuery.matches">
+      <div class="scroll">
+        <mat-nav-list>
+          <mat-list-item (click)="profileActions(0)">
+            <app-icon mat-list-icon [name]="'user'"></app-icon>
+            <span matLine>{{ 'Profile' | translate }}</span>
+          </mat-list-item>
+          <mat-list-item>
+            <app-icon mat-list-icon [name]="'notifications'"></app-icon>
+            <span matLine>{{ 'Disable notifications' | translate }}</span>
+          </mat-list-item>
+          <mat-list-item (click)="profileActions(1)">
+            <app-icon mat-list-icon [name]="'logout'"></app-icon>
+            <span matLine> {{ 'Sign Out' | translate }}</span>
+          </mat-list-item>
+          <mat-list-item (click)="reportProblemAction()">
+            <mat-icon mat-list-icon>bug_report</mat-icon>
+            <span matLine> {{ 'Report problem' | translate }}</span>
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </mat-sidenav>
+    <!-- ============================================================== -->
+    <!-- Page container - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <mat-sidenav-content class="page-wrapper">
+      <button class="sidebar-btn" (click)="toggleSideBar()" value="sidebarclosed" [ngClass]="{ show: sidebarOpened }">
+        <span class="arrow-a {{ sidebarOpened ? 'right' : 'left' }} sm"></span>
+      </button>
+      <router-outlet>
+        <app-spinner></app-spinner>
+      </router-outlet>
+    </mat-sidenav-content>
+    <!-- ============================================================== -->
+    <!-- Page container - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+  </mat-sidenav-container>
+</div>

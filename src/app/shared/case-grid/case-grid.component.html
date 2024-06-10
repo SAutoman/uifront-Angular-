@@ -1,0 +1,86 @@
+<div class="popup-scroll">
+  <kendo-grid
+    [data]="gridData"
+    [scrollable]="true"
+    [resizable]="false"
+    [sortable]="false"
+    [reorderable]="false"
+    stickyHeader="true"
+    [height]="200"
+  >
+    <kendo-grid-messages
+      noRecords="{{ 'There are no items to display' | translate }}"
+      pagerPage="{{ 'Page' | translate }}"
+      pagerOf="{{ 'of' | translate }}"
+      pagerItems="{{ 'items' | translate }}"
+      pagerItemsPerPage="{{ 'items per page' | translate }}"
+    >
+    </kendo-grid-messages>
+    <ng-container *ngFor="let item of dataColumns">
+      <kendo-grid-column
+        [id]="item.name + '_' + componentId"
+        [field]="item.field"
+        title="{{ item.title }}"
+        [width]="item._width"
+        class="actions"
+      >
+        <!-- Info column for grid being rendered -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.field && item.field === 'info'">
+          <button mat-stroked-button color="primary" class="btn-sm m-r-8" (click)="onRawDataInfoClicked(dataItem)">
+            <app-icon [name]="'info'"></app-icon>
+            <span>{{ 'Info' | translate }}</span>
+          </button>
+        </ng-template>
+
+        <!-- Status Column -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.field === 'status'">
+          <span class="badge lg {{ dataItem.statusConfig.color }}" [title]="dataItem.status">{{ dataItem.status }}</span>
+        </ng-template>
+        <!-- Actions column -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.field === 'actions'">
+          <button *ngIf="!data?.hideDeleteBtn" mat-icon-button color="warn">
+            <app-icon (click)="removeItem(dataItem)" color="warn" [name]="'close'"></app-icon>
+          </button>
+        </ng-template>
+        <!-- Notifications Column -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.type && item.field === 'emailCount'">
+          <button
+            mat-button
+            color="primary"
+            class="btn-sm"
+            (click)="onNotificationWidgetClicked(dataItem)"
+            [disabled]="!dataItem.emailCount"
+          >
+            {{ dataItem.emailCount }} {{ 'Notifcations Sent' | translate }}
+          </button>
+        </ng-template>
+        <!-- Date Column -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.type && item.type === fieldTypes.DateField">
+          <span>{{ dataItem[item.field] | customDateFormat: userDateFormat }}</span>
+        </ng-template>
+        <!-- DateTime field -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.type && item.type === fieldTypes.DateTimeField">
+          <span>{{ dataItem[item.field] | customDateFormat: userDateTimeFormat:item.field }}</span>
+        </ng-template>
+        <!-- HyperLink Fields -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item?.isHyperlink">
+          <a
+            [href]="dataItem[item.field + hyperLinkData]?.link"
+            [target]="dataItem[item.field + hyperLinkData]?.link"
+            mat-button
+            color="primary"
+            class="btn-sm"
+            >{{ dataItem[item.field + hyperLinkData]?.linkLabel }}</a
+          >
+        </ng-template>
+        <!-- RichTextField -->
+        <ng-template kendoGridCellTemplate let-dataItem *ngIf="item.type && item.type === fieldTypes.RichTextField">
+          <span [innerHTML]="dataItem[item.field] | sanitize: 'noSanitize'"></span>
+        </ng-template>
+      </kendo-grid-column>
+    </ng-container>
+  </kendo-grid>
+  <button class="mt-4" mat-flat-button color="primary" *ngIf="isDialog" (click)="dialogRef.close()" style="float: right">
+    {{ 'Close' | translate }}
+  </button>
+</div>

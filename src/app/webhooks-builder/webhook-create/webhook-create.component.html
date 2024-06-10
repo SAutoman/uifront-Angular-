@@ -1,0 +1,104 @@
+<!-- <ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template> -->
+
+<mat-card>
+  <mat-card-header> {{ 'WebHook Settings' | translate }} </mat-card-header>
+  <mat-card-content class="mt-3">
+    <form [formGroup]="webHooksForm" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'WebHook Settings Name' | translate }}</mat-label>
+          <input type="text" matInput formControlName="name" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'WebHook Topic URL' | translate }}</mat-label>
+          <input type="text" matInput formControlName="webhookUri" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <mat-label>{{ 'Method Type' | translate }}</mat-label>
+          <mat-select formControlName="httpMethod">
+            <mat-option *ngFor="let type of allMethodTypes" [value]="type.value"> {{ type.name | translate }} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <mat-label>{{ 'Payload Type' | translate }}</mat-label>
+          <mat-select formControlName="payloadType">
+            <mat-option *ngFor="let type of payloadTypes" [value]="type.value"> {{ type.name | translate }} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-checkbox formControlName="isActive">{{ 'Is Active' | translate }}</mat-checkbox>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <mat-label>{{ 'Authorization Types' | translate }}</mat-label>
+          <mat-select #authType formControlName="authorizationType" (selectionChange)="onAuthTypeChange()">
+            <mat-option *ngFor="let type of authorizationTypes" [value]="type.value"> {{ type.name | translate }} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="webHooksForm?.controls.authorizationType.value === 1" class="w-50">
+        <app-auth-details
+          [showGrantType]="true"
+          [showClientCreds]="true"
+          (authDetails)="fillAuthDetails($event)"
+          (scopes)="getScopesList($event)"
+          [webHookData]="webHookDetails"
+        >
+        </app-auth-details>
+      </div>
+      <div *ngIf="webHooksForm?.controls.authorizationType.value === 2" class="w-50">
+        <app-auth-details [showBasicAuth]="true" (authDetails)="fillAuthDetails($event)" [webHookData]="webHookDetails"> </app-auth-details>
+      </div>
+      <div *ngIf="webHooksForm?.controls.authorizationType.value === 3" class="w-50 mb-3">
+        <app-auth-details [showApiKeyInfo]="true" (authDetails)="fillAuthDetails($event)" [webHookData]="webHookDetails"></app-auth-details>
+      </div>
+      <div *ngIf="webHooksForm?.controls.authorizationType.value === 4" class="w-50">
+        <app-auth-details
+          [showBasicAuth]="true"
+          (authDetails)="fillAuthDetails($event)"
+          [showClientCreds]="true"
+          (scopes)="getScopesList($event)"
+          [webHookData]="webHookDetails"
+        >
+        </app-auth-details>
+      </div>
+      <div class="mb-3">
+        <button type="button" mat-raised-button color="primary" (click)="addHeader()">{{ 'Headers' | translate }} +</button>
+
+        <div class="my-2" formArrayName="headers">
+          <div *ngFor="let header of headers?.controls; let i = index" [formGroupName]="i" class="w-100 d-flex">
+            <mat-form-field appearance="outline" class="w-25 mr-2">
+              <mat-label>{{ 'Header' | translate }}</mat-label>
+              <input type="text" matInput formControlName="name" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-25">
+              <mat-label>{{ 'Value' | translate }}</mat-label>
+              <input type="text" matInput formControlName="value" />
+            </mat-form-field>
+            <button mat-button matSuffix mat-icon-button class="ml-2">
+              <app-icon [name]="'close'" class="danger" (click)="removeHeader(i)"></app-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button type="submit" [disabled]="webHooksForm.invalid || (loading$ | async)" mat-flat-button color="primary">
+          <app-icon [name]="'save'"></app-icon>
+          {{ 'Save' | translate }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

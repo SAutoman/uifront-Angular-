@@ -1,0 +1,16 @@
+app-form-rule-builder,
+app-form-function-field-settings {
+  box-sizing: border-box;
+}
+app-form-rule-builder {
+  max-width: 520px;
+}
+app-form-function-field-settings {
+  max-width: 500px;
+}
+
+.flex-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

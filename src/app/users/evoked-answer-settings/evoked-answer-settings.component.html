@@ -1,0 +1,21 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Evoked Answer Settings' | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-card class="outline mat-elevation-z0 mb-16">
+    <mat-card-content>
+      <div *ngFor="let setting of settingsList" class="d-flex align-items-center">
+        <h4>{{ setting.title }}</h4>
+        <span *ngIf="setting?.value" class="badge mx-2" [ngClass]="setting?.value === 'Yes' ? 'green' : 'gray'">
+          {{ setting.value }}
+        </span>
+        <button class="mx-2 btn-sm" *ngIf="setting?.id" mat-stroked-button color="warn" (click)="confirmDelete(setting.id)">
+          <app-icon [name]="'delete'"></app-icon>
+          {{ 'Ask me every time' | translate }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</mat-expansion-panel>

@@ -1,0 +1,29 @@
+<form [formGroup]="hyperlinkForm">
+  <mat-checkbox formControlName="allowHyperlink"> {{ 'Enable Hyperlink Feature' | translate }}</mat-checkbox>
+
+  <mat-form-field appearance="outline" *ngIf="allowHyperlinkControl.value">
+    <mat-label>{{ 'Set up hyperlink template' | translate }} </mat-label>
+    <input matInput type="text" formControlName="hyperlinkTemplate" />
+    <mat-hint>{{ 'Use' | translate }} <b>&#123;value}</b> {{ 'as a placeholder for field value in the template' | translate }}</mat-hint>
+    <mat-error *ngIf="hyperlinkTemplateControl.touched && hyperlinkTemplateControl.hasError('pattern')">
+      {{ 'Invalid URL ' | translate }}
+    </mat-error>
+  </mat-form-field>
+  <small *ngIf="hyperlinkTemplateControl.touched && hyperlinkTemplateControl.hasError('pattern')">
+    {{ 'URL should start with https or http' | translate }}
+  </small>
+  <div *ngIf="allowHyperlinkControl.value" class="mt-2">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Select HyperLink Visibility' | translate }}</mat-label>
+      <mat-select formControlName="hyperLinkVisibilitySetting">
+        <mat-option [value]="hyperLinkSetting?.hyperLinkWithValue">{{ 'HyperLink With Value' | translate }}</mat-option>
+        <mat-option [value]="hyperLinkSetting?.onlyValue">{{ 'Value Only' | translate }}</mat-option>
+        <mat-option [value]="hyperLinkSetting?.custom">{{ 'Custom Hyperlink Label' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="hyperlinkForm?.get('hyperLinkVisibilitySetting').value === hyperLinkSetting?.custom">
+      <mat-label>{{ 'Custom Hyperlink Label' | translate }} </mat-label>
+      <input matInput type="text" formControlName="customLabel" />
+    </mat-form-field>
+  </div>
+</form>

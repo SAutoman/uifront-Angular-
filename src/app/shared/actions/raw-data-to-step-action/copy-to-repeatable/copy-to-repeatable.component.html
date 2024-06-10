@@ -1,0 +1,35 @@
+<mat-form-field>
+  <mat-select placeholder="{{ 'Select Repeatable Step' | translate }}" [formControl]="stepSelector">
+    <mat-option *ngFor="let step of repeatableSteps" [value]="step.refName">
+      {{ step.refName }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-card class="outline mat-elevation-z0 pb-0 mb-3" *ngFor="let sourceToDestination of sourceToDestinationFieldPathInputs; let i = index">
+  <button class="close-btn" (click)="removeSourceToDestination(i)">
+    <app-icon [name]="'trash'"></app-icon>
+  </button>
+  <h5 class="mb-2 font-weight-bold">{{ sourceTitle }}</h5>
+  <app-field-path-generator
+    [fieldPathInput]="sourceToDestination.source"
+    [workflow]="workflow"
+    [isChildRefAllowed]="true"
+    (fieldPathEmitter)="sourcePathUpdated($event, i)"
+  >
+  </app-field-path-generator>
+
+  <h5 class="mb-2 font-weight-bold">{{ destinationTitle }}</h5>
+  <app-field-path-generator
+    [fieldPathInput]="sourceToDestination.destination"
+    [workflow]="workflow"
+    [steps]="steps"
+    (fieldPathEmitter)="destinationPathUpdated($event, i)"
+  >
+  </app-field-path-generator>
+</mat-card>
+<div class="d-flex justify-content-end">
+  <button mat-icon-button color="primary" (click)="addNewSourceToDestination()">
+    <app-icon [name]="'add'">add</app-icon>
+  </button>
+</div>

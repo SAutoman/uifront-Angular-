@@ -1,0 +1,17 @@
+.list {
+  display: inline-flex;
+}
+
+.list-field {
+  margin-left: 7px;
+}
+
+p {
+  text-align: left;
+}
+
+mat-form-field {
+  &.status-form-field {
+    width: 150px;
+  }
+}

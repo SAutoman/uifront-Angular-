@@ -1,0 +1,294 @@
+<ng-container *ngIf="!isSaveClicked && !isUpdateClicked && showToolButtons">
+  <button
+    [id]="'options' + componentId"
+    [disabled]="!allowLayoutChange"
+    class="tool-button"
+    [matMenuTriggerFor]="options"
+    matTooltip="{{ 'OPTIONS' | translate }}"
+    *ngIf="settingsLength"
+    [ngClass]="{ show: createLayout }"
+  >
+    <app-icon [name]="'more'"></app-icon>
+  </button>
+  <mat-menu #options="matMenu">
+    <div class="permanent">
+      <button [id]="'create_' + componentId" mat-menu-item (click)="onSaveLayoutClicked()" *ngIf="layoutSettings?.length">
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Create Layout' | translate }}
+      </button>
+
+      <button
+        [id]="'delete_' + componentId"
+        mat-menu-item
+        (click)="confirmDeleteLayout()"
+        *ngIf="selectedLayoutSettingId"
+        [disabled]="isSharedLayout"
+      >
+        <app-icon [name]="'trash'" class="danger"></app-icon>
+        {{ 'Delete Layout' | translate }}
+      </button>
+
+      <button
+        [id]="'update_' + componentId"
+        mat-menu-item
+        (click)="onUpdateLayoutClicked(true)"
+        *ngIf="selectedLayoutSettingId"
+        [disabled]="isSharedLayout"
+      >
+        <app-icon [name]="'edit'" class="primary"></app-icon>
+        {{ 'Update Layout' | translate }}
+      </button>
+
+      <button
+        [id]="'share_' + componentId"
+        mat-menu-item
+        (click)="onShareClicked()"
+        *ngIf="allowSharing && selectedLayoutSettingId && !layoutChanged"
+        [disabled]="isSharedLayout"
+      >
+        <app-icon [name]="'forward'" class="primary"></app-icon>
+        {{ 'Share Layout' | translate }}
+      </button>
+    </div>
+  </mat-menu>
+</ng-container>
+
+<mat-form-field *ngIf="settingsLength && !isSaveClicked && !isUpdateClicked">
+  <mat-label>{{ 'Table Layout' | translate }}</mat-label>
+  <mat-select
+    [id]="'select_' + componentId"
+    (selectionChange)="applyLayout($event.value)"
+    [(ngModel)]="selectedLayoutSetting"
+    (click)="$event.stopPropagation(); $event.preventDefault()"
+  >
+    <mat-option [id]="'updated_' + componentId" [value]="'layoutChanged'" *ngIf="layoutChanged">
+      <div class="layout-name">
+        <span> "{{ selectedLayoutName || 'Default' }}" {{ 'Layout is Changed' | translate }}</span>
+      </div>
+    </mat-option>
+    <mat-option [id]="'clear_' + componentId" [value]="'clear'">
+      <div class="layout-name">
+        <span> {{ 'Default layout' | translate }}</span>
+      </div>
+    </mat-option>
+    <mat-option [id]="layout.value.name + '_' + componentId" *ngFor="let layout of layoutSettings" [value]="layout">
+      <div class="layout-name">
+        <span>{{ layout.value.name }} </span>
+        <span class="layout-name-info" *ngIf="layout.fromUser">{{ '(Shared with user)' | translate }}</span>
+        <span class="layout-name-info" *ngIf="layout.fromGroup">{{ '(Shared with group)' | translate }}</span>
+      </div>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<button
+  *ngIf="showToolButtons"
+  class="tool-button"
+  matTooltip="{{ 'Reset layout' | translate }}"
+  [disabled]="!showResetButton"
+  [id]="'resetLocalLayout_' + componentId"
+  (click)="clearLayout(true)"
+>
+  <app-icon [name]="'refresh-layout'"></app-icon>
+</button>
+
+<button
+  *ngIf="!settingsLength && showToolButtons"
+  class="tool-button"
+  matTooltip="{{ 'Create layout' | translate }}"
+  [disabled]="!showResetButton"
+  [id]="'create_' + componentId"
+  (click)="onSaveLayoutClicked()"
+>
+  <app-icon [name]="'layout'"></app-icon>
+</button>
+
+<div *ngIf="isSaveClicked || isUpdateClicked" class="create-layout" [ngClass]="{ show: createLayout }">
+  <form [formGroup]="layoutForm" class="create" (ngSubmit)="onSaveClicked(layoutForm.value)">
+    <mat-form-field>
+      <mat-label *ngIf="isSaveClicked"> {{ 'Layout Name' | translate }}</mat-label>
+      <mat-label *ngIf="isUpdateClicked"> {{ 'New Layout Name' | translate }}</mat-label>
+
+      <input [id]="'inputLayoutNameCreate_' + componentId" matInput color="primary" formControlName="name" />
+      <mat-error> {{ 'Name is required' | translate }}!</mat-error>
+      <button [disabled]="layoutForm.invalid" [id]="'saveLayout_' + componentId" color="primary" type="submit" mat-icon-button matSuffix>
+        <app-icon [name]="'save'" class="success"></app-icon>
+      </button>
+
+      <button [id]="'clearLayout_' + componentId" color="warn" mat-icon-button (click)="cancelCreateUpdate()" matSuffix>
+        <app-icon [name]="'delete'" class="danger"></app-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</div>
+
+<button
+  [id]="'export_' + componentId"
+  *ngIf="allowExports && type === layoutTypeEnum.Grid && showToolButtons"
+  class="tool-button"
+  matTooltip="{{ 'EXPORT' | translate }}"
+  [matMenuTriggerFor]="menuGrid"
+>
+  <app-icon [name]="'export'"></app-icon>
+</button>
+
+<button
+  [id]="'export_allData' + componentId"
+  *ngIf="allowExports && (type === layoutTypeEnum.Grid || type === layoutTypeEnum.ReportGrid) && showToolButtons"
+  class="tool-button"
+  matTooltip="{{ 'EXPORT ALL DATA' | translate }} - CSV"
+  (click)="exportAllDataCsv()"
+>
+  <app-icon [name]="'download'"></app-icon>
+</button>
+
+<mat-menu #menuGrid="matMenu">
+  <div [id]="'xls_' + componentId" *ngIf="type === layoutTypeEnum.Grid" mat-menu-item>
+    <button kendoGridExcelCommand icon="file-excel">
+      {{ 'Excel Export' | translate }}
+    </button>
+  </div>
+  <div [id]="'pdf_' + componentId" *ngIf="type === layoutTypeEnum.Grid" mat-menu-item>
+    <button kendoGridPDFCommand icon="file-pdf">
+      {{ 'PDF Export' | translate }}
+    </button>
+  </div>
+</mat-menu>
+
+<ng-container *ngIf="!showToolButtons">
+  <ng-container *ngIf="!isSaveClicked && !isUpdateClicked">
+    <button
+      (click)="toggleMatMenu(menuTrigger)"
+      mat-menu-item
+      [id]="'options' + componentId"
+      [disabled]="!allowLayoutChange"
+      class="tool-button"
+      [matMenuTriggerFor]="options"
+      matTooltip="{{ 'OPTIONS' | translate }}"
+      *ngIf="settingsLength"
+      #menuTrigger="matMenuTrigger"
+      [ngClass]="{ show: createLayout }"
+    >
+      <app-icon [name]="'more'"></app-icon>Layout Options
+    </button>
+    <mat-menu #options="matMenu">
+      <div class="permanent">
+        <button [id]="'create_' + componentId" mat-menu-item (click)="onSaveLayoutClicked()" *ngIf="layoutSettings?.length">
+          <app-icon [name]="'save'"></app-icon>
+          {{ 'Create Layout' | translate }}
+        </button>
+
+        <button
+          [id]="'delete_' + componentId"
+          mat-menu-item
+          (click)="confirmDeleteLayout()"
+          *ngIf="selectedLayoutSettingId"
+          [disabled]="isSharedLayout"
+        >
+          <app-icon [name]="'trash'" class="danger"></app-icon>
+          {{ 'Delete Layout' | translate }}
+        </button>
+
+        <button
+          [id]="'update_' + componentId"
+          mat-menu-item
+          (click)="onUpdateLayoutClicked(true)"
+          *ngIf="selectedLayoutSettingId"
+          [disabled]="isSharedLayout"
+        >
+          <app-icon [name]="'edit'" class="primary"></app-icon>
+          {{ 'Update Layout' | translate }}
+        </button>
+
+        <button
+          [id]="'share_' + componentId"
+          mat-menu-item
+          (click)="onShareClicked()"
+          *ngIf="allowSharing && selectedLayoutSettingId && !layoutChanged"
+          [disabled]="isSharedLayout"
+        >
+          <app-icon [name]="'forward'" class="primary"></app-icon>
+          {{ 'Share Layout' | translate }}
+        </button>
+      </div>
+    </mat-menu>
+  </ng-container>
+
+  <button
+    mat-menu-item
+    class="tool-button"
+    matTooltip="{{ 'Reset layout' | translate }}"
+    [disabled]="!showResetButton"
+    [id]="'resetLocalLayout_' + componentId"
+    (click)="clearLayout(true)"
+  >
+    <app-icon [name]="'refresh-layout'"></app-icon>Reset Layout
+  </button>
+
+  <button
+    mat-menu-item
+    *ngIf="!settingsLength"
+    class="tool-button"
+    matTooltip="{{ 'Create layout' | translate }}"
+    [disabled]="!showResetButton"
+    [id]="'create_' + componentId"
+    (click)="onSaveLayoutClicked()"
+  >
+    <app-icon [name]="'layout'"></app-icon>Create layout
+  </button>
+
+  <div *ngIf="isSaveClicked || isUpdateClicked" class="create-layout" [ngClass]="{ show: createLayout }">
+    <form [formGroup]="layoutForm" class="create" (ngSubmit)="onSaveClicked(layoutForm.value)">
+      <mat-form-field>
+        <mat-label *ngIf="isSaveClicked"> {{ 'Layout Name' | translate }}</mat-label>
+        <mat-label *ngIf="isUpdateClicked"> {{ 'New Layout Name' | translate }}</mat-label>
+
+        <input [id]="'inputLayoutNameCreate_' + componentId" matInput color="primary" formControlName="name" />
+        <mat-error> {{ 'Name is required' | translate }}!</mat-error>
+        <button [disabled]="layoutForm.invalid" [id]="'saveLayout_' + componentId" color="primary" type="submit" mat-icon-button matSuffix>
+          <app-icon [name]="'save'" class="success"></app-icon>
+        </button>
+
+        <button [id]="'clearLayout_' + componentId" color="warn" mat-icon-button (click)="cancelCreateUpdate()" matSuffix>
+          <app-icon [name]="'delete'" class="danger"></app-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <button
+    mat-menu-item
+    [id]="'export_allData' + componentId"
+    *ngIf="allowExports && (type === layoutTypeEnum.Grid || type === layoutTypeEnum.ReportGrid)"
+    class="tool-button"
+    matTooltip="{{ 'EXPORT ALL DATA' | translate }} - CSV"
+    (click)="exportAllDataCsv()"
+  >
+    <app-icon [name]="'download'"></app-icon>Export All Data
+  </button>
+
+  <button
+    mat-menu-item
+    (click)="toggleExportMatMenu(exportMenuTrigger)"
+    [id]="'export_' + componentId"
+    *ngIf="allowExports && type === layoutTypeEnum.Grid"
+    class="tool-button"
+    #exportMenuTrigger="matMenuTrigger"
+    matTooltip="{{ 'EXPORT' | translate }}"
+    [matMenuTriggerFor]="menuGrid"
+  >
+    <app-icon [name]="'export'"></app-icon>Export
+  </button>
+  <mat-menu #menuGrid="matMenu">
+    <div [id]="'xls_' + componentId" *ngIf="type === layoutTypeEnum.Grid" mat-menu-item>
+      <button kendoGridExcelCommand icon="file-excel">
+        {{ 'Excel Export' | translate }}
+      </button>
+    </div>
+    <div [id]="'pdf_' + componentId" *ngIf="type === layoutTypeEnum.Grid" mat-menu-item>
+      <button kendoGridPDFCommand icon="file-pdf">
+        {{ 'PDF Export' | translate }}
+      </button>
+    </div>
+  </mat-menu>
+</ng-container>

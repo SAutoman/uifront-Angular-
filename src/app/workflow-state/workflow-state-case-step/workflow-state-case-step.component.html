@@ -1,0 +1,74 @@
+<ng-container class="form-scroll" *ngIf="schema && isLoaded; else loading">
+  <div *ngFor="let stepDe of stepDynamicEntities; let i = index" [ngClass]="{ 'bg-gray': stepDe.rawData }">
+    <h5 *ngIf="stepDe.rawData">
+      <app-repeatable-step-title [linkedRawDataDetails]="stepDe.rawData"></app-repeatable-step-title>
+    </h5>
+
+    <app-dynamic-entity-creator
+      [schema]="stepDe.schema"
+      [stepDe]="stepDe"
+      [schemaId]="stepDe.schema.id"
+      [areaTypeFromGrid]="stepDe.schema.areaType"
+      [allowActionsFor]="stepDe.schema.areaType"
+      [isStepResolved]="!!caseStep.resolution"
+      [allowStepHighlighting]="caseStep.rights?.canHighlightFields"
+      [isFormDisabled]="!caseStep.rights?.canEdit"
+      [activeFieldPath]="stepDe.activeFieldPath"
+      (stepFormValueEmitter)="stepFormValueEmitted($event, i)"
+      (stepHighlightsEmitter)="stepHighlightsEmitted($event, i)"
+      (fieldPathEmitter)="generateFieldLink($event, i)"
+    >
+    </app-dynamic-entity-creator>
+  </div>
+
+  <div class="d-flex align-items-center p-3 bottom-buttons-wrapper">
+    <button
+      mat-stroked-button
+      class="btn-icon m-r-16"
+      color="warning"
+      (click)="saveForm()"
+      [disabled]="isFormDisabled || isStepResolved || areFieldsReadonly || disableSaveButton"
+      matTooltip="{{ 'Save' | translate }}"
+    >
+      <app-icon [name]="'save'"></app-icon>
+    </button>
+    <button
+      mat-stroked-button
+      class="btn-icon m-r-16"
+      color="accent"
+      *ngIf="!isStepResolved && this.resolutionOptions?.length"
+      [disabled]="isFormDisabled || !areFormsValid || isResolveDisabled"
+      (click)="done()"
+      matTooltip="{{ 'Done' | translate }}"
+    >
+      <app-icon [name]="'done'"></app-icon>
+    </button>
+    <button
+      mat-stroked-button
+      class="btn-icon m-r-16"
+      color="accent"
+      *ngIf="isStepResolved"
+      [disabled]="isReopenDisabled"
+      (click)="reopen()"
+      matTooltip="{{ 'Reopen' | translate }}"
+    >
+      <app-icon [name]="'refresh'"></app-icon>
+    </button>
+    <button
+      mat-stroked-button
+      color="warn"
+      class="btn-icon"
+      (click)="removeStep()"
+      [disabled]="!caseStep.rights?.canDelete"
+      matTooltip="{{ 'Remove' | translate }}"
+    >
+      <app-icon [name]="'trash'"></app-icon>
+    </button>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

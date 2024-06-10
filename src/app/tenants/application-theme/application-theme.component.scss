@@ -1,0 +1,40 @@
+.grid {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+@import '../../../assets/styles/variable.scss';
+.mat-flat-button {
+  &.danger {
+    background-color: $danger !important;
+  }
+  &.darkgreen {
+    background-color: $darkgreen !important;
+  }
+  &.blue {
+    background-color: $purple !important;
+  }
+  &.green {
+    background-color: $megna !important;
+  }
+}
+::ng-deep {
+  .mat-expansion-panel {
+    &.dark {
+      background-color: #424242 !important;
+      color: $white !important;
+      .mat-expansion-panel-header {
+        h4 {
+          color: $white;
+        }
+        border-bottom-color: $light-dividers;
+      }
+      .mat-expansion-panel-footer {
+        border-top-color: $light-dividers !important;
+      }
+    }
+  }
+}
+
+.margin-bottom {
+  margin-bottom: 8px;
+}

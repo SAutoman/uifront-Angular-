@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-5 mx-auto py-4">
+      <form [formGroup]="createTenantForm" (ngSubmit)="onSubmit(createTenantForm.value)">
+        <mat-card class="outline mat-elevation-z0">
+          <p>
+            <strong>{{ !currentTenantId ? 'Create Tenant' : ('Update Tenant' | translate) }} </strong>
+          </p>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'Name' | translate }}</mat-label>
+            <input [id]="'inputName_' + componentId" matInput [placeholder]="'Name' | translate" formControlName="name" required />
+            <mat-error *ngIf="name.errors?.required"> {{ 'Name is required' | translate }} </mat-error>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="!currentTenantId" appearance="outline">
+            <mat-label>{{ 'Select Company' | translate }} *</mat-label>
+            <mat-select placeholder="{{ 'Select Company' | translate }}" formControlName="companyId">
+              <mat-option *ngFor="let company of companiesList" [value]="company.id">{{ company?.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <app-time-zone-select [timezoneSelected]="timeZoneSelected" (timezoneUpdated)="timezoneUpdated($event)"></app-time-zone-select>
+
+          <app-tenant-search-auto-complete
+            *ngIf="!currentTenantId"
+            (tenantEmitter)="onTenantSelected($event)"
+          ></app-tenant-search-auto-complete>
+
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ 'Template' | translate }}</mat-label>
+            <textarea rows="10" matInput formControlName="tenantTemplate"></textarea>
+          </mat-form-field>
+
+          <div class="text-right">
+            <button
+              [id]="'submit_' + componentId"
+              mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="!createTenantForm.valid || !timeZoneSelected"
+            >
+              {{ 'Submit' | translate }}
+            </button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</div>

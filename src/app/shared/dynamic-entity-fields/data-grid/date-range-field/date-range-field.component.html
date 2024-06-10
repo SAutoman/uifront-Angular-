@@ -1,0 +1,14 @@
+<div class="inline">
+  <mat-form-field appearance="outline">
+    <mat-label>From</mat-label>
+    <input [id]="'inputFrom_' + componentId" matInput [matDatepicker]="pickerFrom" />
+    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+    <mat-datepicker #pickerFrom></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>To</mat-label>
+    <input [id]="'inputTo_' + componentId" matInput [matDatepicker]="pickerTo" />
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTo></mat-datepicker>
+  </mat-form-field>
+</div>

@@ -1,0 +1,21 @@
+// :host ::ng-deep {
+//   .k-grid {
+//     height: calc(100% - 50px)!important;
+//   }
+// }
+
+.incomplete-button-wrapper {
+  position: absolute;
+  bottom: 10px;
+  right: 0;
+}
+
+.incompleteItems {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    margin-left: 10px;
+  }
+}

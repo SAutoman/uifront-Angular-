@@ -1,0 +1,101 @@
+<ng-container *ngIf="view$ | async as view">
+  <div class="title-bar" mat-dialog-title>
+    <h3 class="mx-3 mb-0">
+      {{ title | translate }}
+      <ng-container *ngIf="inputGroup?.name"> ({{ inputGroup?.name }}) </ng-container>
+    </h3>
+    <div class="tools">
+      <div *ngIf="view$ | async as view">
+        <form [@fadeIn] [formGroup]="view.formly.form">
+          <formly-form [form]="view.formly.form" [fields]="view.formly.fields" [model]="view.formly.model" [disabled]="true"></formly-form>
+        </form>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-content>
+    <kendo-grid
+      #grid
+      [data]="view.kendo.gridData"
+      [selectedKeys]="view.kendo.selectedKeys"
+      [selectable]="{ enabled: true, checkboxOnly: true }"
+      [columnMenu]="{ sort: false }"
+      [resizable]="true"
+      [scrollable]="true"
+      [reorderable]="false"
+      [filter]="view.kendo.state.filter"
+      [filterable]="true"
+      [kendoGridSelectBy]="getGridRowSelector"
+      [attr.disabled]="view.pending || view.kendo.loading || undefined"
+      [loading]="view.kendo.loading"
+      (selectedKeysChange)="onSelectedKeysChange(view, $event)"
+      (sortChange)="onSortChange(view, $event)"
+      (dataStateChange)="onDataStateChange(view, $event)"
+      [pageSize]="view.kendo.state.take"
+      [skip]="view.kendo.state.skip"
+      [pageable]="true"
+      (pageChange)="onPageChange($event, view.kendo.state)"
+      (filterChange)="filterChange(view)"
+      (columnResize)="onColumnResize($event)"
+      (columnReorder)="onColumnReorder($event)"
+      (columnVisibilityChange)="onColumnVisibilityChange($event)"
+    >
+      <kendo-grid-messages
+        noRecords="{{ 'There are no items to display' | translate }}"
+        pagerPage="{{ 'Page' | translate }}"
+        pagerOf="{{ 'of' | translate }}"
+        pagerItems="{{ 'items' | translate }}"
+        pagerItemsPerPage="{{ 'items per page' | translate }}"
+      >
+      </kendo-grid-messages>
+      <!-- TODO do not use Id here, use tag or name selector for test -->
+      <kendo-grid-checkbox-column
+        title="{{ 'In Group' | translate }}"
+        name="dialog-edit-group-kendo-grid-checkbox-column"
+        width="100"
+      ></kendo-grid-checkbox-column>
+      <ng-container *ngFor="let col of view.kendo.columnsConfig">
+        <kendo-grid-column
+          [columnMenu]="false"
+          [field]="col.field"
+          title="{{ col.title | translate }}"
+          [width]="col.width"
+          [hidden]="col.hidden"
+        >
+        </kendo-grid-column>
+      </ng-container>
+
+      <ng-template kendoPagerTemplate>
+        <div class="d-flex">
+          <kendo-pager-prev-buttons *ngIf="!hidePagination"></kendo-pager-prev-buttons>
+          <kendo-pager-info *ngIf="!hidePagination"></kendo-pager-info>
+          <kendo-pager-next-buttons *ngIf="!hidePagination"></kendo-pager-next-buttons>
+        </div>
+        <kendo-pager-page-sizes *ngIf="!hidePagination" [pageSizes]="pageSize"></kendo-pager-page-sizes>
+      </ng-template>
+    </kendo-grid>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button
+      [id]="createId('editGroupDialogCancel')"
+      class="mr-2"
+      mat-stroked-button
+      color="primary"
+      (click)="onDialogClose(view)"
+      [disabled]="view.pending"
+    >
+      <app-icon [name]="'close'"></app-icon>
+      {{ 'Cancel' | translate }}
+    </button>
+
+    <button
+      [id]="createId('editGroupDialogOk')"
+      mat-flat-button
+      color="primary"
+      [disabled]="view.pending || view.formly.form.invalid"
+      (click)="onSave(view)"
+    >
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Save' | translate }}
+    </button>
+  </mat-dialog-actions>
+</ng-container>

@@ -1,0 +1,326 @@
+.title-bar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
+  overflow: hidden;
+  padding: 0;
+  background-color: $white;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  h3 {
+    white-space: nowrap;
+    margin: 0;
+  }
+  h4 {
+    line-height: 0;
+    white-space: nowrap;
+    padding-right: 16px;
+  }
+  &:nth-of-type(1) {
+    border-bottom: solid thin $dark-dividers;
+  }
+  .tools {
+    display: flex;
+    height: 48px;
+    min-height: 48px;
+    max-height: 48px;
+    & > * {
+      border-right: solid thin $dark-dividers;
+    }
+    .mat-checkbox {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      &:first-of-type {
+        padding-left: 0;
+      }
+    }
+    h3 {
+      white-space: nowrap;
+    }
+    h4 {
+      line-height: 0;
+      white-space: nowrap;
+    }
+    .tool-button {
+      height: 48px;
+      width: 48px;
+      min-width: 48px;
+      max-width: 48px;
+      border: none;
+      background-color: $white;
+      border-left: solid thin $dark-dividers;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      app-icon {
+        stroke: $themecolor;
+      }
+      &:last-of-type {
+        border-right: solid thin $dark-dividers;
+      }
+      &.text {
+        width: auto;
+        min-width: 0;
+        max-width: 200px;
+        white-space: nowrap;
+        padding: 0 16px;
+        app-icon {
+          margin-right: 8px;
+        }
+        .truncate-text {
+          width: calc(100% - 32px);
+        }
+        &.mat-badge {
+          width: calc(100% - 62px);
+          .mat-badge-content {
+            min-width: 22px;
+          }
+        }
+      }
+      &:hover {
+        background-color: $border;
+      }
+      &:disabled {
+        app-icon {
+          stroke: $light-text;
+        }
+      }
+
+      &.quick-search {
+        min-width: 200px;
+        max-width: 200px;
+        width: 200px;
+        position: relative;
+        input {
+          width: 100%;
+          max-width: 100%;
+          padding-left: 48px;
+          height: 100%;
+          background-color: transparent;
+          border: none;
+        }
+        app-icon {
+          position: absolute;
+          left: 12px;
+          pointer-events: none;
+        }
+        @media (max-width: 1280px) {
+          min-width: 48px;
+          width: 48px;
+          max-width: 48px;
+          width: 48px;
+          &.full-width {
+            min-width: 200px;
+            width: 200px;
+            max-width: 200px;
+            input {
+              padding-left: 48px;
+            }
+          }
+          input {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            opacity: 0;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+
+            &:focus {
+              padding-left: 96px;
+              min-width: 200px;
+              text-align: left;
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .mat-form-field {
+      overflow: hidden;
+      .mat-select {
+        transform: translateY(-10px);
+      }
+      .mat-form-field-underline {
+        display: none !important;
+      }
+    }
+    &.select-with-label {
+      .mat-select {
+        transform: translateY(0) !important;
+      }
+    }
+    .search-icon {
+      margin-right: 16px;
+      opacity: 0.5;
+    }
+
+    &:first-of-type {
+      overflow-x: auto;
+      overflow-y: hidden;
+      @media (max-width: 540px) {
+        max-width: 0;
+        min-width: fit-content;
+        overflow: inherit;
+      }
+    }
+  }
+  .create-layout {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    border-left: solid thin $dark-dividers;
+    transition: width 0.3s;
+    &.show {
+      width: 256px;
+      opacity: 1;
+      visibility: visible;
+      padding: 0 16px;
+    }
+    .mat-icon-button {
+      &:nth-of-type(1) {
+        margin-right: 8px !important;
+      }
+      &:disabled {
+        opacity: 0.5 !important;
+        app-icon {
+          stroke: gray !important;
+        }
+      }
+    }
+    .mat-form-field-suffix {
+      display: flex;
+    }
+  }
+
+  mat-form-field {
+    height: 48px;
+    border-left: solid thin $dark-dividers;
+    padding: 0 12px 0 16px;
+    min-width: 240px;
+    @media (max-width: 768px) {
+      min-width: 140px;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 1.44375em !important;
+    }
+
+    &.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+    &.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+      transform: translateY(-0.7em) scale(0.75) perspective(100px) translateZ(0.001px) !important;
+    }
+  }
+  app-grid-layout-options {
+    mat-form-field {
+      border-left: none !important;
+      padding-left: 0 !important;
+    }
+  }
+  .buttons {
+    .mat-icon-button {
+      overflow: hidden;
+    }
+  }
+}
+.k-button {
+  box-shadow: none !important;
+}
+
+.mat-expansion-panel-header-title {
+  .tool-button {
+    height: 64px;
+    width: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    border: none;
+    background-color: transparent;
+    border-left: solid thin $dark-dividers;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    app-icon {
+      stroke: $themecolor;
+    }
+
+    &:hover {
+      background-color: $border;
+    }
+    &:disabled {
+      app-icon {
+        stroke: $light-text;
+      }
+    }
+    &:last-of-type {
+      border-right: solid thin $dark-dividers;
+    }
+  }
+  .layout-options {
+    height: 64px;
+    overflow: hidden;
+    .create-layout {
+      width: 0;
+      opacity: 0;
+      visibility: hidden;
+      border-right: solid thin $dark-dividers;
+      transition: width 0.3s;
+      &.show {
+        width: 256px;
+        opacity: 1;
+        visibility: visible;
+        padding: 16px 16px 0;
+      }
+      .mat-icon-button {
+        &:nth-of-type(1) {
+          margin-right: 8px !important;
+        }
+        &:disabled {
+          opacity: 0.5 !important;
+          app-icon {
+            stroke: gray !important;
+          }
+        }
+      }
+      .mat-form-field-suffix {
+        display: flex;
+      }
+    }
+  }
+
+  app-grid-layout-options {
+    .mat-form-field {
+      padding-right: 8px;
+      .mat-form-field-wrapper {
+        padding-top: 12px !important;
+      }
+    }
+  }
+}
+td {
+  .mat-expansion-panel-body {
+    padding: 0 !important;
+    .k-grid {
+      border-width: 0 !important;
+    }
+  }
+}
+app-workflow-states-kanban,
+app-dynamic-entity-grid {
+  .tools {
+    &:last-of-type {
+      position: sticky;
+      right: 0;
+      z-index: 10;
+    }
+  }
+}

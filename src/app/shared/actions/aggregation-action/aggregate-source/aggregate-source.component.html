@@ -1,0 +1,126 @@
+<div class="mb-2">
+  <h5>
+    {{ 'Source For Aggregation' | translate }}
+  </h5>
+
+  <form [formGroup]="sourceForm">
+    <mat-form-field>
+      <mat-label>{{ 'Select Source(s)' | translate }}</mat-label>
+      <mat-select formControlName="entitySelector" multiple>
+        <mat-option *ngFor="let ent of entities" [value]="ent.value" (onSelectionChange)="selectionChanged($event)">
+          {{ ent.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div formArrayName="sourcesArray" *ngIf="sourcesArray()?.controls?.length">
+      <ng-container *ngFor="let settingForm of sourcesArray().controls; let settingIndex = index">
+        <div *ngIf="selectedSources[settingIndex] as source">
+          <div class="row" [formGroupName]="settingIndex">
+            <ng-container *ngIf="isSingleGroup">
+              <mat-expansion-panel class="mat-elevation-z0 mb-2 w-100" *ngIf="source.fieldsTreeNodes">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="font-bold"> {{ source.title }}: {{ source.singleFieldLabel }} </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-tree-selectbox
+                  [selectedItems]="source.selectedSingleField"
+                  [rawDatasource]="source.fieldsTreeNodes"
+                  [parentSelectionAllowed]="false"
+                  [multipleSelection]="false"
+                  (selectionEmitter)="singleFieldPathUpdated($event, settingIndex)"
+                >
+                </app-tree-selectbox>
+              </mat-expansion-panel>
+            </ng-container>
+
+            <ng-container *ngIf="!isSingleGroup">
+              <mat-card *ngIf="source.rangeTreeNodes && rangeType" class="mb-2 w-100">
+                <h5>{{ source.title }}</h5>
+                <ng-container *ngIf="!isNodesEmpty(source.rangeTreeNodes); else noNodes">
+                  <mat-expansion-panel class="mat-elevation-z0 mb-2">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="font-bold">{{ source.fromFieldLabel }} </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-tree-selectbox
+                      [selectedItems]="source.selectedFromField"
+                      [rawDatasource]="source.rangeTreeNodes"
+                      [parentSelectionAllowed]="false"
+                      [multipleSelection]="false"
+                      (selectionEmitter)="rangeFromPathUpdated($event, settingIndex)"
+                    >
+                    </app-tree-selectbox>
+                  </mat-expansion-panel>
+
+                  <mat-expansion-panel class="mat-elevation-z0">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title class="font-bold"> {{ source.toFieldLabel }} </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-tree-selectbox
+                      [selectedItems]="source.selectedToField"
+                      [rawDatasource]="source.rangeTreeNodes"
+                      [parentSelectionAllowed]="false"
+                      [multipleSelection]="false"
+                      (selectionEmitter)="rangeToPathUpdated($event, settingIndex)"
+                    >
+                    </app-tree-selectbox>
+                  </mat-expansion-panel>
+                </ng-container>
+                <ng-template #noNodes>
+                  <small class="col-lg-12"
+                    >{{ 'No fields matching range type' | translate }} <b>{{ rangeTypeLabel }}</b>
+                  </small>
+                </ng-template>
+              </mat-card>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <mat-form-field>
+      <mat-label>{{ 'Aggregation Type' | translate }}</mat-label>
+      <mat-select formControlName="aggregationType">
+        <mat-option *ngFor="let agg of aggregationTypeOptions" [value]="agg.value">
+          {{ agg.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="showConcatControl">
+      <mat-label>{{ 'Concat Text' | translate }}</mat-label>
+      <input matInput type="text" formControlName="concatSymbol" />
+    </mat-form-field>
+  </form>
+
+  <ng-container *ngIf="selectedSources?.length && showFilters">
+    <div *ngIf="filters && filters.length" cdkDropList [cdkDropListData]="filters" (cdkDropListDropped)="onDrag($event)">
+      <div cdkDrag class="filter mb-2" *ngFor="let filter of filters; let i = index">
+        <button class="close-btn" (click)="removeFilter(i)">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="font-bold">
+              <button class="move" mat-icon-button color="primary" (click)="$event.stopPropagation()">
+                <app-icon [name]="'drag-indicator'"></app-icon>
+              </button>
+              <div>{{ 'Filter' | translate }} {{ i + 1 }}</div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-aggregate-source-filtering
+            [filterData]="filter"
+            [selectedSources]="selectedSources"
+            (emitter)="filterUpdated($event, i)"
+          ></app-aggregate-source-filtering>
+        </mat-expansion-panel>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button class="mb-3 btn-sm" (click)="addFilter()" mat-stroked-button>
+        <app-icon [name]="'raw-data'"></app-icon>
+        {{ 'Add Filter (optional)' | translate }}
+      </button>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,40 @@
+@import '../../../assets/styles/variable';
+
+.datasource-wrapper {
+  max-width: 100%;
+  min-width: 100%;
+  overflow: auto;
+  height: 100%;
+  max-height: 100%;
+  background-color: white;
+
+  ::ng-deep {
+    .selected {
+      background-color: $themecolor !important;
+      app-icon {
+        stroke: $white !important;
+      }
+    }
+    button.icon-button {
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      min-height: 32px !important;
+      width: 32px !important;
+      span {
+        app-icon {
+          margin: 0 !important;
+        }
+      }
+      &.selected {
+        background-color: $themecolor;
+        span {
+          app-icon {
+            stroke: $white !important;
+          }
+        }
+      }
+    }
+  }
+}

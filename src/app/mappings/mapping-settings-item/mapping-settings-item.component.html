@@ -1,0 +1,29 @@
+<form [formGroup]="rolesRightsForm">
+  <div class="d-flex">
+    <mat-radio-group class="example-radio-group" formControlName="settingType">
+      <mat-radio-button [value]="mappingSettingTypeEnum?.DEFAULT" class="example-radio-button">
+        {{ 'Show mapped data' }}
+      </mat-radio-button>
+      <mat-radio-button [value]="mappingSettingTypeEnum?.MAPPED_AND_UNMAPPED" class="example-radio-button">
+        {{ 'Show mapped and not mapped data' }}
+      </mat-radio-button>
+      <mat-radio-button [value]="mappingSettingTypeEnum?.EXACT_MATCH" class="example-radio-button">
+        {{ 'Enable Search for exact match' }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div *ngIf="rolesRightsForm?.controls?.settingType?.value === mappingSettingTypeEnum?.EXACT_MATCH" class="d-flex mt-1">
+    <mat-form-field class="w-25" appearance="outline">
+      <mat-label>{{ 'Select Field' | translate }}</mat-label>
+      <mat-select formControlName="fieldName">
+        <mat-option *ngFor="let field of schemaFields" [value]="field.fieldName">{{ field?.displayName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-25 ml-2" appearance="outline">
+      <mat-label>{{ 'Select Field Separator' | translate }}</mat-label>
+      <mat-select formControlName="valueSeparator">
+        <mat-option *ngFor="let separator of fieldSeparators" [value]="separator">{{ separator }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>

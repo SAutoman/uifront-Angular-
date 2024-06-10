@@ -1,0 +1,448 @@
+@use '@angular/material' as mat;
+$dark-primary: mat.define-palette(mat.$blue-palette);
+$dark-accent: mat.define-palette(mat.$indigo-palette, A200, A100, A400);
+$dark-warn: mat.define-palette(mat.$pink-palette);
+$dark-theme: mat.define-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+$themecolor: #2d84fb;
+$themecolor-alt: #2d84fb;
+$white: #fff;
+$sidebar-text: #8999a0;
+$sidebar-icons: #909394;
+$light: #505050;
+$inverse: #424242;
+$border: rgba(255, 255, 255, 0.2);
+
+/* This is for the navigation*/
+
+#snav {
+  .mat-nav-list .mat-list-item {
+    a {
+      color: $white;
+      app-icon {
+        stroke: $white;
+      }
+    }
+    &.selected .sub-item .mat-list-item-content a.selected {
+      color: $white;
+    }
+  }
+  .parent-active {
+    background-color: $inverse !important;
+    a {
+      color: $white !important;
+      app-icon {
+        stroke: $white !important;
+      }
+    }
+    app-icon {
+      stroke: $white !important;
+    }
+  }
+}
+app-tenant-settings {
+  .mat-expansion-panel {
+    .mat-expansion-panel-footer {
+      background-color: $inverse !important;
+    }
+  }
+}
+app-sidebar mat-tab-group mat-tab-header {
+  background-color: $inverse !important;
+  .mat-tab-label {
+    app-icon {
+      stroke: $white;
+    }
+    &.mat-tab-label-active {
+      app-icon {
+        stroke: $themecolor;
+      }
+    }
+  }
+}
+/*This is for the chartis js*/
+.ct-label {
+  fill: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.4);
+}
+.bg-light,
+.email-sidebar .selected .d-flex,
+.email-right-panel,
+.cal-month-view .cal-cell-row .cal-cell:hover,
+.cal-month-view .cal-cell.cal-has-events.cal-open,
+.cal-month-view .cal-cell-row:hover,
+.chat-middle-box,
+.chat-footer,
+.mat-card[_ngcontent-c10],
+.ngx-datatable.material {
+  background-color: $light;
+}
+.chat-middle-box {
+  color: black;
+}
+.ql-snow .ql-stroke {
+  stroke: $white;
+}
+.ql-snow .ql-fill {
+  fill: $white;
+}
+.ql-snow .ql-picker {
+  color: $white;
+}
+.my-drop-zone {
+  background: $inverse;
+}
+.cal-month-view .cal-day-cell:not(:last-child),
+.cal-month-view .cal-days .cal-cell-row,
+.cal-header,
+.cal-month-view .cal-days {
+  border-color: $border;
+}
+.k-grid {
+  background-color: $inverse !important;
+  color: $white !important;
+  .k-grid-content {
+    background-color: $inverse !important;
+    color: $white !important;
+    .k-grid-table {
+      border-bottom: solid thin $border !important;
+    }
+  }
+  th {
+    color: $white !important;
+    border-bottom-color: $border !important;
+    background-color: $inverse !important;
+    .k-icon {
+      color: $themecolor !important;
+    }
+  }
+}
+.k-grid-header,
+.k-header,
+.k-grid-header-wrap,
+.k-grouping-header,
+.k-grouping-header .k-group-indicator,
+.k-grid td,
+.k-grid-footer,
+.k-grid-footer-wrap,
+.k-grid-content-locked,
+.k-grid-footer-locked,
+.k-grid-header-locked,
+.k-filter-row > td,
+.k-filter-row > th {
+  border-color: $border !important;
+  background-color: $inverse !important;
+}
+.k-grid-header {
+  border-top: solid thin;
+}
+.custom-k-checkbox,
+.k-checkbox {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.custom-k-checkbox:checked,
+.k-checkbox:checked {
+  border-color: $themecolor !important;
+  color: #fff !important;
+  background-color: $themecolor !important;
+}
+.k-grid .k-grid-filter,
+.k-grid .k-header-column-menu,
+.k-grid .k-hierarchy-cell .k-icon {
+  color: $themecolor;
+}
+.k-grid-header .k-sorted,
+.k-grid-header .k-link:hover {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+.title-bar {
+  background-color: $inverse !important;
+  border-color: $border !important;
+  color: $white !important;
+}
+.k-toolbar {
+  background-color: $inverse !important;
+  border-color: $border !important;
+  color: $white !important;
+}
+.k-popup {
+  background-color: $inverse !important;
+  border-color: $border !important;
+  color: $white !important;
+}
+app-dynamic-entity-creator {
+  background-color: $inverse !important;
+  color: $white !important;
+  .button-wrapper {
+    background-color: $inverse !important;
+    color: $white !important;
+  }
+}
+.mat-drawer {
+  background-color: $inverse !important;
+  color: $white !important;
+}
+.page-wrapper {
+  .sidebar-btn {
+    background-color: $inverse !important;
+    color: $white !important;
+  }
+}
+.mat-toolbar {
+  background-color: $inverse !important;
+  color: $white !important;
+  .logo-text {
+    path {
+      fill: $white !important;
+    }
+  }
+  button {
+    app-icon {
+      stroke: $white !important;
+    }
+  }
+}
+.title-bar .tools .search-icon {
+  stroke: $white !important;
+}
+.title-bar {
+  .tools {
+    .tool-button {
+      background-color: $inverse !important;
+      &:disabled {
+        app-icon {
+          opacity: 0.3;
+        }
+      }
+    }
+  }
+}
+.process-steps {
+  background-color: $inverse !important;
+  border-color: $border !important;
+  app-workflow-state {
+    background-color: $inverse !important;
+    color: $white !important;
+    .article-top-section {
+      background-color: $inverse !important;
+    }
+  }
+}
+.mat-expansion-panel {
+  background-color: $inverse !important;
+  color: $white !important;
+  border-color: $border !important;
+  .mat-expansion-panel-header-title {
+    color: $white !important;
+  }
+}
+.process-steps-container .state-steps .box-step {
+  background-color: $inverse !important;
+}
+.process-steps-container {
+  .btn-toggle {
+    background-color: $inverse !important;
+  }
+}
+.mat-drawer-container {
+  background-color: darken($inverse, 10%) !important;
+}
+.mat-dialog-container {
+  app-dynamic-entity-creator {
+    border-color: transparent !important;
+  }
+  .action-buttons {
+    background-color: $inverse !important;
+    border-color: $border !important;
+  }
+}
+.mat-card {
+  background-color: $inverse !important;
+  color: $white !important;
+}
+app-dynamic-entity-search-mask {
+  .search-btn-wrapper {
+    background-color: $inverse !important;
+  }
+}
+.mat-option {
+  color: $white !important;
+}
+.mat-menu-content {
+  .mat-menu-item {
+    color: $white !important;
+    app-icon {
+      stroke: $white !important;
+      opacity: 0.6;
+    }
+  }
+}
+.mat-button-toggle-group {
+  background-color: darken($inverse, 3%) !important;
+  .mat-button-toggle {
+    background-color: darken($inverse, 3%) !important;
+    color: $white !important;
+    &.mat-button-toggle-checked {
+      background-color: $inverse !important;
+      color: $themecolor !important;
+      &:after {
+        background-color: $inverse !important;
+      }
+    }
+  }
+}
+.status-card-wrapper .status-card-container .column-wrapper .column .status-card .mat-card-header {
+  background-color: $inverse !important;
+}
+app-workflow-state {
+  background-color: $inverse !important;
+  color: $white !important;
+  .article-top-section {
+    background-color: $inverse !important;
+  }
+}
+app-user-profile-sidebar {
+  .mat-expansion-panel-body {
+    .mat-menu-item {
+      color: $white;
+      app-icon {
+        stroke: $white;
+      }
+    }
+  }
+}
+.mat-button-toggle-group {
+  app-icon {
+    stroke: $white;
+    opacity: 0.5;
+  }
+  .mat-button-toggle-checked {
+    background-color: $themecolor !important;
+    color: $white !important;
+    app-icon {
+      stroke: $themecolor;
+      opacity: 1;
+    }
+  }
+}
+
+app-page-tenant-fields,
+app-page-tenant-lists {
+  .sticky-top {
+    background-color: $inverse !important;
+  }
+}
+app-list-item {
+  .list-item {
+    background-color: $inverse !important;
+    color: $white !important;
+  }
+}
+.mat-form-field-prefix {
+  app-icon {
+    stroke: $white;
+    opacity: 0.4;
+  }
+}
+.mat-card.outline,
+.mat-toolbar,
+.mat-drawer-side,
+#snav .mat-nav-list .mat-list-item.selected > .mat-list-item-content > a,
+.title-bar .tools,
+.title-bar mat-form-field,
+.title-bar .tools .tool-button,
+.mat-stroked-button,
+.sidebar-btn,
+app-page-field-settings-visibility .row-form,
+.k-grid-pager,
+.mat-expansion-panel-footer,
+.mat-expansion-panel-header,
+.process-steps-container .state-steps,
+app-workflow-state-case .case-header,
+.process-steps-container .state-steps app-workflow-state-step-search .search,
+.process-steps-container .process-steps .btn-toggle,
+.article-top-section,
+.mat-button-toggle-standalone.mat-button-toggle-appearance-standard,
+.mat-button-toggle-group-appearance-standard,
+app-dynamic-entity-creator .button-wrapper,
+.mat-expansion-panel-header .dragable-symbol-container,
+.title-header {
+  border-color: $border !important;
+}
+app-workflow-state-case-step {
+  background-color: $inverse !important;
+  border-color: $border !important;
+}
+.tool-button.text,
+app-mapping-editor {
+  color: $white !important;
+}
+app-page-form-builder {
+  .builder-section {
+    background-color: $inverse !important;
+  }
+}
+mat-card-actions {
+  background-color: $inverse !important;
+  border-color: $border !important;
+}
+app-formly-nested-checkbox-addon {
+  .formly-nested-checkbox-addon--field-content {
+    .formly-nested-checkbox-addon--checkbox {
+      background-color: $inverse;
+      border: solid thin $border;
+    }
+  }
+}
+.mat-form-field-infix {
+  input:-internal-autofill-selected {
+    background-color: $inverse !important;
+    color: $white !important;
+  }
+}
+
+formly-field-mat-input {
+  color: $white !important;
+}
+app-formly-autocomplete {
+  color: $white !important;
+}
+.formly-right-button-addon--button {
+  background-color: $inverse !important;
+  border-color: $border !important;
+  &:hover {
+    background-color: darken($inverse, 3%) !important;
+  }
+}
+.formly-nested-checkbox-addon--checkbox {
+  background-color: $inverse !important;
+  border-color: $border !important;
+}
+app-workflow-state-case-step {
+  .bottom-buttons-wrapper {
+    background-color: $inverse !important;
+    border-color: $border !important;
+  }
+}
+
+.dragable-symbol-container {
+  app-icon {
+    stroke: $themecolor !important;
+  }
+}
+.column {
+  position: relative;
+  .resize-handle-right {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.149) !important;
+    }
+  }
+}
+.resize-handler {
+  &:hover,
+  &:active {
+    &:after {
+      background-color: $themecolor;
+    }
+  }
+}

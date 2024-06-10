@@ -1,0 +1,32 @@
+<input
+  matInput
+  *ngIf="formControl"
+  [id]="id"
+  [placeholder]="to.placeholder"
+  [(ngModel)]="formattedDateTime"
+  (ngModelChange)="onDateTimeStringChange($event)"
+  [formlyAttributes]="field"
+  [tabindex]="to.tabindex"
+  [required]="to.required"
+  [readonly]="to.disableButtons || to.readonly || to.disabled"
+  [disabled]="formControl.disabled"
+  (keyup)="checkForResetEvent($event)"
+  (focusout)="onFocusOut()"
+/>
+
+<div class="picker-buttons-1">
+  <button
+    type="button"
+    *ngIf="formControl.value"
+    color="warn"
+    mat-icon-button
+    (click)="resetValue()"
+    [disabled]="to.disableButtons || to.readonly || to.disabled"
+  >
+    <app-icon [name]="'close'"></app-icon>
+  </button>
+
+  <button type="button" mat-icon-button (click)="openDateTimePicker()" [disabled]="to.disableButtons || to.readonly || to.disabled">
+    <app-icon [name]="'calendar'"></app-icon>
+  </button>
+</div>

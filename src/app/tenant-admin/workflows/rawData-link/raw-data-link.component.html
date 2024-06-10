@@ -1,0 +1,77 @@
+<div>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Select RawData' | translate }}</mat-label>
+      <mat-select formControlName="rawDataReferenceFieldControl">
+        <mat-option *ngFor="let field of rawDataReferenceFields" [value]="field.id">{{ field.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-container *ngIf="rawDataReferenceFieldControl?.value">
+      <mat-form-field appearance="outline" class="col-md-6">
+        <mat-label>{{ 'Min Number of RawData Items' | translate }}</mat-label>
+        <input matInput type="number" formControlName="minCount" required />
+        <mat-error *ngIf="form?.controls?.minCount?.errors?.min">
+          {{ 'Number must be equal or greater than 0' | translate }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-md-6">
+        <mat-label>{{ 'Max Number of RawData Items' | translate }}</mat-label>
+        <input matInput type="number" formControlName="maxCount" required />
+        <mat-error *ngIf="form?.controls?.maxCount?.errors?.min">
+          {{ 'Number must be equal or greater than 0' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </ng-container>
+  </form>
+
+  <div *ngIf="rawDataReferenceFieldControl?.value">
+    <mat-card class="link-wrapper outline mat-elevation-z0" *ngFor="let rule of rawDataLink?.rawDataLinkOverrides; let i = index">
+      <div>
+        <div>
+          <b>{{ 'Name' | translate }}: </b> {{ rule.name }}
+        </div>
+        <div>
+          <b>{{ 'Action' | translate }}: </b> {{ getRightLabel(rule.rawDataLinkRight) | translate }}
+        </div>
+        <div>
+          <b>{{ 'User Roles' | translate }}: </b>
+          <ng-container *ngIf="rule.roles.length">
+            <span *ngFor="let role of rule.roles; let i = index">
+              {{ rolesEnum[role] }}<span *ngIf="i < rule.roles.length - 1">, </span>
+            </span>
+          </ng-container>
+          <ng-container *ngIf="!rule.roles.length">
+            {{ 'Any Role' | translate }}
+          </ng-container>
+        </div>
+      </div>
+      <div class="d-flex">
+        <button mat-stroked-button (click)="editLinkOverride(rule, i)" color="primary" class="mr-2 btn-icon btn-sm">
+          <app-icon [name]="'edit'"></app-icon>
+        </button>
+        <button mat-stroked-button (click)="removeLinkOverride(i)" color="warn" class="btn-icon btn-sm">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+      </div>
+    </mat-card>
+    <div class="flex-buttons-start">
+      <button mat-stroked-button color="primary" (click)="addLinkOverride()" class="btn-sm mt-3">
+        <app-icon [name]="'add'" class="primary"></app-icon>
+        {{ 'New rule' | translate }}
+      </button>
+      <button mat-stroked-button mat-button [matMenuTriggerFor]="menu" class="btn-sm mt-3" *ngIf="fieldsWithLinks?.length">
+        {{ 'Copy Field Rules From' | translate }}
+        <app-icon [name]="'arrow-down'" class="primary"></app-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let linkData of fieldsWithLinks" (click)="copyRulesFrom(linkData)">{{ linkData.field.label }}</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="flex-buttons-end">
+    <button mat-stroked-button color="warn" (click)="deleteRawDataLink()" *ngIf="rawDataLink && rawDataLink['id']" class="mr-3">
+      {{ 'Delete' | translate }}
+    </button>
+    <button mat-flat-button color="primary" (click)="saveRawDataLink()" [disabled]="!form.valid">{{ 'Save' | translate }}</button>
+  </div>
+</div>

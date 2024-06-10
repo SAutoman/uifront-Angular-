@@ -1,0 +1,60 @@
+<div *ngIf="connectorForm">
+  <h4 mat-dialog-title>{{ 'Create connector' | translate }}</h4>
+  <mat-dialog-content>
+    <br />
+    <form [formGroup]="connectorForm">
+      <mat-form-field>
+        <mat-label>{{ 'Name' | translate }}</mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'Select Source' | translate }}</mat-label>
+        <mat-select formControlName="source" (selectionChange)="onSourceChanged($event)">
+          <div>
+            <input
+              class="searchInput"
+              type="text"
+              [placeholder]="'Search' | translate"
+              matInput
+              autocomplete="off"
+              [formControl]="sourceCtrl"
+            />
+          </div>
+          <mat-optgroup *ngFor="let tenant of sources | async" [label]="tenant.tenantName">
+            <mat-option *ngFor="let option of tenant.workflows" [value]="option.id" [disabled]="option.disabled">
+              {{ option.name }}{{ option.id === selectedSourceOption ? ' (' + tenant.tenantName + ')' : '' }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'Select Destination' | translate }}</mat-label>
+        <mat-select formControlName="destination" (selectionChange)="onDestinationChanged($event)">
+          <div>
+            <input
+              class="searchInput"
+              type="text"
+              [placeholder]="'Search' | translate"
+              matInput
+              autocomplete="off"
+              [formControl]="destinationCtrl"
+            />
+          </div>
+          <mat-optgroup *ngFor="let tenant of destinations | async" [label]="tenant.tenantName">
+            <mat-option *ngFor="let option of tenant.workflows" [value]="option.id" [disabled]="option.disabled">
+              {{ option.name }}{{ option.id === selectedDestinationOption ? ' (' + tenant.tenantName + ')' : '' }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+    </form>
+    <br
+  /></mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button (click)="createConnector()" [disabled]="!connectorForm.valid" color="primary">
+      <app-icon name="save"></app-icon> {{ 'Create' | translate }}
+    </button></mat-dialog-actions
+  >
+</div>

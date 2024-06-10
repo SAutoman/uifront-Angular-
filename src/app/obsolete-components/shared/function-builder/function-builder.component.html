@@ -1,0 +1,67 @@
+<!-- <ng-container *ngIf="!hasError && !this.loading">
+  <mat-form-field class="function-name">
+    <input
+      [id]="'inputFunctionName_' + componentId"
+      matInput
+      placeholder="Function Name"
+      [(ngModel)]="functionName"
+      #funcname="ngModel"
+      required
+    />
+    <mat-error *ngIf="funcname.invalid && (funcname.dirty || funcname.touched)">Function Name is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="forms.length > 0">
+    <mat-label>Select form</mat-label>
+    <mat-select [id]="'selectForm_' + componentId" (selectionChange)="onFormSelected($event.value)">
+      <mat-option [id]="item.name + '_' + componentId" *ngFor="let item of forms" [value]="item">
+        {{ item.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="fields.length > 0">
+    <mat-label>Select field</mat-label>
+    <mat-select [id]="'selectField_' + componentId" (selectionChange)="onFieldSelected($event.value)" [(ngModel)]="currentSelectedField">
+      <mat-option [id]="item.field.fieldName + '_' + componentId" *ngFor="let item of fields" [value]="item">
+        {{ item.field.fieldName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <app-function-output
+    [selectedItems]="selectedItems"
+    [selectedItemsDefault]="items"
+    (isOutPutFieldDeleted)="onOutPutFieldDeleted($event)"
+  ></app-function-output>
+  <br />
+
+  <query-builder [formControl]="queryCtrl" [config]="config" [allowRuleset]="false" *ngIf="isDataLoaded && queryCtrl">
+    <ng-container *queryInput="let rule; type: 'textarea'; let getDisabledState = getDisabledState">
+      <textarea
+        [id]="'textarea_' + componentId"
+        class="text-input text-area"
+        [(ngModel)]="rule.value"
+        placeholder="Custom Textarea"
+      ></textarea>
+    </ng-container>
+  </query-builder>
+
+  <br />
+
+  <div class="submit-wrapper">
+    <div *ngIf="query.rules.length === 0">The rule is mandatory in this function</div>
+    <button
+      [id]="'save_' + componentId"
+      mat-flat-button
+      color="primary"
+      (click)="onSave()"
+      [disabled]="funcname.invalid || query.rules.length === 0"
+    >
+      <app-icon [name]="'save'"></app-icon>
+    </button>
+    <button [id]="'cancel_' + componentId" mat-raised-button color="warn" (click)="onDeletedFunction()" class="btn-item">
+      <app-icon [name]="'cancel'"></app-icon>
+    </button>
+  </div>
+</ng-container> -->

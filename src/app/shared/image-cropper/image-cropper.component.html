@@ -1,0 +1,26 @@
+<image-cropper
+  [imageChangedEvent]="imageChangedEvent"
+  [imageBase64]="imageFileb64"
+  [roundCropper]="isRoundCropper"
+  [maintainAspectRatio]="false"
+  format="png"
+  (imageCropped)="imageCropped($event)"
+  (imageLoaded)="imageLoaded($event)"
+  (cropperReady)="cropperReady()"
+  (loadImageFailed)="loadImageFailed()"
+></image-cropper>
+<ng-container *ngIf="!fileReady">
+  <div class="min-h-128 w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-container>
+<div class="pb-4 pt-3 d-flex justify-content-end" style="padding-right: 5px">
+  <button mat-stroked-button color="primary" (click)="onCancel()" class="mr-3">
+    <app-icon name="close"></app-icon>
+    {{ 'Cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" (click)="onCropImage()">
+    <app-icon name="crop"></app-icon>
+    {{ 'Crop' | translate }}
+  </button>
+</div>

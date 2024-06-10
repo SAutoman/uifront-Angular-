@@ -1,0 +1,41 @@
+@import '../../../../assets/styles/variable.scss';
+:host {
+  ::ng-deep {
+    app-form-builder-form-preview {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+    }
+    .mat-dialog-container .mat-dialog-content .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+    }
+  }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+.app-list-item {
+  display: block;
+  &:last-child {
+    border: none;
+  }
+}
+::ng-deep {
+  .schema-selector {
+    min-width: 500px !important;
+  }
+  @media (max-width: 540px) {
+    .schema-selector {
+      min-width: 300px !important;
+    }
+  }
+}
+
+.list-container.cdk-drop-list-dragging .app-list-item:not(.cdk-drag-placeholder) {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}

@@ -1,0 +1,73 @@
+<mat-dialog-content>
+  <br />
+  <form [formGroup]="dataBindForm">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Unit Name' | translate }}</mat-label>
+      <input type="text" matInput formControlName="bindingName" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Color For Occupied Unit' | translate }}</mat-label>
+      <mat-select formControlName="color">
+        <mat-option *ngFor="let colorItem of colors" [value]="colorItem.key">
+          <span class="colorIndicator" [ngStyle]="{ backgroundColor: colorItem.key }"></span>
+
+          {{ colorItem.label | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-expansion-panel class="mb-3 mat-elevation-z0 outline" [expanded]="labelSettings" *ngIf="isDynamicTitleAllowed">
+      <mat-expansion-panel-header>
+        {{ 'Title For Occupied Unit (optional)' | translate }}
+        <app-icon
+          [name]="'info'"
+          class="info-icon ml-2"
+          matTooltip="{{ 'In case of multiple mapped cases, title will be generated for the first one' | translate }}"
+          matTooltipPosition="below"
+        ></app-icon>
+      </mat-expansion-panel-header>
+      <app-connector-field-option-label-settings
+        [schema]="schema"
+        (labelSettingsEmitter)="labelSettingsUpdated($event)"
+        [labelSettings]="labelSettings"
+      ></app-connector-field-option-label-settings>
+    </mat-expansion-panel>
+    <mat-form-field>
+      <mat-label>{{ 'Fields To Map To This Unit' | translate }}</mat-label>
+      <mat-select (selectionChange)="onFieldSelected($event.value)" formControlName="selectedField">
+        <mat-option *ngFor="let field of fields; let i = index" [value]="field">
+          <span *ngIf="field.isSystem">{{ field.displayName | translate }}</span>
+          <span *ngIf="!field.isSystem">{{ field.displayName }}</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-container *ngIf="selectedFields.length">
+      <div class="mb-3" *ngFor="let field of selectedFields; let i = index">
+        <mat-card class="outline mat-elevation-z0 pt-0 overflow-hidden w-100">
+          <app-dynamic-entity-field [field]="field"></app-dynamic-entity-field>
+          <button
+            [id]="'clear_' + i + '_' + componentId"
+            mat-icon-button
+            color="warn"
+            (click)="onFieldRemove(field)"
+            class="position-absolute"
+            style="top: 0; right: 0; z-index: 2"
+          >
+            <app-icon [name]="'close'"></app-icon>
+          </button>
+        </mat-card>
+      </div>
+    </ng-container>
+  </form>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <div class="action-buttons">
+    <button class="mr-2" mat-stroked-button color="primary" (click)="cancel()">
+      <app-icon name="close"></app-icon>{{ 'Cancel' | translate }}
+    </button>
+    <button mat-flat-button color="primary" (click)="saveMapping()" [disabled]="!isValid()">
+      <app-icon name="save"></app-icon>{{ 'Save' | translate }}
+    </button>
+  </div></mat-dialog-actions
+>

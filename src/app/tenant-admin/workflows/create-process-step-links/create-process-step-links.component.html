@@ -1,0 +1,89 @@
+<div *ngIf="processStepLinkForm">
+  <form [formGroup]="processStepLinkForm">
+    <mat-form-field>
+      <mat-select [placeholder]="'Select Step' | translate" formControlName="stepId" required>
+        <mat-option *ngFor="let step of availableProcessSteps" [value]="step.id">{{ step.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="mb-3">
+      <mat-select
+        [disabled]="existingLinks?.length === 0"
+        [placeholder]="'Select Parent Step' | translate"
+        formControlName="parentId"
+        (selectionChange)="onParentStepChange($event)"
+      >
+        <mat-option *ngIf="processStepLinkForm?.controls.parentId.value" value="reset">{{ 'None' | translate }}</mat-option>
+        <mat-option
+          *ngFor="let step of existingLinks"
+          [value]="step.refName"
+          [disabled]="processStepLinkForm?.controls.stepId.value === step.processStepEntityId"
+          >{{ step.refName }}</mat-option
+        >
+      </mat-select>
+      <mat-hint>{{
+        'When some step is a parent to another step, parent step shall not be possible to delete if the child step is still in the case'
+          | translate
+      }}</mat-hint>
+    </mat-form-field>
+
+    <mat-checkbox color="primary" formControlName="isRepeatable" class="mr-4" [disabled]="noRawDataSchema || disableRepeatableCheckbox"
+      >{{ 'Make Step Repeatable' | translate }}
+    </mat-checkbox>
+  </form>
+
+  <app-repeatable-step-settings
+    *ngIf="isRepeatable && !noRawDataSchema"
+    [workflow]="workflow"
+    (settingsEmitter)="setRepeatableSettings($event)"
+    [repeatableSettings]="repeatableSettings"
+  >
+  </app-repeatable-step-settings>
+  <br />
+  <app-link-override
+    [isDefaultOverride]="true"
+    [overrideDto]="processStepLink?.defaultOverride"
+    [workflow]="workflow"
+    [processStep]="processStep"
+    [linkData$]="linkData$"
+    (overriderDataEmitter)="updateDefaultOverride($event)"
+  >
+  </app-link-override>
+
+  <mat-card class="outline mat-elevation-z0 mt-3" *ngIf="overrides">
+    <h4 class="mt-0 mb-2">{{ 'Overrides' | translate }}</h4>
+    <mat-divider></mat-divider>
+    <br />
+    <p class="text-center m-0" style="font-size: 16px" *ngIf="overrides && !overrides.length">
+      {{ 'Currently no Overrides added' | translate }}.
+    </p>
+    <ng-container *ngIf="overrides && overrides.length">
+      <mat-card class="d-flex align-items-center outline mat-elevation-z0 mb-3" *ngFor="let overrideItem of overrides; let i = index">
+        <p class="m-0 flex-grow-1 text" style="font-size: 16px">{{ overrideItem.name }}</p>
+        <div class="flex">
+          <button mat-stroked-button color="primary" (click)="openOverride(overrideItem, i)" class="btn-icon btn-sm mr-2">
+            <app-icon [name]="'edit'"></app-icon>
+          </button>
+          <button mat-stroked-button color="warn" (click)="removeOverride(overrideItem, i)" class="btn-icon btn-sm">
+            <app-icon [name]="'trash'"></app-icon>
+          </button>
+        </div>
+      </mat-card>
+    </ng-container>
+    <br />
+    <mat-divider></mat-divider>
+    <div class="pt-3 d-flex justify-content-end">
+      <button mat-flat-button (click)="openOverride()" color="primary" class="btn-sm">{{ 'Add Conditioned Override' | translate }}</button>
+    </div>
+  </mat-card>
+  <br />
+  <mat-divider></mat-divider>
+  <br />
+
+  <div class="d-flex justify-content-end">
+    <button mat-stroked-button color="warn" (click)="deleteLink()" *ngIf="processStepLink" class="mr-3">{{ 'Remove' | translate }}</button>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!isLinkOverrideFormValid || !processStepLinkForm.valid">
+      {{ 'Submit' | translate }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+.clickable {
+  cursor: pointer;
+  color: blue;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.action-item-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.drag-wrapper {
+  margin: 0 -16px;
+  p {
+    flex: 1;
+  }
+}
+
+.move {
+  cursor: move;
+}

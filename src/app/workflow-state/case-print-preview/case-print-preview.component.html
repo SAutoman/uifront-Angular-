@@ -1,0 +1,215 @@
+<ng-container *ngTemplateOutlet="casePreview"></ng-container>
+<ng-template #casePreview>
+  <div class="print-container" #printContainer>
+    <div mat-dialog-title class="print-header">
+      <span [ngClass]="{ 'align-items-center': true, 'd-flex': !isMultiColumn }">
+        <h4 class="title" [innerHTML]="caseItem?.title | sanitize: 'html'" [ngClass]="{ 'mb-2': isMultiColumn }"></h4>
+        <div class="d-flex align-items-center mr-3" [ngClass]="{ 'mb-2': isMultiColumn }">
+          <span class="badge {{ currentStatus?.configuration?.color }}">
+            {{ currentStatus?.name }}
+          </span>
+          <span class="attachments"><app-icon name="attach"></app-icon>{{ attachments?.length }}</span>
+        </div>
+      </span>
+
+      <span class="print-meta mt-4">
+        <p>{{ tenantDetails.tenant.tenantName }} ({{ tenantDetails.tenant.role }})</p>
+        <!-- <p>{{ currentUrl }}</p> -->
+        <p>{{ currentDate }}</p>
+      </span>
+    </div>
+    <mat-dialog-content>
+      <!-- RawData items in case -->
+      <ng-container *ngIf="rawDataItems?.length && showRawDataAreaHeader">
+        <h5 class="module-title">{{ rawDataComponentTitle | translate }}</h5>
+        <mat-card class="outline mat-elevation-z0 case-fields" *ngFor="let article of paginatedRawDataItems; let i = index">
+          <div class="cell articles-index">
+            <p>{{ i + 1 }}</p>
+          </div>
+          <div *ngFor="let node of article.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: node }"></div>
+        </mat-card>
+        <div class="show-articles" *ngIf="rawDataItems?.length > 2">
+          <button mat-stroked-button color="primary" (click)="showHideArticles()" class="btn-rounded btn-sm btn-icon-right">
+            {{ allArticleVisible ? ('Hide All Raw Data' | translate) : ('Show All Raw Data' | translate) }}
+            <app-icon [name]="!allArticleVisible ? 'arrow-down' : 'arrow-up'"></app-icon>
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Steps in case -->
+      <ng-container *ngIf="steps?.length && showCaseAreaHeader">
+        <h5 class="module-title">{{ 'Steps In This Case' | translate }}</h5>
+        <mat-card class="outline mat-elevation-z0 mb-3 case-fields" *ngFor="let caseStepItem of steps">
+          <p class="step-title">
+            {{ caseStepItem.title || caseStepItem.name }}
+            <span *ngIf="caseStepItem.rawData">
+              (
+              <app-repeatable-step-title [linkedRawDataDetails]="caseStepItem.rawData"></app-repeatable-step-title>
+              )
+            </span>
+          </p>
+          <div *ngFor="let node of caseStepItem.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: node }"></div>
+        </mat-card>
+      </ng-container>
+
+      <!-- Case fields -->
+      <ng-container *ngIf="caseItem?.fields?.length">
+        <h5 class="module-title">{{ 'Case Fields' | translate }}</h5>
+        <mat-card class="outline mat-elevation-z0 mb-3 case-fields">
+          <div *ngFor="let node of caseItem?.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: node }"></div>
+        </mat-card>
+      </ng-container>
+
+      <!-- Comments in case -->
+      <ng-container *ngIf="commentItems?.length">
+        <h5 class="module-title">{{ 'Comments In This Case' | translate }}</h5>
+        <div class="mat-elevation-z0 outline activity-msg m-b-16" *ngFor="let comment of commentItems">
+          <div *ngFor="let node of comment.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: node }"></div>
+        </div>
+      </ng-container>
+
+      <!-- All attachments in the case -->
+      <ng-container *ngIf="attachments?.length">
+        <br />
+        <div class="attachment-header" [ngClass]="{ 'hide-attachments': !showAttachments }">
+          <h5 class="module-title">{{ 'Attachments In This Case' | translate }}</h5>
+          <mat-checkbox class="hide-attachments printAction" [(ngModel)]="showAttachments" color="primary">
+            {{ 'Show preview files in the printed document' | translate }}
+          </mat-checkbox>
+        </div>
+        <div class="attachment-container" *ngIf="showAttachments" [ngClass]="{ 'hide-attachments': !showAttachments }">
+          <ng-container *ngFor="let file of attachments">
+            <div class="cell">
+              <ng-container *ngIf="file.url as fi">
+                <div>
+                  <div class="file-actions hide-attachments printAction">
+                    <button
+                      class="mr-2 btn-icon btn-sm"
+                      mat-stroked-button
+                      color="primary"
+                      type="button"
+                      (click)="showPreview(fi, file.fileType)"
+                      *ngIf="file.fileType === 'image'"
+                    >
+                      <app-icon [name]="'eye'" class="m-0"></app-icon>
+                    </button>
+                    <a class="btn-icon btn-sm" mat-stroked-button color="primary" type="button" [href]="fi">
+                      <app-icon [name]="'download'" class="m-0"></app-icon>
+                    </a>
+                  </div>
+                  <a *ngIf="file.fileType === 'image'; else docType" class="picture-file">
+                    <img [src]="fi" alt="file.fileName" />
+                  </a>
+                </div>
+                <ng-template #docType>
+                  <div class="media-file">
+                    <app-icon [name]="file.fileType"></app-icon>
+                  </div>
+                </ng-template>
+              </ng-container>
+              <label>{{ file.fileName }}</label>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </mat-dialog-content>
+    <mat-dialog-actions class="actions printAction" id="printAction">
+      <span>
+        <button mat-stroked-button color="primary" class="mr-2" mat-dialog-close><app-icon name="close"></app-icon>Cancel</button>
+        <button mat-flat-button color="primary" (click)="printElement()" class="mr-2"><app-icon [name]="'print'"></app-icon> Print</button>
+      </span>
+
+      <span class="print-meta">
+        <p>{{ tenantDetails.tenant.tenantName }} ({{ tenantDetails.tenant.role }})</p>
+        <!-- <p>{{ currentUrl }}</p> -->
+        <p>{{ currentDate }}</p>
+      </span>
+    </mat-dialog-actions>
+  </div>
+</ng-template>
+
+<ng-template #fields let-data>
+  <div
+    class="cell"
+    [ngClass]="{
+      nested: data.type === fieldTypes.EmbededField || data.type === fieldTypes.ConnectorField,
+      'full-width': data.type === fieldTypes.TextareaField
+    }"
+  >
+    <ng-template #title>
+      <label>{{ data.displayName }}</label>
+    </ng-template>
+    <p class="step-title" *ngIf="data.type === fieldTypes.EmbededField || data.type === fieldTypes.ConnectorField; else title">
+      {{ data.displayName }}
+    </p>
+    <ng-container [ngSwitch]="data.type">
+      <ng-container *ngSwitchCase="fieldTypes.FileField">
+        <p class="file-attachment">
+          <ng-container *ngFor="let file of data.configuration?.value">
+            <a *ngIf="file.url" [href]="file.url">
+              {{ file.fileName }}
+            </a>
+          </ng-container>
+        </p>
+      </ng-container>
+      <ng-container *ngSwitchCase="fieldTypes.EmbededField">
+        <div class="case-fields">
+          <ng-container *ngFor="let child of data.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: child }">
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="fieldTypes.ConnectorField">
+        <div class="case-fields" *ngIf="data.configuration?.exposedData as exposedData; else noExposedData">
+          <ng-container
+            *ngFor="let child of exposedData.fields"
+            [ngTemplateOutlet]="fields"
+            [ngTemplateOutletContext]="{ $implicit: child }"
+          >
+          </ng-container>
+        </div>
+
+        <ng-template #noExposedData>
+          <p style="text-align: center" *ngIf="data.configuration.value != undefined; else noValue" class="value-container">
+            ID: {{ data.configuration.value }} <small>({{ 'No exposed fields' | translate }} )</small>
+          </p>
+          <ng-template #noValue>
+            <p style="text-align: center">-</p>
+          </ng-template>
+          <!-- <p style="text-align: center">-</p> -->
+        </ng-template>
+      </ng-container>
+      <ng-container *ngSwitchCase="fieldTypes.RichTextField">
+        <span [innerHTML]="data.configuration.value | sanitize: 'noSanitize'"></span>
+      </ng-container>
+      <!-- Signature Field -->
+      <ng-container *ngSwitchCase="fieldTypes.SignatureField">
+        <ng-container>
+          <div style="width: 200px">
+            <img class="w-100 mt-1" [src]="data.configuration.value" />
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <p
+          *ngIf="data.configuration.value != undefined; else noValue"
+          [innerHTML]="data.configuration.value | sanitize: 'html'"
+          class="value-container"
+        ></p>
+        <p>
+          <ng-template #noValue>
+            <p>-</p>
+          </ng-template>
+        </p>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+<iframe #iframePrint></iframe>
+<div
+  *ngIf="initiatePrint"
+  class="w-100 h-100 d-flex justify-content-center align-items-center backdrop-bg"
+  style="position: fixed; bottom: 0; right: 0; top: 0; left: 0"
+>
+  <mat-spinner></mat-spinner>
+</div>

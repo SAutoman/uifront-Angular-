@@ -1,0 +1,71 @@
+<!-- <mat-expansion-panel [id]="'processStepPanel_' + componentId" [expanded]="false" style="margin-bottom: 10px">
+
+  <mat-expansion-panel-header (click)="onProcessStepExpanded()">
+    <mat-panel-title style="width: 55%">
+      <div style="align-items: center; display: flex">
+        <div class="handle" cdkDragHandle>
+          <svg width="24px" [attr.fill]="getStateColor()" viewBox="0 0 24 24">
+            <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+            <path d="M0 0h24v24H0z" fill="none"></path>
+          </svg>
+        </div>
+      </div>
+      {{ processStep.name }}
+    </mat-panel-title>
+
+    <mat-panel-description>Fill process step data</mat-panel-description>
+  </mat-expansion-panel-header>
+  <div class="form-scroll" *ngIf="processStep.isLoaded">
+    <div style="width: 99%" *ngFor="let item of processStep.caseFormWrapper; trackBy: trackByStepID">
+      <app-case-field-wrapper
+        [canEditCase]="canEditCase"
+        (onFieldUpdated)="onFieldChanged($event)"
+        [field]="item.field"
+        *ngIf="item.elementType === CaseFormFieldType.Field"
+        (mousedown)="disabledDrag($event)"
+      ></app-case-field-wrapper>
+
+      <app-case-process-form
+        [form]="item.form"
+        [stepContentId]="processStep.contentId"
+        [stepVersion]="processStep.version"
+        *ngIf="item.elementType === CaseFormFieldType.Form"
+        [canEditCase]="canEditCase"
+        [canEditCaseError]="canEditCaseError"
+        (isChangedFields)="onFieldChangedForm($event)"
+        [tenant]="tenant"
+        (mousedown)="disabledDrag($event)"
+      ></app-case-process-form>
+    </div>
+
+    <div class="button-wrapper" (mousedown)="disabledDrag($event)">
+      <button
+        [id]="'saveProcessStep_' + componentId"
+        mat-flat-button
+        color="primary"
+        (click)="onSave()"
+        *ngIf="processStep.isFreeFields && canEditCase"
+      >
+        <mat-icon class="material-icons">save</mat-icon>
+      </button>
+
+      <button
+        [id]="'deleteProcessStep_' + componentId"
+        style="margin-left: 5px"
+        mat-flat-button
+        color="warn"
+        (click)="onEmitProcessStep(processStep)"
+        *ngIf="canEditCase"
+      >
+        <mat-icon class="material-icons">delete</mat-icon>
+      </button>
+
+      <mat-error [id]="'error_' + componentId" class="error" *ngIf="!canEditCase">
+        <mat-icon color="warn">warning</mat-icon>
+        <strong>{{ canEditCaseError }}</strong>
+      </mat-error>
+    </div>
+  </div>
+</mat-expansion-panel>
+
+<div></div> -->

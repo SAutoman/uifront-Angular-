@@ -1,0 +1,30 @@
+<app-wfm-grid
+  #tenantsGrid
+  pageTitle="Tenants"
+  [gridConfiguration]="tenantGridSettingsConf"
+  [gridData]="gridData"
+  gridAreaType="tenants"
+  [actions]="gridActions"
+  [hidePaginationOptions]="hidePaginationOptions"
+  (onSearch)="onSearch($event)"
+  showCreateButton="true"
+  (actionEvent)="onActionClick($event)"
+  (createBtnEmitter)="toCreatePage($event)"
+>
+</app-wfm-grid>
+
+<ng-template #companyInfo>
+  <mat-dialog-content>
+    <app-wfm-grid
+      [gridConfiguration]="companyInfoGridSettings"
+      [gridData]="companyInfoData"
+      isModal="true"
+      gridAreaType="companyInfo"
+      [pageTitle]="'Company Info'"
+    >
+    </app-wfm-grid>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" (click)="closeDialog()">{{ 'Close' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>

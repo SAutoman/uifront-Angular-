@@ -1,0 +1,39 @@
+<mat-card class="outline mat-elevation-z0 m-b-16">
+  <mat-card-header class="header">
+    <mat-card-title>{{ 'Date Format' | translate }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="dateFormatSettingForm" (ngSubmit)="onSubmit()">
+      <h4 class="pl-2">{{ 'Select date format' | translate }}</h4>
+      <mat-radio-group
+        [id]="'radioDateFormat_' + componentId"
+        formControlName="dateFormat"
+        class="date-format-buttons"
+        (change)="onDateChange()"
+      >
+        <mat-radio-button color="primary" [value]="dateFormat.BrowseCultureDate" class="date-format-btn-radio"
+          >{{ 'Browser culture' | translate }} ({{ locale }})</mat-radio-button
+        >
+        <mat-radio-button [id]="'iso_' + componentId" color="primary" [value]="dateFormat.IsoDate" class="date-format-btn-radio"
+          >yyyy-mm-dd ({{ isoDate }})</mat-radio-button
+        >
+        <mat-radio-button [id]="'long_' + componentId" color="primary" [value]="dateFormat.LongDate" class="date-format-btn-radio"
+          >month dd yyyy ({{ longDate }})</mat-radio-button
+        >
+        <mat-radio-button [id]="'short_' + componentId" color="primary" [value]="dateFormat.ShortDate" class="date-format-btn-radio"
+          >mm/dd/yyyy ({{ shortDate }})</mat-radio-button
+        >
+        <mat-radio-button [id]="'other_' + componentId" color="primary" [value]="dateFormat.Other" class="date-format-btn-radio"
+          >dd.mm.yyyy ({{ other }})</mat-radio-button
+        >
+      </mat-radio-group>
+
+      <div class="submit-wrapper">
+        <button [id]="'save_' + componentId" mat-flat-button color="primary">
+          <app-icon [name]="'save'"></app-icon> {{ 'Save' | translate }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

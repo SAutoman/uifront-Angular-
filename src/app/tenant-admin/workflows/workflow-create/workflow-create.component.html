@@ -1,0 +1,252 @@
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+<mat-dialog-content>
+  <br />
+  <div
+    class="container-fluid py-3"
+    *ngIf="!(wfStateLoading$ | async) || !(wfBuilderProcessStepsLoading$ | async) || !(wfBuilderTransitionsLoading$ | async); else loading"
+  >
+    <form [formGroup]="workflowForm">
+      <div class="row">
+        <div class="col-lg-6" [ngClass]="{ 'mx-auto': !currentWorkflowId }">
+          <mat-card class="outline mat-elevation-z0">
+            <ng-container *ngIf="isDeskTop">
+              <h3 ma-dialog-title>{{ title | translate }}</h3>
+              <mat-divider></mat-divider>
+            </ng-container>
+            <br />
+            <mat-card-content>
+              <mat-form-field>
+                <mat-label>{{ 'Name' | translate }}</mat-label>
+                <input [id]="'inputName_' + componentId" matInput type="text" formControlName="name" #name required />
+                <mat-error *ngIf="hasError('name', 'required')">{{ 'Name is required' | translate }}!</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select
+                  [placeholder]="'Select Case Schema' | translate"
+                  formControlName="caseSchemaId"
+                  required
+                  (selectionChange)="onSchemaChange($event)"
+                >
+                  <mat-option *ngFor="let schema of caseSchemaOptions" [value]="schema.id" [disabled]="schema.disabled">{{
+                    schema?.name
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field *ngIf="!workflowCopyId">
+                <mat-select
+                  [placeholder]="'Select Statuses' | translate"
+                  formControlName="statusIds"
+                  required
+                  multiple
+                  #sts
+                  (selectionChange)="loadDefaultStatuses()"
+                >
+                  <mat-option *ngFor="let status of statusesList" [value]="status.id">{{ status?.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('statusIds', 'required')">{{ 'Status is required!' | translate }}</mat-error>
+                <mat-hint>{{ 'To be used in Actions, Status Transitions & Process Steps' | translate }}.</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field class="mt-2" *ngIf="workflowForm.controls.statusIds?.value">
+                <mat-select
+                  [placeholder]="'Select Default Status' | translate"
+                  formControlName="defaultStatus"
+                  (selectionChange)="updateDefaultStatus()"
+                >
+                  <mat-option *ngFor="let status of defaultStatusesList" [value]="status.id">{{ status?.name }} </mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('statusIds', 'required')">{{ 'Default status is required!' | translate }}</mat-error>
+              </mat-form-field>
+              <mat-card class="outline mat-elevation-z0" *ngIf="caseSchemaIdControl?.value && statusesControl?.value">
+                <div class="d-flex align-items-center justify-content-between">
+                  <h4 class="mb-2 mt-0">{{ 'Actions' | translate }}</h4>
+                  <button
+                    mat-flat-button
+                    (click)="openAction()"
+                    class="btn-sm mb-3"
+                    color="primary"
+                    *ngIf="caseSchemaIdControl?.value && statusesControl?.value"
+                  >
+                    {{ 'Add Action' | translate }}
+                  </button>
+                </div>
+                <mat-divider></mat-divider>
+                <br />
+                <ng-container *ngFor="let areaActionsData of actionsByArea">
+                  <mat-card
+                    *ngIf="areaActionsData.actions.length"
+                    class="outline mat-elevation-z0 mb-3 pb-0"
+                    cdkDropList
+                    [cdkDropListData]="areaActionsData.actions"
+                    (cdkDropListDropped)="onActionDrag($event, areaActionsData)"
+                  >
+                    <h5 class="mb-2 font-bold">{{ areaActionsData.label | translate }}</h5>
+                    <mat-divider></mat-divider>
+                    <div class="drag-wrapper">
+                      <div
+                        *ngFor="let action of areaActionsData.actions; let i = index"
+                        cdkDrag
+                        class="d-flex justify-content-start align-items-center"
+                      >
+                        <button class="move" mat-icon-button color="primary" cdkDragHandle>
+                          <app-icon [name]="'drag-indicator'"></app-icon>
+                        </button>
+                        <p class="flex-1">
+                          <b>{{ i + 1 }}. {{ action.name }}</b> (type: {{ getEventName(action.eventType) | translate }})
+                        </p>
+                        <div class="d-flex justify-content-end pr-3">
+                          <button
+                            mat-stroked-button
+                            color="primary"
+                            class="btn-icon mr-2 btn-sm"
+                            (click)="openAction(action, i, areaActionsData.subArea)"
+                          >
+                            <app-icon [name]="'edit'"></app-icon>
+                          </button>
+                          <button
+                            mat-stroked-button
+                            color="warn"
+                            (click)="removeAction(areaActionsData.subArea, action, i)"
+                            class="btn-icon btn-sm"
+                          >
+                            <app-icon [name]="'trash'"></app-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card>
+                </ng-container>
+              </mat-card>
+              <br />
+              <mat-divider></mat-divider>
+              <div class="d-flex justify-content-end mt-3">
+                <button
+                  [id]="'send_' + componentId"
+                  [disabled]="workflowForm.invalid || disableSaveBtn"
+                  mat-flat-button
+                  color="primary"
+                  [matTooltip]="!currentWorkflowId ? 'create' : 'update'"
+                  matTooltipPosition="below"
+                  (click)="onSubmit()"
+                >
+                  <app-icon name="save"></app-icon> {{ 'Save' | translate }}
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-6" *ngIf="currentWorkflowId && !isIncompleteWorkflow">
+          <mat-card class="outline mat-elevation-z0">
+            <mat-tab-group class="full-width">
+              <mat-tab label="{{ 'Process Steps Linked' | translate }}">
+                <br />
+                <mat-expansion-panel
+                  hideToggle
+                  #linkCreator
+                  *ngIf="!allStepsLinked"
+                  class="mb-3 mat-elevation-z0 outline"
+                  [expanded]="showLinkWidget && !activeLink"
+                >
+                  <mat-expansion-panel-header (click)="createLink()" class="create-button"
+                    >{{ 'Add Process Step Link' | translate }}
+                  </mat-expansion-panel-header>
+                  <div *ngIf="showLinkWidget && !activeLink" class="mt-3">
+                    <app-create-process-step-links
+                      [workflowStateSchemasData]="workflowStateSchemasData"
+                      [workflow]="workflow"
+                      [processStepLink]="activeLink"
+                      (closeCommand)="closeLinkWidget($event)"
+                    >
+                    </app-create-process-step-links>
+                  </div>
+                </mat-expansion-panel>
+                <mat-accordion>
+                  <div cdkDropList [cdkDropListData]="processStepLinks" (cdkDropListDropped)="onDrag($event)">
+                    <mat-expansion-panel
+                      class="mat-elevation-z0"
+                      *ngFor="let link of processStepLinks"
+                      (opened)="editLink(link)"
+                      (closed)="resetActiveLink()"
+                      [expanded]="activeLink && activeLink.id === link.id"
+                      cdkDrag
+                    >
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <button class="move" *ngIf="true" mat-icon-button color="primary" (click)="$event.stopPropagation()">
+                            <app-icon [name]="'drag-indicator'"></app-icon>
+                          </button>
+                          {{ link.refName }}
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <div *ngIf="showLinkWidget && activeLink?.id === link.id" class="mt-3">
+                        <app-create-process-step-links
+                          [workflowStateSchemasData]="workflowStateSchemasData"
+                          [workflow]="workflow"
+                          [processStepLink]="activeLink"
+                          (closeCommand)="closeLinkWidget($event)"
+                        >
+                        </app-create-process-step-links>
+                      </div>
+                    </mat-expansion-panel>
+                  </div>
+                </mat-accordion>
+              </mat-tab>
+              <mat-tab label="{{ 'RawData Rules' | translate }}" *ngIf="showRawDataRules">
+                <br />
+
+                <div class="mt-3" *ngIf="workflow?.caseSchemaId">
+                  <app-raw-data-link [workflow]="workflow"></app-raw-data-link>
+                </div>
+              </mat-tab>
+              <mat-tab label="{{ 'Status Transitions' | translate }}">
+                <br />
+                <mat-expansion-panel hideToggle #transitionCreator class="mb-3 mat-elevation-z0 outline">
+                  <mat-expansion-panel-header (click)="createTransition()" class="create-button">
+                    {{ 'Add Status Transition' | translate }}
+                  </mat-expansion-panel-header>
+
+                  <div *ngIf="showTransitionWidget && !activeTransition" class="mt-3">
+                    <app-create-transition [workflow]="workflow" (closeCommand)="closeTransitionWidget($event)"> </app-create-transition>
+                  </div>
+                </mat-expansion-panel>
+                <mat-accordion>
+                  <mat-expansion-panel
+                    class="mat-elevation-z0"
+                    *ngFor="let transition of statusTransitions"
+                    (opened)="editTransition(transition)"
+                    (closed)="resetActiveTransition()"
+                    [expanded]="activeTransition?.id === transition.id"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title> {{ transition.name }} </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngIf="showTransitionWidget && activeTransition?.id === transition.id" class="mt-3">
+                      <app-create-transition
+                        [workflow]="workflow"
+                        [transition]="activeTransition"
+                        (closeCommand)="closeTransitionWidget($event)"
+                      >
+                      </app-create-transition>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </mat-tab>
+              <mat-tab label="{{ 'Case Field Rules' | translate }}">
+                <br />
+                <div class="mt-3" *ngIf="workflow?.caseSchemaId">
+                  <app-workflow-field-link [workflow]="workflow"></app-workflow-field-link>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>

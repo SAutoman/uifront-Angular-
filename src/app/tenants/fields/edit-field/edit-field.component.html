@@ -1,0 +1,40 @@
+<!-- <h3 mat-dialog-title></h3> -->
+
+<mat-dialog-content>
+  <div>
+    <mat-form-field *ngIf="field">
+      <mat-label>{{ 'Field Name' | translate }}</mat-label>
+      <input matInput type="text" [(ngModel)]="field.name" />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!field">
+      <mat-label>{{ 'Field Name' | translate }}</mat-label>
+      <input matInput type="text" [(ngModel)]="name" />
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field *ngIf="field">
+      <mat-label>{{ 'Type' | translate }}</mat-label>
+      <mat-select [(ngModel)]="field.type">
+        <mat-option *ngFor="let type of types" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!field">
+      <mat-label>{{ 'Type' | translate }}</mat-label>
+      <mat-select [(ngModel)]="type">
+        <mat-option *ngFor="let type of types" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions" align="end">
+  <button mat-flat-button color="primary" cdkFocusInitial (click)="onUpdateClicked()">{{ buttonText }}</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

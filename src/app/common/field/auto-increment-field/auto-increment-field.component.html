@@ -1,0 +1,15 @@
+<form [formGroup]="autoIncrementForm">
+  <mat-checkbox formControlName="isAutoIncrementField">
+    {{ 'Is Auto Increment Field' | translate }}
+  </mat-checkbox>
+  <mat-form-field class="mt-2" *ngIf="autoIncrementForm?.get('isAutoIncrementField')?.value" appearance="outline">
+    <mat-label>{{ 'Auto Increment Value' | translate }}</mat-label>
+    <input matInput type="number" required formControlName="autoIncrementValue" />
+    <mat-error *ngIf="autoIncrementForm?.get('autoIncrementValue')?.errors?.required">
+      {{ 'Required' | translate }}
+    </mat-error>
+    <mat-error *ngIf="autoIncrementForm?.get('autoIncrementValue')?.errors?.min">
+      {{ 'Minimum value should be 1' | translate }}
+    </mat-error>
+  </mat-form-field>
+</form>

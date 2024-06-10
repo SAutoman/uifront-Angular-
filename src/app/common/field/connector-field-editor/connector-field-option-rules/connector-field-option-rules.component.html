@@ -1,0 +1,50 @@
+<div *ngIf="targetSchema">
+  <mat-card class="mb-3 mat-elevation-z0 outline" *ngIf="statuses?.length">
+    <h5>{{ 'Status Rules' | translate }}</h5>
+    <form class="" [formGroup]="view.statuses.form">
+      <formly-form
+        class="d-flex w-100"
+        [form]="view.statuses.form"
+        [fields]="view.statuses.fields"
+        [model]="view.statuses.model"
+      ></formly-form>
+    </form>
+  </mat-card>
+  <mat-card class="mat-elevation-z0 outline">
+    <mat-tab-group class="m-t-10">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div>{{ 'Static Rules' | translate }}</div>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="rules-wrapper">
+            <app-rules-builder
+              [expressionConfig]="expressionConfig"
+              [expressionDto]="expressionsDef"
+              [schema]="targetSchema"
+              (expressionUpdated)="expressionUpdated($event)"
+            ></app-rules-builder>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab *ngIf="ownerSchemaFields$">
+        <ng-template mat-tab-label>
+          <div>{{ 'Dynamic Rules' | translate }}</div>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="rules-wrapper">
+            <app-dynamic-rules-builder
+              [validatorRuleSet]="dynamicRules"
+              [currentSchemaFields]="currentSchemaFields"
+              [currentSchemaName]="targetSchema.name"
+              [valueSchemaName]="ownerSchemaName"
+              [valueSchemaFields]="ownerSchemaFields"
+              (emitter)="dynamicRulesUpdate($event)"
+            ></app-dynamic-rules-builder>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

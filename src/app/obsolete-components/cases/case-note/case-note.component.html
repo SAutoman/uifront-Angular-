@@ -1,0 +1,64 @@
+<!-- <div class="comments-container">
+  <div class="no-comments" *ngIf="!comments.length">There are no comments yet on this case.</div>
+
+  <div class="comments-wrapper" *ngFor="let comment of comments">
+    <div class="comment">
+      <div class="comment-header">
+        <div class="comment-header-meta">
+          <div class="comment-header-name">{{ comment.fields[2]?.value }}</div>
+          <div class="comment-header-date">added a comment - {{ comment.fields[0]?.value }}</div>
+        </div>
+        <div class="comment-actions">
+          <button
+            [id]="'deleteComment_' + componentId"
+            mat-icon-button
+            color="warn"
+            (click)="onCommentRemove(comment.id)"
+            class="btn-delete"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div [id]="'commentText_' + componentId" class="comment-content">{{ comment.fields[1]?.value }}</div>
+    </div>
+  </div>
+
+  <div class="btn-wrapper">
+    <button [id]="'comment_' + componentId" (click)="onCommentAdd(); scrollToElement(comment)" mat-button mat-flat-button color="primary">
+      <mat-icon>comment</mat-icon>
+      Comment
+    </button>
+  </div>
+
+  <div #comment>
+    <form [formGroup]="commentForm" *ngIf="commentFieldOpened" (ngSubmit)="onSubmit(commentForm.value)">
+      <mat-form-field>
+        <textarea
+          [id]="'textareaComment_' + componentId"
+          class="txt"
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="5"
+          matInput
+          placeholder=""
+          formControlName="comment"
+        ></textarea>
+        <mat-error *ngIf="commentForm.controls['comment'].errors?.required">Comment is required.</mat-error>
+      </mat-form-field>
+
+      <div class="btn-wrapper">
+        <button
+          [id]="'submit_' + componentId"
+          [disabled]="commentForm.invalid"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-submit"
+        >
+          Submit
+        </button>
+        <button [id]="'cancel_' + componentId" mat-raised-button color="warn" class="btn-submit" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div> -->

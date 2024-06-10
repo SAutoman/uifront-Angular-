@@ -1,0 +1,29 @@
+@import '../../../../assets/styles/variable';
+:host {
+  width: 100%;
+
+  .flex-truncate {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+
+    mat-form-field {
+      margin-left: 10px;
+      // width: 300px;
+    }
+  }
+}
+.move {
+  cursor: move;
+}
+.tile-formatter-footer {
+  display: flex;
+  justify-content: end;
+  position: sticky;
+  bottom: 0;
+  padding: 16px 0;
+  border-top: solid thin $border;
+  background-color: $white;
+  z-index: 1000;
+}

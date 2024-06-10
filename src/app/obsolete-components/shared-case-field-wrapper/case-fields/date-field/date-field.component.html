@@ -1,0 +1,25 @@
+<!-- <form [formGroup]="stepForm" *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <mat-form-field>
+    <input
+      [id]="'inputDate_' + componentId"
+      matInput
+      [matDatepicker]="pickerDate"
+      placeholder="Choose {{ fieldControlApiData.fieldMetadata.name }} date"
+      [formControlName]="controlName"
+      (dateChange)="onChange()"
+      [readonly]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+      [required]="stepForm.controls[controlName].errors?.required"
+    />
+
+    <mat-hint>{{ fieldControlApiData.fieldMetadata.funcFieldProps.hintMessage }}</mat-hint>
+
+    <mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
+    <mat-datepicker #pickerDate></mat-datepicker>
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.required">This field is required.</mat-error>
+
+    <mat-error *ngIf="stepForm.controls[controlName].errors?.dateInvalid"
+      >Invalid date, should be: Between: {{ getValidatorValueForErrorMessage(ValidatorType.MinMax).min | date: 'short' }} and
+      {{ getValidatorValueForErrorMessage(ValidatorType.MinMax).max | date: 'short' }}
+    </mat-error>
+  </mat-form-field>
+</form> -->

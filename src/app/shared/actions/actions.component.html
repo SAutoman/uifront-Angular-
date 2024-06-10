@@ -1,0 +1,244 @@
+<h3 mat-dialog-title>{{ 'Actions' | translate }}</h3>
+<div *ngIf="loading$ | async" class="w-100 h-100 d-flex justify-content-center align-items-center">
+  <mat-spinner></mat-spinner>
+</div>
+<mat-dialog-content>
+  <br />
+  <form [formGroup]="actionsForm">
+    <mat-form-field>
+      <input type="text" matInput placeholder="{{ 'Name' | translate }}" formControlName="actionName" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="{{ 'Select type' | translate }}" formControlName="type" [disabled]="actionDto">
+        <mat-option *ngFor="let action of actionTypeOptions" [value]="action.value">{{ action.viewValue }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="actionsForm.get('type').value && allowedSubAreaOptions?.length && !allowMultipleSubAreas">
+      <mat-select placeholder="{{ 'When to trigger action' | translate }}" formControlName="subArea" required [disabled]="!!subArea">
+        <mat-option *ngFor="let area of allowedSubAreaOptions" [value]="area.value">{{ area.viewValue }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="actionsForm.get('type').value && allowedSubAreaOptions?.length && allowMultipleSubAreas">
+      <mat-select
+        placeholder="{{ 'When to trigger action' | translate }}"
+        formControlName="subAreaMultiple"
+        required
+        [disabled]="!!subArea"
+        multiple
+      >
+        <mat-option *ngFor="let area of allowedSubAreaOptions" [value]="area.value">{{ area.viewValue }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <ng-container [ngSwitch]="selectedActionType" [formGroup]="additionalPropsGroup">
+      <ng-container *ngSwitchCase="eventTypes.AutomaticAddSteps">
+        <mat-form-field>
+          <mat-select placeholder="{{ 'Select Steps To Be Added' | translate }}" formControlName="steps" multiple>
+            <mat-option *ngFor="let step of workflowSteps" [value]="step.name">{{ step.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.AutomaticRemoveSteps">
+        <mat-form-field>
+          <mat-select placeholder="{{ 'Select Steps To Be Removed' | translate }}" formControlName="steps" multiple>
+            <mat-option *ngFor="let step of workflowSteps" [value]="step.name">{{ step.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.UpdateStatusBasedOnStepAdded">
+        <mat-form-field>
+          <mat-select placeholder="{{ 'Select status' | translate }}" formControlName="statusId">
+            <mat-option *ngFor="let status of workflowStatuses" [value]="status.id">{{ status.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.UpdateCaseStatusBasedOnStepResolution">
+        <mat-form-field>
+          <mat-select placeholder="{{ 'On which resolutions to update' | translate }}" formControlName="resolutions" multiple>
+            <mat-option *ngFor="let resolution of currentProcessStep?.resolutions" [value]="resolution.name">{{
+              resolution.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-select placeholder="{{ 'Select case status to update to' | translate }}" formControlName="statusId">
+            <mat-option *ngFor="let status of workflowStatuses" [value]="status.id">{{ status.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.StepToCase">
+        <app-copy-fields-action
+          [type]="eventTypes.StepToCase"
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="copyFieldsActionDataUpdated($event)"
+        >
+        </app-copy-fields-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.RawDataToCase">
+        <app-copy-fields-action
+          [type]="eventTypes.RawDataToCase"
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="copyFieldsActionDataUpdated($event)"
+        >
+        </app-copy-fields-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.StepToRawData">
+        <app-copy-fields-action
+          [type]="eventTypes.StepToRawData"
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          [stepLinkData]="stepLinkData"
+          (outputEmitter)="copyFieldsActionDataUpdated($event)"
+        >
+        </app-copy-fields-action>
+      </ng-container>
+      <ng-container *ngSwitchCase="eventTypes.DifferenceCalculation">
+        <app-difference-calculation-action
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="diffActionDataUpdated($event)"
+          [currentProcessStep]="currentProcessStep"
+        >
+        </app-difference-calculation-action>
+      </ng-container>
+      <ng-container *ngSwitchCase="eventTypes.MathExpressionCalculation">
+        <app-math-expression-action
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="mathActionDataUpdated($event)"
+          [currentProcessStep]="currentProcessStep"
+        >
+        </app-math-expression-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.WebHook">
+        <app-webhook-action
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="webhookActionDataUpdated($event)"
+          [currentProcessStep]="currentProcessStep"
+        >
+        </app-webhook-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.CaseToStep">
+        <app-case-to-step-action
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [subArea]="subArea"
+          [workflow]="workflow"
+          (outputEmitter)="caseToStepActionDataUpdated($event)"
+        >
+        </app-case-to-step-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.SendEmail">
+        <app-send-email-action
+          [actionScope]="actionArea"
+          [schemaId]="actionArea === actionAreaTypes?.WorkflowScope ? workflow?.caseSchemaId : currentProcessStep?.schemaId"
+          [actionDto]="actionDto"
+          [notificationTopics]="notificationTopics"
+          (outputEmitter)="sendEmailActionDataUpdated($event)"
+          [eventSubArea$]="eventSubAreaSubject$"
+        >
+        </app-send-email-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.AggregatedRawDataToCase">
+        <app-aggregation-action
+          [aggregationEventType]="aggregationEventType.RawDataToCase"
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          (outputEmitter)="aggregationActionDataUpdated($event)"
+          [workflow]="workflow"
+        >
+        </app-aggregation-action>
+      </ng-container>
+      <ng-container *ngSwitchCase="eventTypes.AutoIncrement">
+        <app-auto-increment-action
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          [currentProcessStep]="currentProcessStep"
+          (outputEmitter)="autoIncrementDataUpdated($event)"
+        >
+        </app-auto-increment-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.RawDataToStep">
+        <app-raw-data-to-step-action
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="rawDataToStepUpdated($event)"
+        ></app-raw-data-to-step-action>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="eventTypes.BrowserAction">
+        <app-browser-action
+          [actionScope]="actionArea"
+          [actionDto]="actionDto"
+          [workflow]="workflow"
+          (outputEmitter)="browserActionUpdated($event)"
+        ></app-browser-action>
+      </ng-container>
+      <div *ngSwitchDefault></div>
+    </ng-container>
+  </form>
+  <br />
+
+  <mat-expansion-panel
+    class="mt-1 mat-elevation-z0 mb-3"
+    *ngIf="actionsForm?.get('type')?.value"
+    [expanded]="hasRules || actionsForm.get('subArea')?.value === wfEventSubAreas?.WorkflowOnAutoIncrementField"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title class="font-bold">
+        {{ 'Conditional Triggering' | translate }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngIf="isAutoIncrementSubAreaSelected()">
+      <div class="mb-2">
+        <app-auto-increment-field-selector
+          [schemaId]="workflow?.caseSchemaId"
+          [areaType]="1"
+          [selectedFieldsForTree]="selectedFieldsForTree"
+          [title]="'Select Trigger AutoIncrement Field(s)'"
+          (fieldsEmitter)="onFieldUpdate($event)"
+        >
+        </app-auto-increment-field-selector>
+      </div>
+    </ng-container>
+    <hr />
+
+    <app-rules-builder
+      [expressionConfig]="expressionConfig"
+      [expressionDto]="expressionsDef"
+      [schema]="targetSchema"
+      (expressionUpdated)="expressionUpdated($event)"
+    ></app-rules-builder>
+  </mat-expansion-panel>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions class="action-buttons" align="end">
+  <mat-divider></mat-divider>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!isFormValid()">
+    <app-icon name="save"></app-icon>{{ 'Submit' | translate }}
+  </button>
+</mat-dialog-actions>

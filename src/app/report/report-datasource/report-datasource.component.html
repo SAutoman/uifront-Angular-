@@ -1,0 +1,12 @@
+<div class="datasource-wrapper">
+  <div *ngIf="isEditMode && datasource">
+    <app-datasource-builder
+      (modeChanged)="toggleEdit($event)"
+      (removeDataSource)="removeDatasource()"
+      [isEditMode]="isEditMode"
+    ></app-datasource-builder>
+  </div>
+  <ng-container *ngIf="isViewMode && datasource">
+    <app-report-grid (modeChanged)="toggleEdit($event)" (removeDataSource)="removeDatasource()" [isEditMode]="isEditMode"></app-report-grid>
+  </ng-container>
+</div>

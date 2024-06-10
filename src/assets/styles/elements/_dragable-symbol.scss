@@ -1,0 +1,24 @@
+.dragable-symbol {
+  width: 6px;
+  height: 2px;
+  background-color: $dark-text;
+  border-radius: 2px;
+  position: relative;
+  cursor: grabbing;
+  &:before,
+  &:after {
+    content: '';
+    width: 6px;
+    height: 2px;
+    background-color: $dark-text;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+  }
+  &:before {
+    top: -4px;
+  }
+  &:after {
+    bottom: -4px;
+  }
+}

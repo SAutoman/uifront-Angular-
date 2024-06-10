@@ -1,0 +1,67 @@
+<div class="form-group-container w-100">
+  <ng-container *ngIf="view$ | async as view; else loading">
+    <mat-dialog-content>
+      <br />
+      <form [formGroup]="view.listForm.form">
+        <formly-form class="row" [form]="view.listForm.form" [fields]="view.listForm.fields" [model]="view.listForm.model"></formly-form>
+      </form>
+
+      <ng-container *ngIf="view.parent$ | async as pw; else listWithoutParentTmpl">
+        <div class="">
+          <div class="list-wrapper p-1 pr-2">
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let parentView of pw.items" class="mat-elevation-z0 mb-3">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <span *ngIf="parentView.parent.key"
+                      >{{ 'Key' | translate }}: {{ parentView.parent.key }}, {{ 'Value' | translate }}: {{ parentView.parent.item }}</span
+                    >
+
+                    <span *ngIf="!parentView.parent.key">{{ parentView.parent.item }}</span>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <app-inner-tenant-list
+                  [listData]="view.listForm?.model"
+                  [keySetting$]="listItemKeySetting$"
+                  [currentListId]="listField?.id"
+                  [parentListId]="parentView.parent.id"
+                  [listItems]="parentView.children"
+                  (update)="onListWithParentUpdate($event, parentView)"
+                  (fieldChange)="onFieldChanged($event)"
+                ></app-inner-tenant-list>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #listWithoutParentTmpl>
+        <app-inner-tenant-list
+          [listData]="view.listForm?.model"
+          [keySetting$]="listItemKeySetting$"
+          [currentListId]="listField?.id"
+          [listItems]="getListWithoutParentOptions()"
+          (update)="onListWithoutParentUpdate($event)"
+          (fieldChange)="onFieldChanged($event)"
+        ></app-inner-tenant-list>
+      </ng-template>
+      <br />
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button class="mr-3" mat-stroked-button color="primary" (click)="onCloseForm(view)">
+        <app-icon [name]="'close'"></app-icon>
+        {{ 'Cancel' | translate }}
+      </button>
+      <button mat-flat-button color="primary" [disabled]="!isValidForm(view)" (click)="onSaveForm(view)">
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+    </mat-dialog-actions>
+  </ng-container>
+</div>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

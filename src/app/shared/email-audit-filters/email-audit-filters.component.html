@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>{{ 'Email Audit Search' | translate }}</h2>
+<mat-dialog-content>
+  <br />
+  <form [formGroup]="view.form">
+    <formly-form class="w-100" [form]="view.form" [fields]="view.fields" [model]="view.model"> </formly-form>
+  </form>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" mat-dialog-close class="mr-2">
+    <app-icon name="close"></app-icon>{{ 'Close' | translate }}
+  </button>
+  <button mat-flat-button color="primary" cdkFocusInitial (click)="applyFilters()" class="mr-2" [disabled]="!view.form.valid">
+    <app-icon name="check"></app-icon> {{ 'Apply' | translate }}
+  </button>
+  <button mat-flat-button color="primary" (click)="resetFilters()" class="mr-2">
+    <app-icon name="refresh-layout"></app-icon> {{ 'Reset' | translate }}
+  </button>
+</mat-dialog-actions>

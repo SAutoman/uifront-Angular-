@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>{{ 'Reapply the mapping for' | translate }} {{ mapping.companyName }}</h1>
+<mat-dialog-content>
+  <br />
+  <h5>{{ 'Process on items meeting criteria (optional)' | translate }}</h5>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'Select field' | translate }}</mat-label>
+    <mat-select [id]="'selectField_' + componentId" (selectionChange)="onFieldSelected($event)" [(ngModel)]="selectedOption">
+      <mat-option [id]="field.fieldName + i + '_' + componentId" *ngFor="let field of deFilterFields; let i = index" [value]="field">
+        {{ field.displayName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="selectedFields?.length">
+    <div *ngFor="let field of selectedFields; let i = index">
+      <mat-card class="outline mat-elevation-z0 pt-0 overflow-hidden">
+        <app-dynamic-entity-field [field]="field"></app-dynamic-entity-field>
+        <button
+          [id]="'clear_' + i + '_' + componentId"
+          mat-icon-button
+          color="warn"
+          (click)="onFieldRemove(field)"
+          class="position-absolute"
+          style="top: 0; right: 0; z-index: 2"
+        >
+          <app-icon [name]="'close'"></app-icon>
+        </button>
+      </mat-card>
+    </div>
+  </ng-container>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" mat-dialog-close class="mr-2">
+    <app-icon name="close"></app-icon>{{ 'Cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" (click)="confirmDialog()" class="mr-2" [disabled]="!isValid()">
+    <app-icon name="check"></app-icon>{{ 'Apply' | translate }}
+  </button>
+</mat-dialog-actions>

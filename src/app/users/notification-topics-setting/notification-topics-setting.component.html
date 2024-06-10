@@ -1,0 +1,20 @@
+<mat-card class="outline mat-elevation-z0 m-b-16">
+  <mat-card-header class="header">
+    <mat-card-title>{{ 'Notification Settings' | translate }}</mat-card-title>
+  </mat-card-header>
+
+  <table *ngIf="userSubscriptions?.length > 0" class="w-100">
+    <tr *ngFor="let subscription of userSubscriptions">
+      <td class="py-2">
+        {{ subscription?.name | titlecase }}
+        <span class="badge sm" [ngClass]="subscription.subscribed ? 'green' : 'gray'">{{
+          subscription.subscribed ? 'Subscribed' : ('Not Subscribed' | translate)
+        }}</span>
+      </td>
+      <td class="slide-toggle">
+        <mat-slide-toggle class="mr-3" [ngModel]="subscription.subscribed" (change)="toggleSubscription($event, subscription)">
+        </mat-slide-toggle>
+      </td>
+    </tr>
+  </table>
+</mat-card>

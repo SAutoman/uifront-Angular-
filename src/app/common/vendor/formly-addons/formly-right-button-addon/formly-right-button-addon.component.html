@@ -1,0 +1,33 @@
+<ng-container *ngIf="config">
+  <ng-container *ngIf="!config.isFormGroup">
+    <div class="formly-right-button-addon--field-content" [ngClass]="config.cssClass">
+      <div class="formly-right-button-addon--field-ref">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+      <ng-container *ngTemplateOutlet="customMatSuffix"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="config.isFormGroup">
+    <mat-card class="mat-elevation-z0 outline mb-3 d-flex" [ngClass]="config.cssClass">
+      <div class="formly-right-button-addon--form-group-content">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+      <div class="formly-right-button-addon--form-group-button-suffix">
+        <ng-container *ngTemplateOutlet="customMatSuffix"></ng-container>
+      </div>
+    </mat-card>
+  </ng-container>
+</ng-container>
+
+<ng-template #customMatSuffix>
+  <button
+    type="button"
+    class="formly-right-button-addon--button"
+    *ngIf="config"
+    (click)="addonRightClick($event)"
+    matTooltip="{{ config.tooltip }}"
+  >
+    <app-icon [name]="config.icon" class="{{ config.color }}"></app-icon>
+  </button>
+</ng-template>

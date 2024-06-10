@@ -1,0 +1,15 @@
+table {
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
+  td {
+    padding: 0 15px;
+    &.slide-toggle {
+      margin-right: 0px;
+      text-align: right;
+    }
+
+    button {
+      width: 150px;
+    }
+  }
+}

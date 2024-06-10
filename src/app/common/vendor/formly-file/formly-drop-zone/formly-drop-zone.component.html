@@ -1,0 +1,21 @@
+<div class="dropzone-wrapper">
+  <div class="upload-wrapper">
+    <kendo-uploaddropzone [zoneId]="'myZone' + componentId">
+      <div class="text-center" *ngIf="accept">
+        <div>{{ 'Allowed File Types' | translate }}</div>
+        <div>{{ accept | uppercase }}</div>
+      </div>
+    </kendo-uploaddropzone>
+    <kendo-upload
+      [disabled]="disableUpload"
+      [accept]="accept"
+      [zoneId]="'myZone' + componentId"
+      [showFileList]="false"
+      [autoUpload]="false"
+      [multiple]="allowMultipleFiles"
+      [restrictions]="myRestrictions"
+      (select)="onFilesAdd($event)"
+    >
+    </kendo-upload>
+  </div>
+</div>

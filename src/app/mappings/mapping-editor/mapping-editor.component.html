@@ -1,0 +1,87 @@
+<div class="container-fluid overflow-auto h-100 pb-4">
+  <div class="row">
+    <div class="col-md-7 mx-auto">
+      <div class="d-flex align-items-center">
+        <button mat-icon-button matTooltip="Back to {{ header }} Mapping" (click)="back()">
+          <app-icon [name]="'back'" class="primary mr-3"></app-icon>
+        </button>
+        <h4>{{ title | translate }}</h4>
+      </div>
+      <form [formGroup]="mappingForm">
+        <mat-card class="mat-elevation-z0 outline">
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ 'Current tenant' | translate }}</mat-label>
+            <input matInput value="{{ selectedTenant?.name }}" disabled />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>{{ 'Select Schema' | translate }}</mat-label>
+            <mat-select (selectionChange)="getSearchMaskFields($event.value)" formControlName="schemaId">
+              <mat-option *ngFor="let schema of schemas" [value]="schema.id">
+                {{ schema.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>{{ 'Select company' | translate }}</mat-label>
+            <mat-select [id]="'selectCompany_' + componentId" formControlName="companyId" [disabled]="isEdit">
+              <mat-option
+                [id]="'optionCompany_' + i + '_' + componentId"
+                *ngFor="let company of companies; let i = index"
+                [value]="company.id"
+              >
+                {{ company.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>{{ 'Mapping Fields' | translate }}</mat-label>
+            <mat-select [disabled]="isLoading" [id]="'selectFields_' + componentId" (selectionChange)="onFieldSelected($event.value)">
+              <mat-option [id]="'optionFields_' + i + '_' + componentId" *ngFor="let field of fields; let i = index" [value]="field">
+                {{ field.displayName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="row" *ngIf="selectedFields.length">
+            <div class="col-lg-6 mb-3" *ngFor="let field of selectedFields; let i = index">
+              <mat-card class="outline mat-elevation-z0 pt-0 overflow-hidden">
+                <app-dynamic-entity-field [field]="field"></app-dynamic-entity-field>
+                <button
+                  [id]="'clear_' + i + '_' + componentId"
+                  mat-icon-button
+                  color="warn"
+                  (click)="onFieldRemove(field)"
+                  class="position-absolute"
+                  style="top: 0; right: 0; z-index: 2"
+                >
+                  <app-icon [name]="'close'"></app-icon>
+                </button>
+              </mat-card>
+            </div>
+          </div>
+          <mat-error *ngIf="hasError && !isLoading">
+            <strong>{{ 'ERROR' | translate }}:</strong> {{ 'Mapping fields are in an unknown format, please update them' | translate }}!
+          </mat-error>
+          <div class="btn-submit-container">
+            <button
+              [id]="'submit_' + componentId"
+              mat-flat-button
+              color="primary"
+              type="submit"
+              [disabled]="!validate()"
+              (click)="onSubmit()"
+              class="mr-3"
+            >
+              {{ 'Submit' | translate }}
+            </button>
+            <button *ngIf="isEdit" mat-stroked-button color="primary" [disabled]="!validate()" (click)="openMappingManualRunner()">
+              {{ 'Apply mapping' | translate }}
+            </button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</div>

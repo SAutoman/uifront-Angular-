@@ -1,0 +1,6 @@
+<p class="font-16 font-medium my-2" *ngIf="!isSystem">{{ model.displayName || model.fieldName }}</p>
+<p class="font-16 font-medium my-2" *ngIf="isSystem">{{ model.displayName || model.fieldName | translate }}</p>
+
+<form [formGroup]="view.form">
+  <formly-form class="w-100" [form]="view.form" [fields]="view.fields" [model]="view.model" (modelChange)="onChange()"> </formly-form>
+</form>

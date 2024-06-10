@@ -1,0 +1,31 @@
+<mat-button-toggle-group [value]="searchTypeIn" (change)="onSearchType($event)">
+  <ng-container *ngFor="let allowedSearchType of allowedSearchTypes; let i = index">
+    <mat-button-toggle
+      [id]="'toggleFromTo_' + i + '_' + componentId"
+      [value]="searchTypes.Range"
+      *ngIf="allowedSearchType === searchTypes.Range"
+      >{{ 'From To' | translate }}</mat-button-toggle
+    >
+
+    <mat-button-toggle
+      [id]="'toggleEqualTo_' + i + '_' + componentId"
+      [value]="searchTypes.EqualTo"
+      *ngIf="allowedSearchType === searchTypes.EqualTo"
+      >{{ 'Equal To' | translate }}</mat-button-toggle
+    >
+
+    <mat-button-toggle
+      [id]="'toggleLike_' + i + '_' + componentId"
+      [value]="searchTypes.Like"
+      *ngIf="allowedSearchType === searchTypes.Like"
+      >{{ 'Like' | translate }}</mat-button-toggle
+    >
+
+    <mat-button-toggle
+      [id]="'toggleList_' + i + '_' + componentId"
+      [value]="searchTypes.List"
+      *ngIf="allowedSearchType === searchTypes.List"
+      >{{ 'List' | translate }}</mat-button-toggle
+    >
+  </ng-container>
+</mat-button-toggle-group>

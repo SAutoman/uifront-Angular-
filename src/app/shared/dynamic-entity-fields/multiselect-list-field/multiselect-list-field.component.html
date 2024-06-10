@@ -1,0 +1,10 @@
+<div class="multi">
+  <mat-form-field class="list" *ngIf="toppings" appearance="outline">
+    <mat-label>{{ 'Multiple selection' | translate }}</mat-label>
+    <mat-select [formControl]="toppings" multiple>
+      <mat-option *ngFor="let topping of toppingList" [value]="topping">
+        {{ topping }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

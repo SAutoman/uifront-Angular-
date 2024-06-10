@@ -1,0 +1,27 @@
+<input placeholder="Search Case" matInput type="text" [formControl]="searchInput" [formlyAttributes]="field" />
+<ng-container *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</ng-container>
+
+<ng-container *ngIf="fastCreateWidget">
+  <app-icon
+    *ngIf="showMessage && !autoSelectedCases?.length"
+    [name]="'warning'"
+    matTooltip="No matching item found"
+    [matTooltipPosition]="'above'"
+    class="notMatched"
+  ></app-icon>
+  <app-icon
+    *ngIf="autoSelectedCases && autoSelectedCases.length"
+    [name]="'check'"
+    matTooltip="{{ selectedItemsLabel }}"
+    [matTooltipPosition]="'above'"
+    class="matched"
+  ></app-icon>
+</ng-container>
+<ng-container *ngIf="!fastCreateWidget">
+  <small *ngIf="showMessage && !autoSelectedCases?.length">No matching item found</small>
+  <div *ngIf="autoSelectedCases?.length" class="selection-info">
+    <div *ngFor="let item of autoSelectedCases">{{ item.label }}</div>
+  </div>
+</ng-container>

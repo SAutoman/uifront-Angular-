@@ -1,0 +1,31 @@
+:root {
+  --theme-color: #f44336;
+}
+
+.k-primary {
+  background-color: var(--theme-color) !important;
+}
+
+.theme-icon {
+  color: var(--theme-color) !important;
+}
+
+.theme-button {
+  background-color: var(--theme-color) !important;
+  color:#fff;
+}
+
+.k-checkbox:checked {
+  background-color: var(--theme-color) !important;
+  border-color: var(--theme-color) !important;
+  color: #fff !important;
+}
+
+mat-dialog-actions button.theme-color {
+  background-color: var(--theme-color) !important;
+  color: #fff !important;
+}
+
+li .k-link {
+  color: var(--theme-color) !important;
+}

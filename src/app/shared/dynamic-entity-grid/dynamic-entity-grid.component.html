@@ -1,0 +1,842 @@
+<ng-container *ngIf="!isChildDetailGrid; else childGrid">
+  <ng-container *ngTemplateOutlet="grid"></ng-container>
+</ng-container>
+
+<!-- the main component template -->
+<ng-template #grid>
+  <div class="grid-container" *ngIf="gridColumnFields">
+    <div class="d-flex h-100 overflow-hidden">
+      <div class="search-wrapper">
+        <ng-container *ngIf="isSearchActive && allowedGridOperations.allowSearching">
+          <app-dynamic-entity-search-mask
+            [hidden]="!isSearchBarOpen"
+            *ngIf="schemaId"
+            [schemaId]="schemaId"
+            [searchBarOpen$]="searchBarOpenSubject$"
+            [areaType]="schema.areaType"
+            (searchEvent)="onSearch($event)"
+            (searchClose)="closeSearchBar($event)"
+          >
+          </app-dynamic-entity-search-mask>
+        </ng-container>
+
+        <div *ngIf="loading" class="k-i-loading"></div>
+        <ng-container class="wrapper" *ngIf="gridData">
+          <kendo-grid
+            #grid
+            class="grid"
+            [data]="gridData"
+            [groupable]="permission.allowLayoutChange && allowedGridOperations.enableGrouping ? { showFooter: true } : false"
+            [group]="groups"
+            [pageSize]="gridSettings.state.take"
+            [skip]="gridSettings.state.skip"
+            [sort]="uiSorting"
+            [selectable]="selectableSettings"
+            [sortable]="permission.allowLayoutChange ? { mode: 'multiple' } : false"
+            [columnMenu]="permission.allowLayoutChange ? { sort: false } : false"
+            [pageable]="pageable"
+            [scrollable]="true"
+            [resizable]="permission.allowLayoutChange"
+            [reorderable]="permission.allowLayoutChange"
+            (groupChange)="onGroupChange($event)"
+            (sortChange)="onSortChange($event)"
+            (pageChange)="onPageChange($event)"
+            (columnReorder)="onReorder($event)"
+            (columnResize)="onResize($event)"
+            (columnMenuOpen)="columnMenu()"
+            (columnVisibilityChange)="onVisibilityChange($event)"
+            kendoGridSelectBy="publicId"
+            (selectedKeysChange)="onSelectedKeysChange($event)"
+            [rowSelected]="isRowSelected"
+            [selectedKeys]="mySelection"
+            [rowClass]="rowClassCheckCallback"
+            (dataStateChange)="dataStateChange($event)"
+            (cellClick)="onCellClick($event)"
+            (detailExpand)="onDetailExpand(false, $event)"
+            [virtualColumns]="isVirtualColumnsEnabled"
+            [kendoGridExpandDetailsBy]="expandDetailsBy"
+            [(expandedDetailKeys)]="expandedDetailKeys"
+          >
+            <kendo-grid-messages
+              noRecords="{{ 'There are no items to display' | translate }}"
+              pagerPage="{{ 'Page' | translate }}"
+              pagerOf="{{ 'of' | translate }}"
+              pagerItems="{{ 'items' | translate }}"
+              pagerItemsPerPage="{{ 'items per page' | translate }}"
+            >
+            </kendo-grid-messages>
+            <ng-template kendoPagerTemplate>
+              <div *ngIf="!qsTerm" class="d-flex">
+                <kendo-pager-prev-buttons *ngIf="!qsTerm"></kendo-pager-prev-buttons>
+                <kendo-pager-numeric-buttons [buttonCount]="pagerButtonCount"></kendo-pager-numeric-buttons>
+                <kendo-pager-info *ngIf="!qsTerm"></kendo-pager-info>
+                <kendo-pager-next-buttons *ngIf="!qsTerm"></kendo-pager-next-buttons>
+              </div>
+              <kendo-pager-page-sizes *ngIf="!qsTerm && permission.allowLayoutChange" [pageSizes]="pageSize"></kendo-pager-page-sizes>
+              <div *ngIf="qsTerm" class="ml-5">
+                {{ gridData?.data?.length }} of
+                {{ gridData?.total > gridSettings?.state?.take ? gridSettings?.state.take : gridData?.total }} items found
+              </div>
+            </ng-template>
+            <ng-template kendoGridToolbarTemplate position="top" *ngIf="useLayout && !isChildDetailGrid">
+              <div class="title-bar">
+                <div *ngIf="isRawDataMainGrid && allowedGridOperations.crudOperations" class="tools">
+                  <h4 class="px-3">{{ selectedMenu }}</h4>
+                  <button
+                    [id]="'addRawData_' + componentId"
+                    class="tool-button"
+                    matRipple
+                    *ngIf="permission.create"
+                    (click)="onDynamicEntityAddClicked()"
+                    matTooltip="{{ 'Add Raw Data' | translate }}"
+                  >
+                    <app-icon [name]="'add'"></app-icon>
+                  </button>
+                  <button
+                    *ngIf="isAnyChecked && permission.delete"
+                    [id]="'deleteRawData_' + componentId"
+                    class="tool-button"
+                    matRipple
+                    matTooltip="{{ 'Delete Raw Data' | translate }}"
+                    (click)="onDynamicEntityDeleteButtonClicked()"
+                  >
+                    <app-icon [name]="'trash'" class="danger"></app-icon>
+                  </button>
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    [id]="'createCase_' + componentId"
+                    class="btn-md ml-3"
+                    matRipple
+                    (click)="openCreateCasePanel()"
+                    matTooltip="{{ 'Create Case' | translate }}"
+                    [disabled]="showCreateCasePanel"
+                    style="align-self: center"
+                  >
+                    <app-icon [name]="'cases'"></app-icon>
+                    {{ 'Create Case' | translate }}
+                  </button>
+                </div>
+                <div class="tools" *ngIf="workflow">
+                  <h4 class="px-3">{{ workflow?.name }}</h4>
+
+                  <div class="tool-button quick-search" #quickSearchInput>
+                    <input
+                      type="text"
+                      [(ngModel)]="qsTerm"
+                      matInput
+                      (input)="quickSearchCases()"
+                      placeholder="{{ 'Quick Search' | translate }}"
+                      name="search"
+                      (focus)="onFocusSearch()"
+                      (focusout)="onFocusOutSearch()"
+                    />
+                    <app-icon [name]="'search'"></app-icon>
+                  </div>
+                  <button
+                    *ngIf="isAnyChecked && permission.delete"
+                    [id]="'deleteCase_' + componentId"
+                    class="tool-button"
+                    matRipple
+                    matTooltip="{{ 'Delete Cases' | translate }}"
+                    (click)="onWorkflowStateDeleteButtonClicked()"
+                  >
+                    <app-icon [name]="'trash'" class="danger"></app-icon>
+                  </button>
+
+                  <button
+                    *ngIf="showCreateCaseButton"
+                    class="tool-button"
+                    matRipple
+                    (click)="onOpenCaseCreateDialogue()"
+                    matTooltip="{{ 'Create Case' | translate }}"
+                  >
+                    <app-icon [name]="'add'"></app-icon>
+                  </button>
+                  <app-fast-create-dynamic-entity
+                    *ngIf="fastCreateEnabled"
+                    [schema]="schema"
+                    [workflow]="workflow"
+                  ></app-fast-create-dynamic-entity>
+                </div>
+
+                <div class="tools" *ngIf="!showToolButtons || fastCreateEnabled">
+                  <button class="tool-button" matRipple [matMenuTriggerFor]="menuDropdowns">
+                    <app-icon [name]="'more'"></app-icon>
+                  </button>
+                  <mat-menu #menuDropdowns="matMenu">
+                    <app-grid-layout-options
+                      (click)="$event.stopPropagation(); $event.preventDefault()"
+                      [type]="layoutTypeEnum.Grid"
+                      [showToolButtons]="fastCreateEnabled ? false : showToolButtons"
+                      [grid]="grid"
+                      class="showdropdown"
+                      [schemaId]="schemaId"
+                      [allowExports]="allowedGridOperations.exportActions"
+                      [gridSettingsName]="gridSettingsName"
+                      [allowSharing]="allowedGridOperations.allowSharing"
+                      [schemaAreaType]="schema.areaType"
+                      [gridChange$]="gridChanges$"
+                      [groups]="groups"
+                      [aggregates]="aggregates"
+                      [gridSettings]="gridSettings"
+                      [allowLayoutChange]="permission.allowLayoutChange"
+                      [isChildGrid]="isChildDetailGrid ? true : false"
+                      [parentSchemaId]="parentSchemaId"
+                      [defaultLayoutId]="schemaPermissions?.defaultLayout"
+                      (resetGrid)="resetGridHandler()"
+                      (csvDownloadEmitter)="onCsvDownloadButtonClicked()"
+                    >
+                    </app-grid-layout-options>
+                    <button
+                      mat-menu-item
+                      *ngIf="!isChildDetailGrid"
+                      [disabled]="!permission.allowLayoutChange"
+                      class="tool-button"
+                      matRipple
+                      (click)="addAggregate()"
+                      matTooltip="Aggregates"
+                      (click)="$event.stopPropagation(); $event.preventDefault()"
+                    >
+                      <app-icon [name]="'raw-data'"></app-icon>Aggregates
+                    </button>
+                    <button
+                      mat-menu-item
+                      (click)="$event.stopPropagation(); $event.preventDefault()"
+                      *ngIf="!isChildDetailGrid"
+                      class="tool-button"
+                      matRipple
+                      (click)="toggleSearchBar()"
+                      [ngClass]="{ 'search-active': isSearchBarOpen }"
+                    >
+                      <app-icon [name]="'search'"></app-icon>Search
+                      <span class="text-danger ml-1">({{ filters?.length ? filters.length : 0 }})</span>
+                    </button>
+                  </mat-menu>
+                </div>
+                <div class="tools" *ngIf="showToolButtons && !fastCreateEnabled">
+                  <app-grid-layout-options
+                    [type]="layoutTypeEnum.Grid"
+                    [showToolButtons]="showToolButtons"
+                    [grid]="grid"
+                    [schemaId]="schemaId"
+                    [allowExports]="allowedGridOperations.exportActions"
+                    [gridSettingsName]="gridSettingsName"
+                    [allowSharing]="allowedGridOperations.allowSharing"
+                    [schemaAreaType]="schema.areaType"
+                    [gridChange$]="gridChanges$"
+                    [groups]="groups"
+                    [aggregates]="aggregates"
+                    [gridSettings]="gridSettings"
+                    [allowLayoutChange]="permission.allowLayoutChange"
+                    [isChildGrid]="isChildDetailGrid ? true : false"
+                    [parentSchemaId]="parentSchemaId"
+                    [defaultLayoutId]="schemaPermissions?.defaultLayout"
+                    (resetGrid)="resetGridHandler()"
+                    (csvDownloadEmitter)="onCsvDownloadButtonClicked()"
+                  >
+                  </app-grid-layout-options>
+                  <button
+                    *ngIf="!isChildDetailGrid"
+                    [disabled]="!permission.allowLayoutChange"
+                    class="tool-button"
+                    matRipple
+                    (click)="addAggregate()"
+                    matTooltip="Aggregates"
+                  >
+                    <app-icon [name]="'raw-data'"></app-icon>
+                  </button>
+                  <button
+                    *ngIf="!isChildDetailGrid"
+                    class="tool-button"
+                    matRipple
+                    (click)="toggleSearchBar()"
+                    [ngClass]="{ 'search-active': isSearchBarOpen }"
+                  >
+                    <div
+                      [matBadge]="filters?.length ? filters.length : 0"
+                      matBadgeColor="warn"
+                      matBadgeSize="small"
+                      matBadgePosition="after"
+                    >
+                      <app-icon [name]="'search'"></app-icon>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-container *ngFor="let col of gridSettings?.columnsConfig">
+              <kendo-grid-checkbox-column
+                *ngIf="!isChildDetailGrid && !col.title && !permission?.hideGridSelection"
+                [id]="'checkbox_' + componentId"
+                [width]="col._width"
+                [showSelectAll]="true"
+              >
+                <ng-template kendoGridHeaderTemplate>
+                  <div style="padding-left: 9px">
+                    <input class="k-checkbox k-checkbox-md k-rounded-md" id="selectAllCheckboxId" kendoGridSelectAllCheckbox />
+                  </div>
+                </ng-template>
+              </kendo-grid-checkbox-column>
+              <ng-template kendoGridColumnMenuTemplate let-service="service">
+                <kendo-grid-columnmenu-chooser #columnChooser [service]="service" (expand)="expandMenu(columnChooser)">
+                </kendo-grid-columnmenu-chooser>
+              </ng-template>
+              <kendo-grid-column
+                *ngIf="!col.title && isChildDetailGrid"
+                [columnMenu]="col.columnMenu"
+                [width]="col._width"
+                [hidden]="col.hidden"
+              >
+              </kendo-grid-column>
+              <kendo-grid-column
+                *ngIf="col.title"
+                [columnMenu]="col.columnMenu"
+                [field]="col.field"
+                [title]="getColumnTitle(col)"
+                [width]="col._width"
+                [reorderable]="col.reorderable"
+                [sortable]="col.sortable"
+                [hidden]="col.hidden"
+                [headerClass]="col.headerClass"
+                class="actions"
+              >
+                <ng-template kendoGridCellTemplate let-dataItem>
+                  <ng-container [ngTemplateOutlet]="gridCell" [ngTemplateOutletContext]="{ col: col, dataItem: dataItem }"></ng-container>
+                </ng-template>
+
+                <ng-template *ngIf="hasGroupAggregate(col.field)" kendoGridGroupFooterTemplate let-aggregates="aggregates">
+                  <ng-container
+                    [ngTemplateOutlet]="aggregateCell"
+                    [ngTemplateOutletContext]="{ col: col, aggregates: aggregates }"
+                  ></ng-container>
+                </ng-template>
+
+                <ng-template kendoGridFooterTemplate *ngIf="hasTotal(col.field)">
+                  <ng-container [ngTemplateOutlet]="aggregateTotal" [ngTemplateOutletContext]="{ col: col }"></ng-container>
+                </ng-template>
+              </kendo-grid-column>
+            </ng-container>
+            <ng-template *ngIf="schema.areaType === areaTypeEnum.comment" kendoGridToolbarTemplate position="bottom">
+              <div class="layouts-container">
+                <app-grid-layout-options
+                  [type]="layoutTypeEnum.Grid"
+                  [grid]="grid"
+                  [schemaId]="schemaId"
+                  [allowExports]="false"
+                  [gridSettingsName]="gridSettingsName"
+                  [allowSharing]="allowedGridOperations.allowSharing"
+                  [schemaAreaType]="schema.areaType"
+                  [groups]="groups"
+                  [aggregates]="aggregates"
+                  [gridSettings]="gridSettings"
+                  (resetGrid)="resetGridHandler()"
+                >
+                </app-grid-layout-options>
+              </div>
+            </ng-template>
+            <!-- Export Settings -->
+            <!-- Excel -->
+            <kendo-grid-excel [fileName]="fileName + '.xlsx'">
+              <ng-container *ngFor="let col of gridSettings?.columnsConfig; trackBy: trackFn">
+                <kendo-excelexport-column
+                  [hidden]="col.hidden"
+                  field="{{ col.field }}"
+                  title="{{ col.title }}"
+                  [width]="col._width"
+                  [cellOptions]="
+                    col.type === fieldTypes.DateField
+                      ? { format: dateFormat }
+                      : col.type === fieldTypes.DateTimeField
+                      ? { format: dateFormat + ' HH:mm' }
+                      : null
+                  "
+                >
+                  <ng-template *ngIf="hasGroupAggregate(col.field)" kendoExcelExportGroupFooterTemplate let-aggregates="aggregates">
+                    <ng-container
+                      [ngTemplateOutlet]="aggregateCell"
+                      [ngTemplateOutletContext]="{ col: col, aggregates: aggregates }"
+                    ></ng-container>
+                  </ng-template>
+
+                  <ng-template kendoExcelExportFooterTemplate *ngIf="hasTotal(col.field)">
+                    <ng-container [ngTemplateOutlet]="aggregateTotal" [ngTemplateOutletContext]="{ col: col }"></ng-container>
+                  </ng-template>
+                </kendo-excelexport-column>
+              </ng-container>
+            </kendo-grid-excel>
+            <!-- PDF -->
+            <kendo-grid-pdf [fileName]="fileName + '.pdf'">
+              <ng-container *ngFor="let col of gridSettings?.columnsConfig; trackBy: trackFn">
+                <kendo-grid-column
+                  *ngIf="col.title"
+                  [field]="col.field"
+                  [title]="getColumnTitle(col)"
+                  [width]="col._width"
+                  [hidden]="col.hidden"
+                >
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <ng-container [ngTemplateOutlet]="gridCell" [ngTemplateOutletContext]="{ col: col, dataItem: dataItem }"></ng-container>
+                  </ng-template>
+
+                  <ng-template *ngIf="hasGroupAggregate(col.field)" kendoGridGroupFooterTemplate let-aggregates="aggregates">
+                    <ng-container
+                      [ngTemplateOutlet]="aggregateCell"
+                      [ngTemplateOutletContext]="{ col: col, aggregates: aggregates }"
+                    ></ng-container>
+                  </ng-template>
+
+                  <ng-template kendoGridFooterTemplate *ngIf="hasTotal(col.field)">
+                    <ng-container [ngTemplateOutlet]="aggregateTotal" [ngTemplateOutletContext]="{ col: col }"></ng-container>
+                  </ng-template>
+                </kendo-grid-column>
+              </ng-container>
+            </kendo-grid-pdf>
+
+            <!-- Master-Detail -->
+            <ng-template
+              kendoGridDetailTemplate
+              let-dataItem
+              *ngIf="!isChildDetailGrid ? allowedGridOperations.enableMasterDetail : detailGridOperations.enableMasterDetail"
+            >
+              <ng-container *ngIf="dataItem._nestedEntities?.length">
+                <ng-container *ngFor="let nestedEntityData of dataItem._nestedEntities; let i = index">
+                  <div *ngIf="nestedEntityData.items?.length; else noDetail">
+                    <app-dynamic-entity-grid
+                      [loading]="true"
+                      [showAll]="false"
+                      [schemaId]="nestedEntityData.schemaId"
+                      [areaType]="nestedEntityData.areaType"
+                      [dynamicEntityIds]="nestedEntityData.items"
+                      [allowedGridOperations]="detailGridOperations"
+                      [actions]="nestedEntityData.actions"
+                      [useLayout]="true"
+                      [pageable]="false"
+                      [isChildDetailGrid]="true"
+                      [nestedEntitySchemaPermission]="nestedEntityData?.permission"
+                      [parentAreaType]="areaType"
+                      [allowAddAndEditActionInChildGrid]="allowAddAndEditActionInChildGrid"
+                      [parentSchemaId]="schemaId"
+                      (actionEvent)="detailActionEvent($event, nestedEntityData, dataItem)"
+                      (emitSelectionToParentGrid)="childSelectionEmitted($event, nestedEntityData)"
+                      [nestedEntityData]="nestedEntityData"
+                      (onRawDataUpdate)="updateGrid($event)"
+                    ></app-dynamic-entity-grid>
+                  </div>
+                  <ng-template #noDetail>
+                    <div *ngIf="schema.areaType !== areaTypeEnum.case">
+                      <mat-expansion-panel [togglePosition]="'before'" class="mat-elevation-z0 mb-2">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            <div class="d-flex align-items-center">
+                              <b>{{ nestedEntityData.displayName }} - no items</b>
+                              <button
+                                *ngIf="allowAddAndEditActionInChildGrid && nestedEntityData && nestedEntityData?.permission?.add"
+                                class="ml-2"
+                                [id]="'addRawDataChild_' + componentId"
+                                color="primary"
+                                mat-icon-button
+                                (click)="$event.stopPropagation(); openChildDynamicRawData(nestedEntityData)"
+                                matTooltip="{{ 'Add Raw Data' | translate }}"
+                              >
+                                <app-icon [name]="'add'"></app-icon>
+                              </button>
+                            </div>
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                      </mat-expansion-panel>
+                    </div>
+                  </ng-template>
+                </ng-container>
+              </ng-container>
+            </ng-template>
+          </kendo-grid>
+        </ng-container>
+      </div>
+      <app-case-creator-wrapper
+        *ngIf="showCreateCasePanel"
+        #caseCreator
+        [rawDataSchemaId]="schemaId"
+        [rawDataDeItems$]="selectedItemsSubject$"
+        [selectedGridItems]="selectedGridItems"
+        [rawDataColumns]="gridSettings?.columnsConfig"
+        [userId]="authState?.profile.id"
+        (closeCreator)="closePanel()"
+        (selectedGridItemRemove)="removeFromSelected($event)"
+        [@panelIn]
+      ></app-case-creator-wrapper>
+    </div>
+
+    <div class="selected-rows" *ngIf="isAnyChecked && !isHideCaseGrid" [@panelInBottom]>
+      <button class="sidebar-btn" (click)="toggleBottomBar()" value="sidebar-closed" [ngClass]="{ show: bottomBarOpened }">
+        <span class="arrow-a {{ bottomBarOpened ? 'right' : 'left' }} sm"></span>
+      </button>
+      <div class="selected-rows-wrapper">
+        <app-case-grid
+          *ngIf="!bottomBarOpened"
+          [itemsWithValues]="selectedGridItems"
+          [dataColumns]="gridSettingsForCaseGrid"
+          (caseGridActionEmitter)="onCaseGridActions($event)"
+        ></app-case-grid>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #gridCell let-col="col" let-dataItem="dataItem">
+  <ng-container [ngSwitch]="getCellType(col)">
+    <!-- File column -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.FILE">
+      <ng-container *ngIf="dataItem[col.field] as filesData">
+        <div *ngFor="let fileData of filesData" class="align-items-center d-flex my-2">
+          <ng-container *ngIf="fileData?.fileType !== 'image' || (!fileData?.thumbnailEnabled && fileData?.fileType === 'image')">
+            <app-icon [name]="fileData.fileType"></app-icon>
+            <span class="fileLabel" title="{{ fileData?.fileInfo?.fileName }}">
+              {{ fileData?.fileInfo?.fileName }}
+            </span>
+          </ng-container>
+          <ng-container *ngIf="fileData?.thumbnailEnabled && fileData?.fileType === 'image'">
+            <img [src]="fileData?.url" [height]="fileData.imageMaxSize" />
+          </ng-container>
+          <div class="ml-auto d-flex">
+            <button
+              class="ml-2 self-align-start btn-sm btn-icon"
+              mat-stroked-button
+              color="primary"
+              type="button"
+              *ngIf="fileData.fileType === 'image'"
+              (click)="showPreview(fileData.url, fileData?.fileInfo?.fileName)"
+              matTooltip="Preview"
+            >
+              <app-icon [name]="'eye'" class="m-0"></app-icon>
+            </button>
+            <a
+              class="ml-2 d-flex justify-content-center align-items-center self-align-start btn-sm btn-icon"
+              mat-stroked-button
+              color="primary"
+              type="button"
+              [href]="fileData.url"
+              matTooltip="Download"
+            >
+              <app-icon [name]="'download'" class="m-0"></app-icon>
+            </a>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+    <!-- isHyperlink field -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.HYPERLINK">
+      <a
+        [href]="dataItem[col.field + hyperLinkData]?.link"
+        [target]="dataItem[col.field + hyperLinkData]?.link"
+        mat-button
+        color="primary"
+        class="btn-sm"
+        >{{ dataItem[col.field + hyperLinkData]?.linkLabel }}</a
+      >
+    </ng-container>
+    <!-- Date field -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.DATE">
+      <span *ngIf="dataItem[col.field]">{{ dataItem[col.field] | customDateFormat: userDateFormat }}</span>
+    </ng-container>
+    <!-- DateTime field -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.DATETIME">
+      <span *ngIf="dataItem[col.field]">{{ dataItem[col.field] | customDateFormat: userDateTimeFormat:col.field }}</span>
+    </ng-container>
+    <!-- Number field -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.NUMBER">
+      <span *ngIf="dataItem[col.field] || dataItem[col.field] === 0">{{ dataItem[col.field] | customNumberFormat: col.field:schema }}</span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="gridCellTypeEnum.BOOLEAN">
+      <span>{{ dataItem[col.field] | booleanFormatter }}</span>
+    </ng-container>
+
+    <!-- Info column for grid being rendered in RawDataGrid (data/list) -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.RAWDATA_INFO">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="btn-sm m-r-8"
+        [ngClass]="{ 'btn-icon': isInfoMinWidth }"
+        [id]="dataItem.name + '_' + componentId"
+        (click)="onRawDataInfoClicked(dataItem)"
+      >
+        <app-icon [name]="'info'"></app-icon>
+        <span *ngIf="!isInfoMinWidth">{{ 'Info' | translate }}</span>
+      </button>
+    </ng-container>
+    <!-- Info column for grid being rendered in Sub grids -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.CASE_RAWDATA_INFO">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="btn-sm m-r-8"
+        [ngClass]="{ 'btn-icon': isInfoMinWidth }"
+        [id]="dataItem.name + '_' + componentId"
+        (click)="goToRawData(dataItem)"
+      >
+        <app-icon [name]="'info'"></app-icon>
+        <span *ngIf="!isInfoMinWidth">{{ 'Info' | translate }}</span>
+      </button>
+    </ng-container>
+    <!-- Status Column -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.STATUS">
+      <div *ngIf="!dataItem.allowStatusChange" class="d-flex">
+        <span class="badge lg {{ dataItem.statusConfig.color }}" [title]="dataItem.status">{{ dataItem.status }}</span>
+        <button
+          *ngIf="!isRawDataMainGrid && showStatusChange && permission.allowGridStatusChange"
+          mat-icon-button
+          color="primary"
+          class="btn-sm"
+          (click)="toggleStatusChangeOption(dataItem)"
+        >
+          <app-icon [name]="'edit'"></app-icon>
+        </button>
+      </div>
+      <div class="d-flex" *ngIf="dataItem.allowStatusChange">
+        <kendo-dropdownlist
+          class="badgeDropDown {{ dataItem.statusConfig.color }}"
+          size="medium"
+          fillMode="solid"
+          [data]="wfStateStatuses"
+          textField="name"
+          valueField="id"
+          [(ngModel)]="dataItem.statusConfig.statusInfo"
+          (valueChange)="confirmStatusChange($event, dataItem)"
+        >
+          <ng-template kendoDropDownListItemTemplate let-status>
+            <div [ngStyle]="{ color: status?.configuration ? status.configuration.color : '' }">
+              <b>{{ status.configuration?.label || status.name }}</b>
+            </div>
+          </ng-template>
+        </kendo-dropdownlist>
+        <button mat-icon-button color="primary" class="btn-sm" (click)="toggleStatusChangeOption(dataItem)">
+          <app-icon [name]="'close'"></app-icon>
+        </button>
+      </div>
+    </ng-container>
+    <!-- Notifications column -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.NOTIFICATIONS">
+      <button mat-button color="primary" class="btn-sm" (click)="showNotificationWidget(dataItem)" [disabled]="!dataItem.emailCount">
+        {{ dataItem.emailCount }} {{ 'Notifications Sent' | translate }}
+      </button>
+    </ng-container>
+
+    <!-- Actions column for grid being rendered in RawDataGrid (data/list) -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.RAWDATA_ACTIONS">
+      <button
+        [id]="'edit_' + componentId"
+        [disabled]="!permission.edit"
+        mat-stroked-button
+        color="primary"
+        class="btn-sm"
+        [ngClass]="{ 'btn-icon': isActionsMinWidth }"
+        (click)="onDynamicEntityUpdateClicked(dataItem.publicId, $event)"
+      >
+        <app-icon [name]="'edit'"></app-icon>
+        <span *ngIf="!isActionsMinWidth">{{ 'Edit' | translate }}</span>
+      </button>
+    </ng-container>
+    <!-- Actions for grids being rendered OUTSIDE RawDataGrid -->
+
+    <ng-container *ngSwitchCase="gridCellTypeEnum.ACTIONS">
+      <!-- actions in master grid -->
+
+      <ng-container *ngIf="!isChildDetailGrid && !isPreviewModule; else referenceActions">
+        <button
+          *ngFor="let action of actions"
+          [id]="'remove_' + componentId"
+          mat-stroked-button
+          color="primary"
+          class="btn-sm m-r-8"
+          [ngClass]="{ 'btn-icon': isActionsMinWidth }"
+          (click)="actionClicked(dataItem, action, $event)"
+        >
+          <app-icon name="{{ action.icon }}"></app-icon>
+          <span *ngIf="!isActionsMinWidth">{{ action.title | translate }}</span>
+        </button>
+      </ng-container>
+
+      <!-- actions in detail grid and references preview  -->
+      <ng-template #referenceActions>
+        <ng-container *ngFor="let action of actions">
+          <button
+            *ngIf="dataItem._allowedActions && dataItem._allowedActions[action.actionId]"
+            [id]="'remove_' + componentId"
+            mat-stroked-button
+            [color]="action.color || 'primary'"
+            class="btn-sm m-r-8"
+            [ngClass]="{ 'btn-icon': isActionsMinWidth }"
+            (click)="actionClicked(dataItem, action, $event)"
+          >
+            <app-icon name="{{ action.icon }}"></app-icon>
+            <span *ngIf="!isActionsMinWidth">{{ action.title | translate }}</span>
+          </button>
+        </ng-container>
+      </ng-template>
+    </ng-container>
+
+    <!-- RichTextField -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.RICH_TEXT">
+      <span [innerHTML]="dataItem[col.field] | sanitize: 'noSanitize'"></span>
+    </ng-container>
+    <!-- Signature Field -->
+    <ng-container *ngSwitchCase="gridCellTypeEnum.SIGNATURE">
+      <ng-container *ngIf="dataItem[col.field]">
+        <img class="pe" [src]="dataItem[col.field]" height="75" width="150" (click)="showPreview(dataItem[col.field], col.field)" />
+      </ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="gridCellTypeEnum.YT_EMBED">
+      <button
+        *ngIf="dataItem[col.field]"
+        [id]="'yt_' + componentId"
+        mat-icon-button
+        color="primary"
+        class="btn-sm"
+        [ngClass]="{ 'btn-icon': isActionsMinWidth }"
+        (click)="playYoutubeVideo(dataItem[col.field])"
+      >
+        <app-icon [name]="'video'"></app-icon>
+        <span *ngIf="!isActionsMinWidth">{{ 'Play' | translate }}</span>
+      </button>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      {{ dataItem[col.field] }}
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<!-- Aggregate value in column footer -->
+<ng-template #aggregateCell let-col="col" let-aggregates="aggregates">
+  <div *ngIf="aggregates[col.field]?.sum || aggregates[col.field]?.sum === 0">
+    <b>{{ 'Sum' | translate }}:</b>
+    {{ aggregates[col.field]?.sum | customNumberFormat: col.field:schema }}
+  </div>
+  <div *ngIf="aggregates[col.field]?.count || aggregates[col.field]?.count === 0">
+    <b>{{ 'Count' | translate }}:</b> {{ aggregates[col.field]?.count }}
+  </div>
+  <div *ngIf="aggregates[col.field]?.min || aggregates[col.field]?.min === 0">
+    <b>{{ 'Min' | translate }}:</b>
+    <span>
+      {{ getFormattedAggregate(aggregates[col.field]?.min, col) }}
+    </span>
+  </div>
+  <div *ngIf="aggregates[col.field]?.max || aggregates[col.field]?.max === 0">
+    <b>{{ 'Max' | translate }}:</b>
+    <span>
+      {{ getFormattedAggregate(aggregates[col.field]?.max, col) }}
+    </span>
+  </div>
+  <div *ngIf="aggregates[col.field]?.average || aggregates[col.field]?.average === 0">
+    <b>{{ 'Average' | translate }}: </b> {{ aggregates[col.field]?.average | customNumberFormat: col.field:schema }}
+  </div>
+</ng-template>
+
+<!-- Aggregate value in grid footer -->
+<ng-template #aggregateTotal let-col="col">
+  <span *ngIf="total[col?.field]?.average || total[col?.field]?.average === 0">
+    {{ 'Average' | translate }}: {{ total[col?.field]?.average | customNumberFormat: col.field:schema }}
+  </span>
+  <span *ngIf="total[col?.field]?.sum || total[col?.field]?.sum === 0"
+    >{{ 'Sum' | translate }}: {{ total[col?.field]?.sum | customNumberFormat: col.field:schema }}</span
+  >
+  <span *ngIf="total[col?.field]?.count || total[col?.field]?.count == 0">{{ 'Count' | translate }}: {{ total[col?.field]?.count }}</span>
+  <span *ngIf="total[col?.field]?.min || total[col?.field]?.min == 0">
+    {{ 'Min' | translate }}: {{ getFormattedAggregate(total[col.field].min, col) }}
+  </span>
+  <span *ngIf="total[col?.field]?.max || total[col?.field]?.max == 0">
+    {{ 'Max' | translate }}: {{ getFormattedAggregate(total[col.field].max, col) }}
+  </span>
+</ng-template>
+
+<!-- for adding raw data in RawDataGrid (data/list)-->
+<ng-template #addDataTmpl>
+  <app-dynamic-entity-creator
+    [fields]="schemaOwnFields"
+    [allowActionsFor]="areaType"
+    [deItem]="row"
+    [schemaId]="schemaId"
+    [areaTypeFromGrid]="areaType"
+    [isEdit]="isEdit"
+    (close)="close($event)"
+    [schema]="schema"
+  >
+  </app-dynamic-entity-creator>
+</ng-template>
+
+<ng-template #viewDynamicEntityTmpl>
+  <mat-dialog-content>
+    <app-form-builder-form-preview
+      [fields$]="detailSchemaFields$"
+      [systemFields]="detailSystemFields"
+      [schema]="detailSchema"
+      [isFormDisabled]="true"
+    ></app-form-builder-form-preview>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="close(true)"><app-icon name="close"></app-icon>{{ 'Close' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #childGrid>
+  <mat-expansion-panel
+    [togglePosition]="'before'"
+    class="mat-elevation-z0 mb-2"
+    [expanded]="isChildGridExpanded"
+    (opened)="isChildGridExpanded = true"
+    (closed)="isChildGridExpanded = false"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div class="d-flex w-100 align-items-center h-100" style="white-space: nowrap">
+          <b class="pr-4">{{ nestedEntityData.displayName }} - {{ nestedEntityData.items.length }} item(s)</b>
+          <button
+            *ngIf="allowAddAndEditActionInChildGrid && nestedEntityData && nestedEntityData?.permission?.add"
+            class="ml-2"
+            [id]="'addRawDataChild_' + componentId"
+            color="primary"
+            mat-icon-button
+            (click)="$event.stopPropagation(); openChildDynamicRawData(nestedEntityData)"
+            matTooltip="{{ 'Add Raw Data' | translate }}"
+          >
+            <app-icon [name]="'add'"></app-icon>
+          </button>
+
+          <div
+            class="layout-options"
+            *ngIf="useLayout && schema"
+            (click)="$event.stopPropagation()"
+            (keydown)="$event.stopPropagation()"
+            [hidden]="!isChildGridExpanded"
+          >
+            <app-grid-layout-options
+              [type]="layoutTypeEnum.Grid"
+              [grid]="grid"
+              [schemaId]="schemaId"
+              [allowExports]="allowedGridOperations.exportActions"
+              [gridSettingsName]="gridSettingsName"
+              [allowSharing]="allowedGridOperations.allowSharing"
+              [schemaAreaType]="schema.areaType"
+              [gridChange$]="gridChanges$"
+              [groups]="groups"
+              [aggregates]="aggregates"
+              [gridSettings]="gridSettings"
+              [allowLayoutChange]="permission.allowLayoutChange"
+              [isChildGrid]="isChildDetailGrid ? true : false"
+              [parentSchemaId]="parentSchemaId"
+              [defaultLayoutId]="schemaPermissions?.defaultLayout"
+              (resetGrid)="resetGridHandler()"
+              (csvDownloadEmitter)="onCsvDownloadButtonClicked()"
+            >
+            </app-grid-layout-options>
+          </div>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngTemplateOutlet="grid"></ng-container>
+  </mat-expansion-panel>
+</ng-template>

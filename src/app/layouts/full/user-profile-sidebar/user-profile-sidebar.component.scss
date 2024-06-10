@@ -1,0 +1,61 @@
+@import '../../../../assets/styles/variable';
+.profile-text-wrap {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 205px;
+  white-space: nowrap;
+}
+app-avatar {
+  width: 96px;
+  height: 96px;
+}
+:host ::ng-deep {
+  .mat-expansion-panel {
+    border: none !important;
+    margin-bottom: 16px !important;
+    .mat-expansion-panel-body {
+      padding: 16px;
+      .mat-menu-item {
+        padding: 0 !important;
+        span {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        &.active {
+          span {
+            color: $themecolor;
+          }
+          app-icon {
+            stroke: $themecolor;
+          }
+        }
+      }
+    }
+  }
+}
+.logo-placeholder {
+  height: 120px;
+  width: 100%;
+  padding: 16px;
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.time-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .timezone-info {
+    font-size: 11px;
+  }
+  .time-info {
+    font-size: 14px;
+  }
+}

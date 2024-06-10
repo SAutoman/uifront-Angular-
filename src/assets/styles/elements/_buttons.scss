@@ -1,0 +1,301 @@
+.mat-stroked-button {
+  line-height: 40px !important;
+  height: 40px !important;
+  &.btn-icon {
+    min-width: 40px !important;
+    max-width: 40px !important;
+    width: 40px !important;
+    min-height: 36px !important;
+    max-height: 36px;
+    height: 36px;
+
+    app-icon {
+      width: 24px !important;
+      height: 24px !important;
+      margin: 0 !important;
+    }
+    &:disabled {
+      background-color: transparent !important;
+      cursor: not-allowed;
+      opacity: 0.3;
+    }
+    &.mat-warn {
+      border-color: $danger !important;
+      app-icon {
+        stroke: $danger !important;
+      }
+    }
+    &.mat-primary {
+      border-color: $primary !important;
+      app-icon {
+        stroke: $themecolor;
+      }
+    }
+    &.mat-accent {
+      border-color: $success !important;
+      app-icon {
+        stroke: $success;
+      }
+    }
+    &.mat-warning {
+      border-color: $warning !important;
+      app-icon {
+        stroke: $warning;
+      }
+    }
+    &.btn-sm {
+      min-width: 32px !important;
+      max-width: 32px !important;
+      width: 32px !important;
+      min-height: 28px !important;
+      max-height: 28px;
+      height: 28px;
+      app-icon {
+        width: 18px !important;
+        height: 18px !important;
+      }
+    }
+    &.btn-xl {
+      min-width: 48px !important;
+      max-width: 48px !important;
+      width: 48px !important;
+      min-height: 48px !important;
+      max-height: 48px;
+      height: 48px;
+      app-icon {
+        width: 22px !important;
+        height: 22px !important;
+      }
+    }
+  }
+  .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    app-icon {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &.mat-primary {
+    .mat-button-wrapper {
+      app-icon {
+        stroke: $primary !important;
+      }
+    }
+  }
+  &.mat-warning {
+    .mat-button-wrapper {
+      app-icon {
+        stroke: $warning !important;
+      }
+    }
+  }
+  &.mat-warn {
+    .mat-button-wrapper {
+      app-icon {
+        stroke: $danger !important;
+      }
+    }
+  }
+  &.btn-rounded {
+    border-radius: 22px !important;
+  }
+  &.btn-sm {
+    line-height: 32px;
+    min-height: 32px !important;
+    max-height: 32px;
+    height: 32px;
+    app-icon {
+      width: 18px !important;
+      height: 18px !important;
+    }
+  }
+  &.btn-icon-right {
+    app-icon {
+      margin-right: -4px !important;
+    }
+  }
+}
+.mat-flat-button {
+  line-height: 40px !important;
+  height: 40px !important;
+  .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    app-icon {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+  }
+  &.mat-primary {
+    .mat-button-wrapper {
+      app-icon {
+        stroke: $white !important;
+      }
+    }
+  }
+  &.btn-md {
+    line-height: 36px !important;
+    height: 36px !important;
+    app-icon {
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+.row {
+  > .mat-flat-button {
+    margin-top: 3px !important;
+  }
+}
+.link-btn {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: $themecolor;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  app-icon {
+    stroke: $themecolor;
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+  }
+}
+
+.mat-icon-button {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  &.mat-warn {
+    app-icon {
+      stroke: $danger !important;
+    }
+  }
+  &.mat-primary {
+    app-icon {
+      stroke: $primary;
+    }
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.mat-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  app-icon {
+    margin-right: 16px;
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+  }
+}
+.mat-primary {
+  &.mat-flat-button {
+    background-color: $themecolor !important;
+    app-icon {
+      stroke: $themecolor !important;
+    }
+  }
+  &.mat-icon-button,
+  &.mat-stroked-button,
+  &.mat-button {
+    color: $themecolor !important;
+    app-icon {
+      stroke: $themecolor !important;
+    }
+  }
+}
+mat-button-toggle-group {
+  &.tab-look {
+    width: 100%;
+    margin-top: -16px;
+    background-color: $bodycolor;
+    z-index: 2;
+    border: none !important;
+    overflow: visible;
+
+    .mat-button-toggle {
+      background-color: $bodycolor;
+    }
+    .mat-button-toggle-checked {
+      background-color: #fff;
+      color: $themecolor;
+      position: relative;
+      border-right: solid thin $dark-dividers;
+      z-index: 2;
+      &::after {
+        content: '';
+        height: 2px;
+        width: 100%;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        background-color: #fff;
+        z-index: 10;
+      }
+    }
+    @media (max-width: 910px) {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  }
+}
+.mat-button-toggle-group {
+  app-icon {
+    width: 24px;
+    height: 24px;
+    padding: 4px 0;
+    stroke: $bodytext;
+  }
+  .mat-button-toggle-checked {
+    background-color: $primary !important;
+    color: $white !important;
+    app-icon {
+      stroke: $white;
+    }
+  }
+}
+.mat-button {
+  &.dropdown {
+    padding-right: 24px;
+    position: relative;
+    cursor: pointer;
+    &:after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid $themecolor;
+      position: absolute;
+      top: 16px;
+      right: 9px;
+    }
+    &[aria-expanded='true'] {
+      &:after {
+        content: '';
+        border-top: none;
+        border-bottom: 5px solid $themecolor;
+      }
+    }
+  }
+}

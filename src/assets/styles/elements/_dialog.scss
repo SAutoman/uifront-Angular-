@@ -1,0 +1,266 @@
+.cdk-overlay-pane {
+  // max-height: calc(100vh - 32px) !important;
+  max-height: calc(100vh - 92px) !important;
+  &.app-form-builder--add-field-dialog,
+  app-schema-additional-settings {
+    .mat-tab-body-wrapper {
+      overflow: clip !important;
+    }
+    .mat-tab-body {
+      overflow: clip !important;
+      .mat-tab-body-content {
+        overflow: clip !important;
+        .button-wrapper {
+          display: flex;
+          justify-content: flex-end;
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+          width: inherit !important;
+          position: sticky;
+          bottom: 0 !important;
+          background-color: $white;
+          z-index: 100;
+          border-top: solid thin $border;
+          padding: 16px 0;
+        }
+      }
+    }
+  }
+  app-schema-additional-settings {
+    .mat-dialog-content {
+      padding: 0 !important;
+    }
+    .mat-tab-body-content {
+      padding: 0 24px !important;
+    }
+  }
+  &.page-tenant-fields--create-field-dialog {
+    .mat-tab-body-wrapper {
+      overflow: clip !important;
+    }
+    .mat-tab-body {
+      overflow: clip !important;
+      .mat-tab-body-content {
+        overflow: clip !important;
+        .button-wrapper {
+          display: flex;
+          justify-content: flex-end;
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+          width: inherit !important;
+          position: sticky;
+          bottom: 0 !important;
+          background-color: $white;
+          z-index: 100;
+          border-top: solid thin $border;
+          padding: 16px 0;
+        }
+      }
+    }
+  }
+  &.page-tenant-fields--edit-field-dialog {
+    .mat-dialog-content {
+      .button-wrapper {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 16px 0 !important;
+      }
+    }
+  }
+  &.page-tenant-lists--create-list-dialog {
+    .mat-dialog-container {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+
+      .mat-card {
+        .mat-dialog-content {
+          max-height: 100% !important;
+          overflow: clip;
+          display: block;
+          margin: 0 -24px !important;
+          padding: 0 24px !important;
+
+          .button-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-left: -24px !important;
+            margin-right: -24px !important;
+            width: inherit !important;
+            position: sticky;
+            bottom: 0 !important;
+            background-color: $white;
+            z-index: 100;
+            border-top: solid thin $border;
+            padding: 16px;
+          }
+        }
+      }
+    }
+  }
+  &.create-article-rawdata {
+    .mat-dialog-content {
+      app-form-builder-form-preview {
+        max-height: 100% !important;
+        overflow: clip;
+        .button-wrapper {
+          margin-left: -24px !important;
+          margin-right: -24px !important;
+        }
+      }
+    }
+  }
+  .mat-dialog-content {
+    &:first-child {
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+    app-field-editor,
+    app-connector-field-editor {
+      .button-wrapper {
+        width: auto !important;
+      }
+    }
+  }
+  .mat-dialog-container {
+    app-user-group-editor-dialog {
+      .mat-dialog-title {
+        display: flex !important;
+      }
+      .title-bar {
+        display: flex !important;
+        width: auto !important;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px !important;
+        min-height: 70px !important;
+        max-height: 70px !important;
+      }
+    }
+  }
+}
+.mat-dialog-container {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  .mat-dialog-title {
+    padding: 16px !important;
+    margin: 0 -24px !important;
+    border-bottom: solid thin $border;
+    position: sticky;
+    top: 0px;
+    background-color: $white;
+    z-index: 10;
+  }
+  .mat-dialog-content {
+    max-height: 100% !important;
+    overflow: clip;
+    .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-left: -24px !important;
+      margin-right: -24px !important;
+      width: inherit !important;
+      position: sticky;
+      bottom: 0 !important;
+      background-color: $white;
+      z-index: 100;
+      border-top: solid thin $border;
+      padding: 16px;
+    }
+  }
+  .mat-dialog-actions {
+    padding: 16px !important;
+    margin: 0 -24px !important;
+    border-top: solid thin $border;
+    min-height: 0 !important;
+    background-color: $white;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+  }
+}
+
+.mat-card {
+  .mat-card-content {
+    .mat-dialog-title {
+      padding: 16px !important;
+      margin: 0 -24px !important;
+      border-bottom: solid thin $border;
+      position: sticky;
+      top: 0px;
+      background-color: $white;
+      z-index: 10;
+    }
+    .mat-dialog-content {
+      max-height: 100% !important;
+      overflow: clip;
+      display: block;
+      margin: 0 -24px !important;
+      padding: 0 24px !important;
+
+      .button-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: -24px !important;
+        margin-right: -24px !important;
+        width: inherit !important;
+        position: sticky;
+        bottom: 0 !important;
+        background-color: $white;
+        z-index: 100;
+        border-top: solid thin $border;
+        padding: 16px;
+      }
+    }
+  }
+}
+
+app-workflow-state-case-activity {
+  .mat-tab-group {
+    .mat-tab-body {
+      app-dynamic-entity-creator {
+        overflow: clip;
+        display: block;
+        padding: 0 24px !important;
+        .button-wrapper {
+          display: flex;
+          justify-content: flex-end;
+          margin-left: -24px !important;
+          margin-right: -24px !important;
+          width: inherit !important;
+          position: sticky;
+          bottom: 0 !important;
+          background-color: $white;
+          z-index: 100;
+          border-top: solid thin $border;
+          padding: 16px;
+        }
+      }
+    }
+  }
+}
+.camera-dialog {
+  @media (max-width: 540px) {
+    max-width: calc(100% - 32px) !important;
+  }
+  .mat-dialog-container {
+    padding: 0;
+  }
+}
+.image-crop-dialog {
+  @media (max-width: 540px) {
+    max-width: calc(100% - 32px) !important;
+  }
+  app-image-cropper {
+    margin-top: 24px;
+    display: block;
+  }
+}
+.print {
+  @media (max-width: 991px) {
+    width: calc(100% - 32px) !important;
+    height: auto !important;
+  }
+  @media (max-width: 768px) {
+    max-width: calc(100% - 32px) !important;
+  }
+}

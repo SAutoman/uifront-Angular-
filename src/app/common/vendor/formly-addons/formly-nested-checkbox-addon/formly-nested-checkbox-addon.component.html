@@ -1,0 +1,32 @@
+<ng-container *ngIf="config">
+  <ng-container *ngIf="!config.isFormGroup">
+    <div class="formly-nested-checkbox-addon--field-content">
+      <div class="formly-nested-checkbox-addon--field-ref" [ngClass]="config.css">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+      <ng-container *ngTemplateOutlet="customMatSuffix"></ng-container>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="config.isFormGroup">
+    <mat-card class="mat-elevation-z0 outline mb-3 d-flex">
+      <div class="formly-nested-checkbox-addon--form-group-content" [ngClass]="config.css">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+      <div class="formly-nested-checkbox-addon--form-group-button-suffix">
+        <ng-container *ngTemplateOutlet="customMatSuffix"></ng-container>
+      </div>
+    </mat-card>
+  </ng-container>
+</ng-container>
+
+<ng-template #customMatSuffix>
+  <mat-checkbox
+    class="formly-nested-checkbox-addon--checkbox"
+    [checked]="config.checked"
+    (click)="onCheckboxClicked($event)"
+    (change)="checkboxChanged($event)"
+  >
+    {{ config.label }}
+  </mat-checkbox>
+</ng-template>

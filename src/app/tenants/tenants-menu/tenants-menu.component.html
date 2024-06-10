@@ -1,0 +1,18 @@
+<mat-sidenav-container autosize>
+  <mat-sidenav #drawer class="sidenav" mode="side" opened="true">
+    <div class="container">
+      <a mat-button class="button" routerLink="../"> {{ 'Home' | translate }} </a>
+      <a mat-button class="button" routerLink="../tenants/companies/list"> {{ 'Companies Tenant' | translate }} </a>
+      <a mat-button class="button" routerLink="../tenants/list"> {{ 'Tenants List' | translate }} </a>
+      <!-- <a mat-button class="button" routerLink="../tenants/fields"> {{ 'Fields' | translate }} </a> -->
+      <a mat-button class="button" routerLink="../tenants/notifications"> {{ 'Notification Settings' | translate }} </a>
+      <a mat-button class="button" routerLink="../tenants/document-management"> {{ 'Document Management' | translate }} </a>
+      <a mat-button class="button" routerLink="../tenants/app-settings"> {{ 'App Settings' | translate }} </a>
+      <a mat-button class="button" routerLink="../tenants/invitations"> {{ 'Invitations' | translate }} </a>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

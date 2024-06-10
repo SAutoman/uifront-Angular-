@@ -1,0 +1,18 @@
+<form [formGroup]="view.condition.form">
+  <formly-form
+    class="d-flex w-100"
+    [form]="view.condition.form"
+    [fields]="view.condition.fields"
+    [model]="view.condition.model"
+  ></formly-form>
+</form>
+<ng-container *ngFor="let rule of view.rules">
+  <form class="" [formGroup]="rule.form">
+    <formly-form class="d-flex" [form]="rule.form" [fields]="rule.fields" [model]="rule.model"></formly-form>
+  </form>
+</ng-container>
+
+<button class="mb-3 btn-sm" (click)="addRule()" mat-stroked-button color="primary">
+  <app-icon [name]="'add'"></app-icon>
+  {{ 'Add Rule' | translate }}
+</button>

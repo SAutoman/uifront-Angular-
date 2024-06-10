@@ -1,0 +1,12 @@
+<div class="bool-field-wrapper">
+  <p class="font-16 font-medium my-2">{{ model.displayName }}</p>
+  <ng-container *ngIf="!renderType || renderType === 'checkbox'">
+    <mat-checkbox [id]="'checkbox_' + componentId" color="primary" [(ngModel)]="model.value"></mat-checkbox>
+  </ng-container>
+  <ng-container *ngIf="renderType === 'radio'">
+    <mat-radio-group [(ngModel)]="model.value">
+      <mat-radio-button value="true"> {{ 'Yes' | translate }} </mat-radio-button>
+      <mat-radio-button value="false"> {{ 'No' | translate }} </mat-radio-button>
+    </mat-radio-group>
+  </ng-container>
+</div>

@@ -1,0 +1,50 @@
+<mat-card-header>
+  <mat-card-title>{{ 'Registration' | translate }}</mat-card-title>
+</mat-card-header>
+
+<ng-container *ngIf="view?.form">
+  <form class="" [formGroup]="view.form">
+    <formly-form class="" [form]="view.form" [fields]="view.fields" [model]="view.model"> </formly-form>
+  </form>
+  <div *ngIf="selectedCompany">
+    {{ selectedCompany.country }}, {{ selectedCompany.zip }}, {{ selectedCompany.city }},
+    {{ selectedCompany.address }}
+  </div>
+  <div class="text-right pr-1">
+    <button
+      (click)="submit()"
+      [id]="'save_' + componentId"
+      mat-flat-button
+      color="primary"
+      [disabled]="isInvalidUser || processing"
+      type="submit"
+    >
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Complete Registration' | translate }}
+    </button>
+  </div>
+</ng-container>
+
+<hr class="my-4" />
+<mat-card-header *ngIf="view?.form" class="justify-content-between align-items-center">
+  <button
+    [id]="'createCompany_' + componentId"
+    type="button"
+    [disabled]="view.model.email == '' || alreadyRegistered || processing"
+    class="margin-top mr-1"
+    mat-flat-button
+    color="primary"
+    (click)="createCompany()"
+  >
+    <ng-container *ngIf="!isCreateCompanyClicked">{{ 'Create New Company' | translate }}</ng-container>
+    <ng-container *ngIf="isCreateCompanyClicked">{{ 'Cancel Create New Company' | translate }}</ng-container>
+  </button>
+</mat-card-header>
+
+<app-company
+  [email]="emailAddress"
+  (loadCompanies)="loadCompanies()"
+  (companyCreated)="newCompanyCreated($event)"
+  *ngIf="isCreateCompanyClicked && emailAddress != ''"
+>
+</app-company>

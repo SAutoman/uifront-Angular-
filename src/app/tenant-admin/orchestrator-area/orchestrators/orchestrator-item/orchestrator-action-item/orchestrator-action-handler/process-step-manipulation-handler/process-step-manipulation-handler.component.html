@@ -1,0 +1,45 @@
+<div>{{ 'Workflow' | translate }}: {{ destination.name }}</div>
+<form [formGroup]="handlerForm">
+  <mat-form-field>
+    <mat-select
+      [disabled]="!destination"
+      [placeholder]="'Select Process Step' | translate"
+      formControlName="processStepLink"
+      (selectionChange)="onStepChange($event)"
+    >
+      <mat-option *ngFor="let step of destination?.processStepLinks" [value]="step.refName">{{ step?.refName }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="my-2">
+    <mat-checkbox formControlName="createStepIfNotExist" [disabled]="!handlerForm?.get('processStepLink')?.value">
+      {{ 'Add step if not exist' | translate }}
+    </mat-checkbox>
+  </div>
+  <button
+    [disabled]="!handlerForm?.get('processStepLink')?.value"
+    mat-stroked-button
+    class="btn-sm my-2"
+    color="primary"
+    (click)="openFieldBuilder()"
+  >
+    {{ 'Update Step Fields' | translate }}
+  </button>
+  <mat-form-field>
+    <button
+      *ngIf="handlerForm?.get('resolutionId')?.value"
+      class="reset-button"
+      mat-icon-button
+      color="warn"
+      (click)="resetResolution($event)"
+    >
+      <app-icon [name]="'close'"></app-icon>
+    </button>
+    <mat-select
+      [disabled]="!handlerForm?.get('processStepLink')?.value"
+      formControlName="resolutionId"
+      [placeholder]="'Set Step Resolution To' | translate"
+    >
+      <mat-option *ngFor="let resolution of resolutionsList" [value]="resolution.name">{{ resolution?.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

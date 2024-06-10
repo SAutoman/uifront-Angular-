@@ -1,0 +1,24 @@
+<form [formGroup]="handlerForm">
+  <mat-form-field>
+    <mat-select
+      [disabled]="!source || !destination"
+      [placeholder]="'Select Workflow' | translate"
+      formControlName="side"
+      (selectionChange)="onSideChange($event)"
+    >
+      <mat-option value="source">{{ source?.name }}</mat-option>
+      <mat-option value="destination">{{ destination?.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button [disabled]="!handlerForm?.get('side')?.value" mat-stroked-button class="btn-sm my-2" color="primary" (click)="openFieldBuilder()">
+    {{ 'Update Case Fields' | translate }}
+  </button>
+  <!-- <mat-form-field>
+    <button *ngIf="handlerForm?.get('status')?.value" class="reset-button" mat-icon-button color="warn" (click)="resetStatus($event)">
+      <app-icon [name]="'close'"></app-icon>
+    </button>
+    <mat-select [disabled]="!handlerForm?.get('side')?.value" formControlName="status" [placeholder]="'Set Case Status To' | translate">
+      <mat-option *ngFor="let status of statusList" [value]="status.id">{{ status?.name }}</mat-option>
+    </mat-select>
+  </mat-form-field> -->
+</form>

@@ -1,0 +1,11 @@
+.fast-create-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+::ng-deep {
+  .horizontalControl {
+    margin-right: 10px;
+    // width: 150px;
+    // padding: 0;
+  }
+}

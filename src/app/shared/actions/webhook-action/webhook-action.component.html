@@ -1,0 +1,22 @@
+<mat-card [formGroup]="actionForm" class="outline mat-elevation-z0">
+  <mat-form-field *ngIf="actionScope !== eventScopes.ProcessStepLinkScope">
+    <mat-select [placeholder]="'Select case status when to trigger webhook event' | translate" formControlName="statusId">
+      <mat-option *ngFor="let status of workflowStatuses" [value]="status.id">{{ status.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select [placeholder]="'Select webhook to call' | translate" formControlName="webhookEndpointId">
+      <mat-option *ngFor="let webhook of allWebhooks" [value]="webhook.id">{{ webhook.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="webhookFieldsTree">
+    <h5>{{ 'Select What To Include In Webhook Payload' | translate }}</h5>
+    <app-tree-selectbox
+      [selectedItems]="selectedFields"
+      [rawDatasource]="webhookFieldsTree"
+      (selectionEmitter)="fieldSelectionEmitted($event)"
+    ></app-tree-selectbox>
+  </div>
+</mat-card>

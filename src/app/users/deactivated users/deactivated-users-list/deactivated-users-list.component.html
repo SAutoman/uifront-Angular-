@@ -1,0 +1,16 @@
+<app-wfm-grid
+  #DeactivatedUsersGrid
+  [gridConfiguration]="deactivatedUsersGridConfig"
+  [gridData]="gridData"
+  [pageTitle]="'Deactivated Users'"
+  gridAreaType="deactivatedUsers"
+  [actions]="gridActions"
+  (actionEvent)="onActionClick($event)"
+>
+</app-wfm-grid>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

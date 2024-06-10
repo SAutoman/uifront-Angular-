@@ -1,0 +1,42 @@
+<kendo-grid
+  [data]="gridData"
+  [resizable]="true"
+  [pageSize]="state.take"
+  [skip]="state.skip"
+  [pageable]="true"
+  scrollable="scrollable"
+  (pageChange)="onPageChange($event)"
+>
+  <kendo-grid-messages
+    noRecords="{{ 'There are no items to display' | translate }}"
+    pagerPage="{{ 'Page' | translate }}"
+    pagerOf="{{ 'of' | translate }}"
+    pagerItems="{{ 'items' | translate }}"
+    pagerItemsPerPage="{{ 'items per page' | translate }}"
+  >
+  </kendo-grid-messages>
+
+  <kendo-grid-column field="name" title="{{ 'Name' | translate }}"></kendo-grid-column>
+
+  <kendo-grid-column field="type" title="{{ 'Type' | translate }}"></kendo-grid-column>
+
+  <kendo-grid-column title="{{ 'Actions' | translate }}" width="200">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button [id]="'edit_' + componentId" mat-stroked-button color="primary" (click)="onEditClicked(dataItem)">
+        {{ 'Edit' | translate }}
+      </button>
+
+      <button [id]="'delete_' + componentId" mat-stroked-button color="warn" (click)="onDeleteClicked(dataItem.id)">
+        {{ 'Delete' | translate }}
+      </button>
+    </ng-template>
+  </kendo-grid-column>
+
+  <ng-template kendoGridToolbarTemplate position="bottom">
+    <div class="btn-wrapper">
+      <button [id]="'create_' + componentId" mat-stroked-button color="primary" (click)="onCreateClicked()">
+        {{ 'Create' | translate }}
+      </button>
+    </div>
+  </ng-template>
+</kendo-grid>

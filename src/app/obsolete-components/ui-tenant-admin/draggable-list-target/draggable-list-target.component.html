@@ -1,0 +1,64 @@
+<!-- <mat-card>
+  <mat-card-header class="header">
+    <mat-card-title>{{ 'Raw Data' | translate }} Fields</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="scroll-fields">
+    <ng-container *ngIf="viewFields$ | async as viewFields; else loading">
+      <div class="drop">
+        <div
+          class="fields-list"
+          [id]="listId"
+          cdkDropList
+          [cdkDropListData]="viewFields"
+          [cdkDropListConnectedTo]="connectedTo"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <div class="accordion" *ngFor="let item of viewFields" cdkDrag>
+            <mat-accordion>
+              <mat-expansion-panel [id]="'panelFields_' + componentId" class="mat-elevation-z0 mb-3">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{ item.name }}</mat-panel-title>
+                  <mat-panel-description class="description"></mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <app-tb-bool-field *ngIf="item.type === fileTypeIds.BoolField" [item]="item"></app-tb-bool-field>
+                <app-tb-time-field *ngIf="item.type === fileTypeIds.TimeField" [item]="item"></app-tb-time-field>
+                <app-tb-date-time-field *ngIf="item.type === fileTypeIds.DateTimeField" [item]="item"></app-tb-date-time-field>
+                <app-tb-string-field *ngIf="item.type === fileTypeIds.StringField" [item]="item"></app-tb-string-field>
+                <app-tb-number-field
+                  *ngIf="item.type === fileTypeIds.IntField || item.type === fileTypeIds.DecimalField"
+                  [item]="item"
+                ></app-tb-number-field>
+                <app-tb-date-field *ngIf="item.type === fileTypeIds.DateField" [item]="item"></app-tb-date-field>
+                <app-tb-list-field *ngIf="item.type === fileTypeIds.ListField" [item]="item"></app-tb-list-field>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </mat-card-content>
+
+  <mat-card-content>
+    <mat-label>( simply drag&drop the fields you want to use and vice versa)</mat-label>
+    <ng-container *ngIf="viewFields$ | async as viewFields">
+      <div class="save">
+        <button
+          [id]="'save_' + componentId"
+          mat-raised-button
+          color="primary"
+          (click)="saveSelectedFields(viewFields)"
+          [disabled]="!isChangedFields(viewFields)"
+        >
+          Save
+        </button>
+      </div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template> -->

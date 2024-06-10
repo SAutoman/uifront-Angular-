@@ -1,0 +1,6 @@
+<mat-form-field class="col-md-12 mt-2" appearance="outline">
+  <mat-label>{{ 'Rights' | translate }}</mat-label>
+  <mat-select multiple [formControl]="selectedRightsControl">
+    <mat-option *ngFor="let rights of rightsOptions" [value]="rights.id">{{ rights?.name }}</mat-option>
+  </mat-select>
+</mat-form-field>

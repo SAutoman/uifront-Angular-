@@ -1,0 +1,8 @@
+<app-copy-fields-action
+  [type]="eventTypes.CaseToStep"
+  [actionDto]="copyActionDto"
+  [workflow]="workflow"
+  [actionScope]="actionScope"
+  (outputEmitter)="copyFieldsActionDataUpdated($event)"
+>
+</app-copy-fields-action>

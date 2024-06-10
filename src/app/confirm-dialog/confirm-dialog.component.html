@@ -1,0 +1,12 @@
+<h2 [id]="'header_' + componentId" mat-dialog-title>{{ 'Confirm Delete' | translate }}</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>{{ 'Are you sure you want to delete this item(s)?' | translate }}</h3>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button [id]="'cancel_' + componentId" mat-stroked-button color="primary" [mat-dialog-close]="false" class="mr-2">
+    <app-icon name="close"></app-icon>{{ 'Cancel' | translate }}
+  </button>
+  <button [id]="'ok_' + componentId" mat-flat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>
+    <app-icon name="check"></app-icon> {{ 'OK' | translate }}
+  </button>
+</mat-dialog-actions>

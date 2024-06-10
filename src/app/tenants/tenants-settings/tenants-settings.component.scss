@@ -1,0 +1,14 @@
+@import '../../../assets/styles/variable';
+::ng-deep {
+  .mat-expansion-panel {
+    overflow: clip;
+    .mat-expansion-panel-footer {
+      background-color: $white;
+      margin: 16px -16px -16px;
+      padding: 16px;
+      z-index: 1000;
+      position: sticky;
+      bottom: 0;
+    }
+  }
+}

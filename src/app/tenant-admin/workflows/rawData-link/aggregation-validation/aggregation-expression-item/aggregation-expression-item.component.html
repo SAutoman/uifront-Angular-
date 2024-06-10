@@ -1,0 +1,31 @@
+<form class="" [formGroup]="view.details.form">
+  <formly-form
+    class="row"
+    [form]="view.details.form"
+    [fields]="view.details.fields"
+    [model]="view.details.model"
+    (modelChange)="emitToParent()"
+  ></formly-form>
+</form>
+
+<ng-container *ngIf="groupTypeValue && selectedGroupType$">
+  <app-aggregate-source
+    [sourceData]="sourceDataInput"
+    [rangeType$]="selectedRangeType$"
+    [entityType]="sourceType"
+    [selectedGroupType$]="selectedGroupType$"
+    [rawDataFields]="rawDataReferences"
+    [showFilters]="false"
+    (emitter)="sourceEmitted($event)"
+  ></app-aggregate-source>
+</ng-container>
+
+<form class="mr-2 ml-2" [formGroup]="view.rule.form">
+  <formly-form
+    class="row w-100"
+    [form]="view.rule.form"
+    [fields]="view.rule.fields"
+    [model]="view.rule.model"
+    (modelChange)="emitToParent()"
+  ></formly-form>
+</form>

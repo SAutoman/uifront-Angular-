@@ -1,0 +1,7 @@
+<ng-container *ngFor="let x of sections; let i = index">
+  <h3>{{ x.value }}</h3>
+  <div class="ml-3 d-flex flex-column">
+    <a [id]="'list_' + i + '_' + componentId" routerLink="./{{ x.key }}/list">list</a>
+    <a [id]="'builder_' + i + '_' + componentId" routerLink="./{{ x.key }}/build">builder</a>
+  </div>
+</ng-container>

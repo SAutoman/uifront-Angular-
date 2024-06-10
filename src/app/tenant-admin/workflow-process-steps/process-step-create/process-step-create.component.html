@@ -1,0 +1,63 @@
+<h4 mat-dialog-title>{{ title | translate }}</h4>
+<mat-dialog-content>
+  <br />
+  <form [formGroup]="processStepEntityForm" *ngIf="!(wfStateLoading$ | async); else loading">
+    <mat-form-field>
+      <mat-label>{{ 'Name' | translate }}</mat-label>
+      <input [id]="'inputName_' + componentId" matInput type="text" formControlName="name" required />
+      <mat-error *ngIf="hasError('name', 'required')">{{ 'Name is required' | translate }}!</mat-error>
+    </mat-form-field>
+
+    <!-- <mat-form-field>
+        <mat-label>Ref Name</mat-label>
+        <input [id]="'inputRefName_' + componentId" matInput type="text" readonly formControlName="refName" />
+      </mat-form-field> -->
+
+    <mat-form-field>
+      <mat-select placeholder="{{ 'Select Step Schema' | translate }}" formControlName="schemaId">
+        <mat-option *ngFor="let schema of stepSchemas" [value]="schema.id">{{ schema?.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="d-flex">
+      <mat-form-field class="w-75">
+        <mat-label>{{ 'Step Resolutions' | translate }}</mat-label>
+        <input [id]="'inputResolution_' + componentId" formControlName="resolutions" #resolution matInput type="text" autocomplete="off" />
+      </mat-form-field>
+      <button class="ml-3" mat-stroked-button color="primary" (click)="addToResolutionsList(resolution)" style="align-self: flex-start">
+        <app-icon [name]="'add'"></app-icon>{{ 'Add' | translate }}
+      </button>
+    </div>
+
+    <div *ngIf="resolutionsList?.length > 0">
+      <mat-chip-list>
+        <mat-chip color="primary" *ngFor="let resolution of resolutionsList; let i = index" (removed)="removeResolutionFromList(i)">
+          {{ resolution?.name }}
+          <app-icon [name]="'close'" matChipRemove></app-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </form>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button (click)="close()" mat-stroked-button color="primary" class="mr-3">
+    <app-icon name="close"></app-icon> {{ 'Cancel' | translate }}
+  </button>
+  <button
+    [id]="'send_' + componentId"
+    [disabled]="processStepEntityForm.invalid"
+    mat-flat-button
+    color="primary"
+    [matTooltip]="!currentProcessStepId ? 'create' : 'update'"
+    matTooltipPosition="below"
+    (click)="onSubmit()"
+  >
+    <app-icon name="save"></app-icon> {{ 'Submit' | translate }}
+  </button>
+</mat-dialog-actions>
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

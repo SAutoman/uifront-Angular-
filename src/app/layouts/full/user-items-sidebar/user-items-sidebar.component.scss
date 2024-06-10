@@ -1,0 +1,82 @@
+@import '../../../../assets/styles/variable.scss';
+:host {
+  display: block;
+  padding: 0 16px;
+  overflow: hidden;
+}
+// .btn-search {
+//   color: #8f999e;
+//   font-weight: 400;
+// }
+
+.tenant-name {
+  text-align: center;
+  margin: 0 !important;
+  padding: 7% 0 0 0;
+}
+
+.tenant-name-wrap {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+// .workflow-profiles {
+//   padding: 0 0 0 15px;
+//   width: 100%;
+//   color: blue;
+// }
+
+// .workflow-profiles-link {
+//   font-size: smaller !important;
+// }
+.mat-list-item {
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+  height: initial;
+  &:hover {
+    background-color: lighten($dark-dividers, 70%) !important;
+    color: $themecolor !important;
+    app-icon {
+      stroke: $themecolor !important;
+    }
+  }
+}
+.parent-active {
+  background-color: lighten($dark-dividers, 70%) !important;
+  a {
+    color: $bodytext !important;
+  }
+  app-icon {
+    stroke: $bodytext !important;
+  }
+  &:hover {
+    background-color: lighten($dark-dividers, 10%) !important;
+    color: $themecolor !important;
+    a {
+      color: $themecolor !important;
+    }
+    app-icon {
+      stroke: $themecolor !important;
+    }
+  }
+}
+
+.workflow-profiles {
+  margin-left: 24px;
+  width: calc(100% - 24px);
+}
+.child-active {
+  a {
+    color: $themecolor !important;
+  }
+  app-icon {
+    stroke: $themecolor !important;
+  }
+}
+.mat-nav-list {
+  &.sub-item {
+    padding-left: 24px !important;
+  }
+}

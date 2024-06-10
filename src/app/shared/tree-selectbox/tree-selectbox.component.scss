@@ -1,0 +1,9 @@
+@import '../../../assets/styles/variable.scss';
+
+.aggregateSelect {
+  border: 1px solid darken($border, 40%);
+  display: block;
+  padding: 5px 17px;
+  border-radius: 4px;
+  max-width: 200px;
+}

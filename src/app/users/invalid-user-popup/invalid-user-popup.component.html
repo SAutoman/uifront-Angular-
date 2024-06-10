@@ -1,0 +1,19 @@
+<h2 [id]="'header_' + componentId" mat-dialog-title>Invalid User</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="data.userRole !== data.invitationRole">
+    The logged in user already has rights of <b>{{ data.userRole }}</b> in <b>{{ data.tenantName }}</b> and invitation link is for the
+    rights of <b>{{ data.invitationRole }}</b
+    >, so please register a new user with invitation link and continue.
+  </div>
+  <div *ngIf="data.invitationEmail !== data.userEmail">
+    The logged in user has email address <b>{{ data.userEmail }}</b> and invitation link is generated for email
+    <b>{{ data.invitationEmail }}</b
+    >, so either login with another user whose email address is <b>{{ data.invitationEmail }}</b> or register a new user with invitation
+    link and continue.
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button [id]="'ok_' + componentId" mat-flat-button color="primary" cdkFocusInitial (click)="onSignOut()">Ok</button>
+</mat-dialog-actions>

@@ -1,0 +1,103 @@
+<div *ngIf="menuType == menuTypeEnum.AdminMenu || menuType === menuTypeEnum.AdminMenuActivated">
+  <ng-container *ngFor="let menuItem of adminMenuItems">
+    <mat-nav-list
+      *ngIf="menuItem.type === 'link' || menuItem.type === 'extLink' || menuItem.type === 'extTabLink' || menuItem.type === 'sub'"
+      [ngClass]="{ active: menuItem.opened, itemSelected: menuItem.isSelected }"
+    >
+      <mat-list-item *ngIf="menuItem.type === 'link'">
+        <a class="" [routerLink]="[menuItem.state]">
+          <app-icon [name]="menuItem.icon"></app-icon>
+          <span title="{{ menuItem.name | translate }}">{{ menuItem.name | translate }} </span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">
+            {{ badge.value }}
+          </span>
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="menuItem.type === 'extLink'">
+        <a class="" href="{{ menuItem.state }}">
+          <app-icon [name]="menuItem.icon"></app-icon>
+          <span title="{{ menuItem.name | translate }}">{{ menuItem.name | translate }} </span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">
+            {{ badge.value }}
+          </span>
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="menuItem.type === 'extTabLink'">
+        <a class="" href="{{ menuItem.state }}" target="_blank">
+          <app-icon [name]="menuItem.icon"></app-icon>
+          <span title="{{ menuItem.name | translate }}">{{ menuItem.name | translate }} </span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">
+            {{ badge.value }}
+          </span>
+        </a>
+      </mat-list-item>
+      <mat-list-item *ngIf="menuItem.type === 'sub'" [ngClass]="{ 'parent-active': menuItem.isSelected }">
+        <a class="" href="javascript:;" (click)="toggleParentMenu(menuItem)">
+          <app-icon [name]="menuItem.icon"></app-icon>
+          <span title="{{ menuItem.name | translate }}">{{ menuItem.name | translate }} </span>
+          <span class="label label-{{ badge.type }}" *ngFor="let badge of menuItem.badge">
+            {{ badge.value }}
+          </span>
+          <app-icon [name]="'arrow-down'" class="dd-icon"></app-icon>
+        </a>
+      </mat-list-item>
+      <mat-nav-list class="sub-item" *ngIf="menuItem.type === 'sub'">
+        <ng-container *ngFor="let childItem of menuItem.children">
+          <mat-list-item
+            *ngIf="
+              (childItem.type === 'link' && childItem.name.includes('Raw Data')) ||
+              (childItem.type === 'link' && !childItem.name.includes('Raw Data'))
+            "
+            [ngClass]="{
+              selected: childItem == childId
+            }"
+          >
+            <a
+              [routerLink]="['/', menuItem.tenantName, menuItem.state, childItem.state]"
+              (click)="handleAction()"
+              *ngIf="childItem.type === 'link' && childItem.name.includes('Raw Data')"
+              class="relative"
+              title="{{ childItem.name | translate }}"
+            >
+              {{ childItem.name | translate }}
+            </a>
+            <a
+              [routerLink]="['/', menuItem.tenantName, menuItem.state, childItem.state]"
+              (click)="handleAction()"
+              *ngIf="childItem.type === 'link' && !childItem.name.includes('Raw Data')"
+              class="relative"
+              title="{{ childItem.name | translate }}"
+            >
+              {{ childItem.name | translate }}
+            </a>
+          </mat-list-item>
+        </ng-container>
+        <mat-nav-list *ngFor="let childItem of menuItem.children">
+          <mat-list-item
+            *ngIf="childItem.type === 'subChild'"
+            [ngClass]="{
+              'parent-active': childItem.isOpened
+            }"
+          >
+            <a href="javascript: void(0);" (click)="toggleChildItemActive(childItem, menuItem)" title="{{ childItem.name | translate }}">
+              <span>{{ childItem.name | translate }}</span>
+              <app-icon [name]="'arrow-down'" class="dd-icon"></app-icon>
+            </a>
+          </mat-list-item>
+          <mat-nav-list class="child-sub-item" *ngIf="childItem.type === 'subChild'">
+            <mat-list-item
+              *ngFor="let child of childItem.child"
+              [ngClass]="{
+                selected: child == childId
+              }"
+            >
+              <a (click)="handleAction()" [routerLink]="buildSubChildPath(menuItem, childItem, child)" title="{{ child.name }}">{{
+                child.name | translate
+              }}</a>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-nav-list>
+      </mat-nav-list>
+    </mat-nav-list>
+  </ng-container>
+</div>

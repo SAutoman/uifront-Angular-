@@ -1,0 +1,16 @@
+<ng-container *ngIf="config">
+  <ng-container *ngIf="!config.isFormGroup">
+    <div class="formly-hyperlink-addon--field-content">
+      <div class="formly-hyperlink-addon--field-ref">
+        <ng-container #fieldComponent></ng-container>
+      </div>
+      <ng-container *ngTemplateOutlet="customMatSuffix"></ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #customMatSuffix>
+  <a [href]="finalUrl" class="formly-addon-hyperlink" [target]="finalUrl">
+    {{ hyperLinkLabel }}
+  </a>
+</ng-template>

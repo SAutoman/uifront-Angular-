@@ -1,0 +1,93 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div>Set Fields</div>
+    </ng-template>
+    <ng-template matTabContent>
+      <form [formGroup]="form" *ngIf="form">
+        <h3>{{ 'Fields to be updated' | translate }}</h3>
+
+        <div formArrayName="dynamicFields">
+          <div *ngFor="let group of dynamicFields.controls; let i = index">
+            <mat-card [formGroupName]="i" class="outline mat-elevation-z0 mb-3 dynamicFieldWrapper">
+              <button color="warn" (click)="removeDynamicFieldGroup(i)" class="close-btn">
+                <app-icon [name]="'trash'"></app-icon>
+              </button>
+
+              <ng-container *ngIf="fieldsTreeNodes">
+                <mat-expansion-panel class="mt-1 mat-elevation-z0">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title class="font-bold">
+                      {{ getFieldLabel(group) }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-tree-selectbox
+                    [selectedItems]="[group?.controls['selectedFieldForTree']?.value]"
+                    [rawDatasource]="fieldsTreeNodes"
+                    [parentSelectionAllowed]="false"
+                    [multipleSelection]="false"
+                    (selectionEmitter)="fieldSelected($event, i)"
+                  >
+                  </app-tree-selectbox>
+                </mat-expansion-panel>
+              </ng-container>
+
+              <div *ngIf="group?.controls['valueForm']?.value as view">
+                <form [formGroup]="view.form">
+                  <formly-form class="row" [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+                </form>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button mat-icon-button color="primary" (click)="addDynamicFieldGroup()" class="">
+            <app-icon [name]="'add'"></app-icon>
+          </button>
+        </div>
+      </form>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab *ngIf="showCopyFieldsTab">
+    <ng-template mat-tab-label>
+      <div>Copy Fields</div>
+    </ng-template>
+
+    <ng-template matTabContent>
+      <mat-card
+        class="outline mat-elevation-z0 pb-0 copyFieldWrapper"
+        *ngFor="let sourceToDestination of sourceToDestinationFieldPathInputs; let i = index"
+      >
+        <button class="close-btn" (click)="removeSourceToDestination(i)">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+        <h5 class="mb-2 font-weight-bold">{{ sourceTitle }}</h5>
+        <app-field-path-generator
+          [fieldPathInput]="sourceToDestination.source"
+          [workflow]="copySourceWorkflow"
+          (fieldPathEmitter)="sourcePathUpdated($event, i)"
+          [includeFieldRefInOutput]="true"
+        >
+        </app-field-path-generator>
+
+        <h5 class="mb-2 font-weight-bold">{{ destinationTitle }}</h5>
+        <app-field-path-generator
+          [fieldPathInput]="sourceToDestination.destination"
+          [workflow]="copyDestinationWorkflow"
+          (fieldPathEmitter)="destinationPathUpdated($event, i)"
+          [includeFieldRefInOutput]="true"
+        >
+        </app-field-path-generator>
+      </mat-card>
+      <div class="d-flex justify-content-end">
+        <button mat-icon-button color="primary" (click)="addNewSourceToDestination()">
+          <app-icon [name]="'add'">add</app-icon>
+        </button>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+<button mat-raised-button color="primary" (click)="populateValues()">{{ 'Save' | translate }}</button>

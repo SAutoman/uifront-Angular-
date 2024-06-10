@@ -1,0 +1,65 @@
+<ng-container *ngIf="view">
+  <h2 mat-dialog-title>{{ 'Set Rules For' | translate }} {{ fieldLabel }}</h2>
+
+  <mat-dialog-content>
+    <br />
+    <ng-container>
+      <form [formGroup]="view.form">
+        <formly-form [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+      </form>
+    </ng-container>
+
+    <mat-expansion-panel class="mt-1 mat-elevation-z0" [expanded]="isExpressionExpanded">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-bold">
+          {{ 'Field Rules' | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-tab-group class="full-width">
+        <mat-tab label="{{ 'RawData Field Rules' | translate }}">
+          <br />
+          <app-rules-builder
+            [expressionConfig]="ruleConfig"
+            [expressionDto]="rawDataExpressionData?.data"
+            [schema]="rawDataSchema"
+            (expressionUpdated)="rulesUpdated($event)"
+          ></app-rules-builder>
+        </mat-tab>
+
+        <mat-tab label="{{ 'Case Field Rules' | translate }}" *ngIf="showCaseRules" class="p-2">
+          <app-rules-builder
+            [expressionConfig]="ruleConfig"
+            [expressionDto]="caseExpressionData?.data"
+            [schema]="caseSchema"
+            (expressionUpdated)="caseRulesUpdated($event)"
+          ></app-rules-builder>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mt-1 mb-2 mat-elevation-z0" [expanded]="isValidationExpanded" *ngIf="!hideRawDataValidation">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-bold">
+          {{ 'Aggregation Validation' | translate }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-aggregation-validation
+        class="mt-3"
+        [rawDataReferences]="rawDataReferences"
+        [schema]="rawDataSchema"
+        [multipleValidation]="override?.rawDataItemsValidation"
+        (dataEmitter)="rawDataItemsValidationUpdated($event)"
+      ></app-aggregation-validation>
+    </mat-expansion-panel>
+    <br />
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button (click)="close()" class="mr-3" color="primary">
+      <app-icon name="close"></app-icon>{{ 'Cancel' | translate }}
+    </button>
+    <button mat-flat-button color="primary" (click)="save()" [disabled]="!isValid() || invalidAggregations">
+      <app-icon name="save"></app-icon> {{ 'Save' | translate }}
+    </button>
+  </mat-dialog-actions>
+</ng-container>

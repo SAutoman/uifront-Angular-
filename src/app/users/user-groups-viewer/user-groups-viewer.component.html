@@ -1,0 +1,48 @@
+<ng-container *ngIf="view$ | async as view">
+  <app-wfm-grid
+    #useGrid
+    [gridConfiguration]="usersGroupGridSettingsConf"
+    [gridData]="view.kendo.gridData"
+    gridAreaType="users-groups"
+    [pageTitle]="'Users Groups'"
+    [actions]="gridActions"
+    showCreateButton="true"
+    (actionEvent)="onActionClick($event)"
+    (createBtnEmitter)="openCreate($event, view)"
+    (paginationChange)="onPaginationChange($event)"
+  >
+  </app-wfm-grid>
+</ng-container>
+
+<ng-template #companyInfo>
+  <mat-dialog-content>
+    <app-wfm-grid
+      [gridConfiguration]="companyInfoGridSettings"
+      [gridData]="companyInfoData"
+      isModal="true"
+      gridAreaType="companyInfo"
+      [pageTitle]="'Company Info'"
+    >
+    </app-wfm-grid>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="closeDialog()"><app-icon name="close"></app-icon> Close</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #GroupUsersInfo>
+  <mat-dialog-content>
+    <app-wfm-grid
+      [gridConfiguration]="usersGroupUsersGridSettingsConf"
+      [gridData]="rowData"
+      [pageTitle]="'Group Users'"
+      [actions]="groupUsersGridActions"
+      isModal="true"
+      (actionEvent)="onActionClick($event)"
+    >
+    </app-wfm-grid>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="closeDialog()"><app-icon name="close"></app-icon> Close</button>
+  </mat-dialog-actions>
+</ng-template>

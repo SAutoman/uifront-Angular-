@@ -1,0 +1,15 @@
+.logo-wrapper {
+  width: 200px;
+}
+
+.flex-unsubscribe {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  mat-card {
+    width: 300px;
+  }
+}

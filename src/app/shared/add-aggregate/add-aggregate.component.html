@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>{{ 'Aggregates' | translate }}</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-select [placeholder]="'Select a field' | translate" [(ngModel)]="selectedField">
+      <mat-option *ngFor="let field of data?.gridColumns" [value]="field.fieldName">{{ field.displayName }} </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select [placeholder]="'Select an Aggregate function' | translate" [(ngModel)]="selectedAggregate">
+      <mat-option *ngFor="let option of aggregateOptions" [value]="option.title"
+        >{{ option.title | uppercase }} {{ option.hint }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+</div>
+<div>
+  <div *ngFor="let aggregate of data?.existingAggregates; let i = index" class="d-flex">
+    <div class="m-auto field">
+      {{ 'Field' | translate }}: <b>{{ aggregate?.field }}</b
+      >, {{ 'Aggregate' | translate }}: <b>{{ aggregate?.aggregate | uppercase }}</b>
+    </div>
+    <div class="m-auto">
+      <button class="float-right" mat-icon-button color="warn" (click)="removeAggregate(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" mat-dialog-close class="mr-2">
+    <app-icon name="close"></app-icon>{{ 'Cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" cdkFocusInitial (click)="add()" class="mr-2">
+    <app-icon name="add"></app-icon>
+    {{ 'Add' | translate }}
+  </button>
+  <button mat-flat-button color="primary" cdkFocusInitial (click)="onApply()" class="mr-2">
+    <app-icon name="check"></app-icon> {{ 'Apply' | translate }}
+  </button>
+</mat-dialog-actions>

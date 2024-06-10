@@ -1,0 +1,36 @@
+<div class="flex-unsubscribe">
+  <div class="logo-wrapper">
+    <app-logo></app-logo>
+  </div>
+
+  <h3>{{ 'Unsubscribe From Notification' | translate }}</h3>
+
+  <mat-card *ngIf="notification">
+    <mat-card-header>
+      <mat-card-title>{{ notification.subject }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <b>{{ notificationType }}</b> {{ 'notification' | translate }}
+
+      <form [formGroup]="form">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Enter Your Email' | translate }}</mat-label>
+          <input type="text" matInput formControlName="email" />
+          <mat-error *ngIf="form.controls['email'].touched && form.controls['email'].hasError('email')">
+            {{'Email is invalid!' | translate}</mat-error
+          >
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="d-flex justify-content-center">
+      <button mat-flat-button class="primary" (click)="unsubscribeFromNotification()" [disabled]="!form.valid">
+        {{ 'Unsubscribe' | translate }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <div *ngIf="error">
+    {{ error }}
+  </div>
+</div>

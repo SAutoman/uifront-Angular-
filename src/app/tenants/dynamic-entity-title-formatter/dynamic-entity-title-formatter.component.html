@@ -1,0 +1,25 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Schema Titles' | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <mat-tab-group *ngIf="areaTypes" class="w-100">
+    <mat-tab *ngFor="let areaType of areaTypes" label="{{ areaType.viewValue | translate }}">
+      <ng-container [ngTemplateOutlet]="titleFormatter" [ngTemplateOutletContext]="{ areaType: areaType }"> </ng-container>
+    </mat-tab>
+  </mat-tab-group>
+
+  <ng-template let-areaType="areaType" #titleFormatter>
+    <div *ngIf="schemasByArea[areaType.key]" class="mt-4">
+      <app-schema-selection
+        [data]="schemasByArea[areaType.key].data"
+        (schemaIdEmitter)="setCurrentSchemaPerArea($event, schemasByArea[areaType.key])"
+      >
+      </app-schema-selection>
+
+      <app-title-formatter-per-schema [schema$]="schemasByArea[areaType.key].currentSchema$"> </app-title-formatter-per-schema>
+    </div>
+  </ng-template>
+</mat-expansion-panel>

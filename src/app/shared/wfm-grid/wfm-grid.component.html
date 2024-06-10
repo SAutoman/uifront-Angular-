@@ -1,0 +1,307 @@
+<div *ngIf="loading" class="k-i-loading"></div>
+<kendo-grid
+  #grid
+  *ngIf="gridConfiguration"
+  [data]="gridData"
+  [groupable]="gridConfiguration?.hideGroupingAndAggregates ? false : { showFooter: true }"
+  [group]="groups"
+  [resizable]="gridConfiguration.gridSettings.resizable"
+  [pageable]="gridConfiguration.gridSettings.pageable"
+  [reorderable]="true"
+  [pageSize]="state.take"
+  [skip]="state.skip"
+  [sort]="gridConfiguration.gridSettings.sort || state.sort"
+  [selectable]="gridConfiguration.gridSettings.selectable"
+  [scrollable]="gridConfiguration.gridSettings.scrollable"
+  [sortable]="gridConfiguration.gridSettings.sortable"
+  [columnMenu]="{ sort: false }"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (columnResize)="onColumnResize($event)"
+  (columnReorder)="onColumnReorder($event)"
+  (dataStateChange)="onDataStateChanged($event)"
+  (columnVisibilityChange)="onColumnVisibilityChange($event)"
+  (detailExpand)="onExpand($event)"
+  (groupChange)="onGroupChange($event)"
+>
+  <kendo-grid-messages
+    noRecords="{{ 'There are no items to display' | translate }}"
+    pagerPage="{{ 'Page' | translate }}"
+    pagerOf="{{ 'of' | translate }}"
+    pagerItems="{{ 'items' | translate }}"
+    pagerItemsPerPage="{{ 'items per page' | translate }}"
+  >
+  </kendo-grid-messages>
+  <ng-template kendoGridToolbarTemplate position="top">
+    <div class="title-bar">
+      <div class="tools">
+        <div>
+          <h4 class="px-3">{{ pageTitle | translate }}</h4>
+        </div>
+        <div *ngIf="showCreateButton" class="d-flex align-items-center">
+          <button matSuffix mat-icon-button aria-label="add" (click)="backToParent()" matTooltip="{{ 'Create' | translate }}">
+            <app-icon [name]="'add'" class="primary"></app-icon>
+          </button>
+        </div>
+        <div *ngIf="gridAreaType === 'mappings'" class="d-flex align-items-center">
+          <button
+            class="mx-1"
+            matSuffix
+            mat-raised-button
+            aria-label="Delete all mappings"
+            color="warn"
+            matTooltip="{{ 'Delete All existing mappings' | translate }}"
+            (click)="reapplyAllMappings()"
+          >
+            {{ 'Delete All Existing Mappings' | translate }}
+          </button>
+        </div>
+      </div>
+      <div class="tools position-relative">
+        <div class="tool-button quick-search" *ngIf="!isDeskTop && gridConfiguration?.showQuickSearch">
+          <input
+            type="text"
+            [(ngModel)]="qsTerm"
+            matInput
+            (input)="onQuickSearch()"
+            [placeholder]="'Quick Search' | translate"
+            name="search"
+          />
+          <app-icon [name]="'search'"></app-icon>
+        </div>
+        <ng-container *ngIf="isDeskTop && gridConfiguration?.showQuickSearch">
+          <mat-form-field class="quick-search">
+            <mat-label>{{ 'Quick Search' | translate }}</mat-label>
+            <input matInput (input)="onQuickSearch()" [(ngModel)]="qsTerm" />
+            <app-icon [name]="'search'" matPrefix class="search-icon"></app-icon>
+            <button matSuffix mat-icon-button aria-label="Clear" *ngIf="qsTerm" (click)="onCloseQuickSearch()">
+              <app-icon [name]="'delete'" class="primary"></app-icon>
+            </button>
+          </mat-form-field>
+        </ng-container>
+
+        <ng-container *ngIf="gridConfiguration?.showSearchFilter">
+          <button matSuffix mat-icon-button aria-label="Clear" (click)="openFilters()">
+            <app-icon [name]="'search'" class="primary"></app-icon>
+          </button>
+        </ng-container>
+
+        <app-grid-layout-options
+          *ngIf="!gridConfiguration.gridToolbarSettings.toolbarHidden"
+          [type]="layoutTypeEnum.Grid"
+          [allowExports]="gridConfiguration.gridToolbarSettings.allowExports"
+          [appSettingName]="gridConfiguration.gridToolbarSettings.appSettingName"
+          [gridSettingsName]="gridConfiguration.gridToolbarSettings.gridSettingsName"
+          [allowSharing]="gridConfiguration.gridToolbarSettings.allowSharing"
+          [gridChange$]="gridChanges$"
+          [groups]="groups"
+          [gridSettings]="gridSettings"
+        >
+        </app-grid-layout-options>
+        <mat-form-field *ngIf="selectorData">
+          <mat-label>{{ selectorData.selectorLabel | translate }}</mat-label>
+          <mat-select [formControl]="selectorControl">
+            <mat-option *ngFor="let option of selectorData.options" [value]="option.value">
+              {{ option.key | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          *ngIf="!gridConfiguration?.hideGroupingAndAggregates"
+          class="tool-button"
+          matRipple
+          (click)="addAggregate()"
+          matTooltip="{{ 'Aggregates' | translate }}"
+        >
+          <app-icon [name]="'raw-data'"></app-icon>
+        </button>
+        <!-- <button class="tool-button" matRipple (click)="searchOpenClicked()" [ngClass]="{ 'search-active': isSearchOpen }">
+          <app-icon [name]="'search'"></app-icon>
+        </button> -->
+      </div>
+    </div>
+  </ng-template>
+  <ng-template kendoPagerTemplate>
+    <div class="d-flex">
+      <kendo-pager-prev-buttons *ngIf="!qsTerm && !hidePaginationOptions"></kendo-pager-prev-buttons>
+      <kendo-pager-info *ngIf="!qsTerm && !hidePaginationOptions"></kendo-pager-info>
+      <kendo-pager-next-buttons *ngIf="!qsTerm && !hidePaginationOptions"></kendo-pager-next-buttons>
+    </div>
+    <kendo-pager-page-sizes *ngIf="!qsTerm && !hidePaginationOptions" [pageSizes]="pageSize"></kendo-pager-page-sizes>
+    <div *ngIf="qsTerm" class="ml-5">
+      {{ gridData?.data?.length }} of
+      {{ allGridData?.total > gridConfiguration?.gridSettings?.pageSize ? gridConfiguration?.gridSettings?.pageSize : allGridData?.total }}
+      items found
+    </div>
+  </ng-template>
+
+  <ng-container *ngFor="let col of gridSettings?.columnsConfig">
+    <kendo-grid-column
+      *ngIf="!col.isActionType"
+      [field]="col.field"
+      title="{{ col.title | translate }}"
+      [width]="col.width || col._width"
+      [reorderable]="true"
+      [sortable]="true"
+      [hidden]="col.hidden"
+      [filterable]="col.filterable"
+      [filter]="col.filter"
+      [columnMenu]="col.columnMenu"
+      [isDetailExpanded]="true"
+    >
+      <!-- Schemas Grid template -->
+
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="col.field === 'areaType' && gridAreaType === 'schemas'">
+        {{ dataItem?.areaTypeTitle | translate }}
+      </ng-template>
+
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="col.field === 'name' && gridAreaType === 'schemas'">
+        <span *ngIf="dataItem?.id !== lastOpenedSchema">{{ dataItem?.name }}</span>
+        <b *ngIf="dataItem?.id === lastOpenedSchema">{{ dataItem?.name }}</b>
+      </ng-template>
+
+      <ng-template
+        kendoGridCellTemplate
+        let-dataItem
+        *ngIf="
+          (col.field === 'updatedAt' || col.field === 'createdAt') &&
+          (gridAreaType === 'schemas' || gridAreaType === 'workflows' || gridAreaType === 'invitations')
+        "
+      >
+        {{ dataItem[col.field] | customDateFormat: userDateTimeFormat:col.field }}
+      </ng-template>
+
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="col.field === 'companyName' && gridAreaType === 'companyInfo'">
+        <div class="d-flex">
+          <span *ngIf="!allowCompanyChange">{{ dataItem.companyName }}</span>
+          <button *ngIf="!allowCompanyChange" mat-icon-button color="primary" class="btn-sm" (click)="toggleCompanyChangeFlag()">
+            <app-icon [name]="'edit'"></app-icon>
+          </button>
+
+          <kendo-dropdownlist
+            *ngIf="allowCompanyChange"
+            size="medium"
+            fillMode="solid"
+            [data]="filteredCompanies"
+            [filterable]="true"
+            textField="name"
+            valueField="id"
+            [(ngModel)]="dataItem.companyDropDownInfo"
+            (valueChange)="onCompanyChange($event, dataItem)"
+            (filterChange)="handleFilter($event)"
+          >
+          </kendo-dropdownlist>
+          <button *ngIf="allowCompanyChange" mat-icon-button color="primary" class="btn-sm" (click)="toggleCompanyChangeFlag(dataItem)">
+            <app-icon [name]="'close'"></app-icon>
+          </button>
+        </div>
+      </ng-template>
+
+      <ng-template
+        *ngIf="col.title !== 'Actions' && aggregates?.length"
+        kendoGridGroupFooterTemplate
+        let-aggregates="aggregates"
+        let-field="field"
+      >
+        <!-- Aggregate value in column footer -->
+        <span *ngIf="aggregates[field]">
+          <div *ngIf="aggregates[field]?.sum || aggregates[field]?.sum === 0">
+            <b>{{ 'Sum' | translate }}:</b> {{ aggregates[field]?.sum }}
+          </div>
+          <div *ngIf="aggregates[field]?.count || aggregates[field]?.count === 0">
+            <b>{{ 'Count' }}:</b> {{ aggregates[field]?.count }}
+          </div>
+          <div *ngIf="aggregates[field]?.min || aggregates[field]?.min === 0">
+            <b>{{ 'Min' | translate }}:</b> {{ aggregates[field]?.min }}
+          </div>
+          <div *ngIf="aggregates[field]?.max || aggregates[field]?.max === 0">
+            <b>{{ 'Max' | translate }}:</b> {{ aggregates[field]?.max }}
+          </div>
+          <div *ngIf="aggregates[field]?.average || aggregates[field]?.average === 0">
+            <b>{{ 'Average' | translate }}: </b> {{ aggregates[field]?.average | number: '1.0-2' }}
+          </div>
+        </span>
+      </ng-template>
+
+      <!-- Aggregate value in grid footer -->
+      <ng-template *ngIf="col.title && aggregates?.length" kendoGridFooterTemplate>
+        <span *ngIf="total[col?.field]?.average">{{ 'Average' | translate }}: {{ total[col?.field]?.average }}</span>
+        <span *ngIf="total[col?.field]?.sum">{{ 'Sum' | translate }}: {{ total[col?.field]?.sum }}</span>
+        <span *ngIf="total[col?.field]?.count">{{ 'Count' | translate }}: {{ total[col?.field]?.count }}</span>
+        <span *ngIf="total[col?.field]?.min">{{ 'Min' | translate }}: {{ total[col?.field]?.min }}</span>
+        <span *ngIf="total[col?.field]?.max">{{ 'Max' | translate }}: {{ total[col?.field]?.max }}</span>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column
+      *ngIf="col.isActionType"
+      [title]="col.title"
+      [width]="col.width || col._width"
+      [hidden]="col.hidden"
+      [columnMenu]="col.columnMenu"
+    >
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="col.isActionType && col.title === 'Actions'">
+        <ng-container *ngIf="gridAreaType !== 'invitations'">
+          <button
+            [id]="'remove_' + componentId"
+            mat-stroked-button
+            class="btn-sm m-r-8"
+            *ngFor="let action of actions"
+            (click)="actionClicked(action, dataItem)"
+            [hidden]="action?.isConditional && dataItem?.disabled"
+            [matTooltip]="action.hideTitle ? action.title : ''"
+            [color]="action.color || 'primary'"
+          >
+            <app-icon name="{{ action.icon }}"></app-icon>
+            <span *ngIf="!action.hideTitle">{{ action.title | translate }}</span>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="gridAreaType === 'invitations'">
+          <ng-container *ngFor="let action of actions">
+            <button
+              [id]="'remove_' + componentId"
+              mat-stroked-button
+              class="btn-sm m-r-8"
+              *ngIf="action.actionId !== 'deactivate' || dataItem.isActive"
+              (click)="actionClicked(action, dataItem)"
+              [hidden]="action?.isConditional && dataItem?.disabled"
+              [matTooltip]="action.hideTitle ? action.title : ''"
+              [color]="action.color || 'primary'"
+            >
+              <app-icon name="{{ action.icon }}"></app-icon>
+              <span *ngIf="!action.hideTitle">{{ action.title | translate }}</span>
+            </button>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="col.isActionType && col.title === 'Company Info'">
+        <button [id]="'show_' + componentId" mat-stroked-button color="primary" class="btn-sm m-r-8" (click)="onShowInfoClicked(dataItem)">
+          <app-icon name="info"></app-icon>
+          {{ 'Info' | translate }}
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+  </ng-container>
+
+  <ng-template *ngIf="gridConfiguration?.enableMasterDetail" kendoGridDetailTemplate let-dataItem>
+    <div class="ml-5">
+      <ng-container *ngIf="gridAreaType === 'companiesTenant'">
+        <ng-container>
+          <div *ngIf="dataItem?.users?.length; else noDetail">
+            <app-wfm-grid pageTitle="Users" [gridConfiguration]="usersGridSettingsConf" [gridData]="dataItem?.users"> </app-wfm-grid>
+          </div>
+        </ng-container>
+        <ng-template #noDetail>
+          <div>
+            <b>No items</b>
+          </div>
+        </ng-template>
+      </ng-container>
+
+      <ng-container *ngIf="gridAreaType === 'invitations'">
+        <app-registered-users-grid [dataItem]="dataItem"> </app-registered-users-grid>
+      </ng-container>
+    </div>
+  </ng-template>
+</kendo-grid>

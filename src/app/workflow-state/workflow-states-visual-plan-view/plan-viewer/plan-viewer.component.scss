@@ -1,0 +1,53 @@
+.spinner-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  z-index: 100;
+  background: white;
+}
+
+.canvas-wrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 100%;
+  max-height: 100%;
+  .case-sidebar {
+    margin-right: 5px;
+    width: 335px;
+    position: absolute;
+    top: 35px;
+    right: 0;
+    overflow-y: auto;
+    max-height: calc(100% - 50px);
+  }
+  .tools {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+}
+
+.caseWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  .workflowStateItem {
+    width: calc(100% - 65px);
+    word-break: break-all;
+  }
+}
+
+.workflowStateItem {
+  font-size: 13px;
+}

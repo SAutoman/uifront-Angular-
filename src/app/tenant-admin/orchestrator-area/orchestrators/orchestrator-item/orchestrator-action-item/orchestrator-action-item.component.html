@@ -1,0 +1,86 @@
+<form [formGroup]="form">
+  <mat-form-field class="mt-2">
+    <mat-label>{{ 'Name' | translate }}</mat-label>
+    <input matInput type="text" formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select [placeholder]="'Select Connector' | translate" formControlName="connector" #con>
+      <mat-option *ngFor="let connector of connectors" [value]="connector.id">
+        {{ connector.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-card class="outline mat-elevation-z0 mb-3" *ngIf="selectedConnector">
+    <div>
+      {{ 'Source Workflow' | translate }}:
+      <b>{{ selectedConnector.workflowSchemaSource.name }} (tenant: {{ selectedConnector.workflowSchemaSource.tenantName }})</b>
+    </div>
+    <div>
+      {{ 'Destination Workflow' | translate }}:
+      <b>{{ selectedConnector.workflowSchemaDestination.name }} (tenant: {{ selectedConnector.workflowSchemaDestination.tenantName }})</b>
+    </div>
+  </mat-card>
+  <mat-card class="outline mat-elevation-z0 mb-3">
+    <mat-form-field>
+      <mat-select
+        [placeholder]="'Select Triggerer Event In Source Workflow' | translate"
+        formControlName="eventType"
+        [disabled]="!con.value"
+      >
+        <mat-option *ngFor="let event of events" [value]="event.key">
+          {{ event.value }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="form.get('eventType')?.value && source">
+      <app-orchestrator-action-event
+        [triggerType]="form.get('eventType')?.value"
+        [source]="source"
+        [config]="actionJsonConfig?.trigger"
+        (actionEventDataEmitter)="eventDataUpdated($event)"
+      ></app-orchestrator-action-event>
+    </div>
+  </mat-card>
+
+  <mat-card class="outline mat-elevation-z0 mb-3" *ngIf="con.value">
+    <div class="d-flex my-2">
+      <button mat-flat-button color="primary" class="btn-sm ml-auto" (click)="addActionHandler()">
+        <app-icon name="add"></app-icon> Add Handler
+      </button>
+    </div>
+    <div *ngIf="handlersList?.length">
+      <mat-expansion-panel *ngFor="let handler of handlersList; let i = index" class="mb-2">
+        <mat-expansion-panel-header>
+          <div class="row w-100 align-items-center">
+            <div class="col-10">
+              <mat-label
+                ><strong>{{ i + 1 }}. {{ handler.name }}</strong></mat-label
+              >
+            </div>
+            <div class="col-2">
+              <button mat-icon-button class="btn-sm">
+                <app-icon [name]="'trash'" class="danger" (click)="confirmRemovingHandler($event, i)"></app-icon>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <app-orchestrator-action-handler
+          [destination]="destination"
+          [source]="source"
+          [config]="handler"
+          [connector]="selectedConnector"
+          (actionHandlerDataEmitter)="handlerDataUpdated($event)"
+        ></app-orchestrator-action-handler>
+      </mat-expansion-panel>
+    </div>
+  </mat-card>
+</form>
+
+<div class="action-buttons">
+  <mat-divider></mat-divider>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!isDataValid()">
+    <app-icon name="save"></app-icon> {{ (!actionDto ? 'Create Action' : 'Update Action') | translate }}
+  </button>
+</div>

@@ -1,0 +1,39 @@
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup" errorMessage="{{ 'Name is required' | translate }}">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>{{ 'Name' | translate }}</ng-template>
+      <mat-form-field>
+        <input matInput [placeholder]="'Search Profile Name' | translate" formControlName="firstCtrl" required />
+        <mat-error>{{ 'Name is required' | translate }}!</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button (click)="onDoneCloseClicked()">{{ 'Close' | translate }}</button>
+        <button mat-button matStepperNext>{{ 'Next' | translate }}</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" errorMessage="Filter is required.">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>{{ 'Select Search Filters' | translate }}</ng-template>
+      <mat-form-field>
+        <input matInput [placeholder]="'Filters' | translate" formControlName="secondCtrl" required />
+        <mat-error>{{ 'Filter is required!' | translate }}</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button (click)="onDoneCloseClicked()">{{ 'Close' | translate }}</button>
+        <button mat-button matStepperPrevious>{{ 'Back' | translate }}</button>
+        <button mat-button matStepperNext>{{ 'Next' | translate }}</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>{{ 'Done' | translate }}</ng-template>
+    {{ 'You are now done.' | translate }}
+    <div>
+      <button mat-button matStepperPrevious>{{ 'Back' | translate }}</button>
+      <button mat-button (click)="onDoneCloseClicked(); onSubmit(firstFormGroup.value, secondFormGroup.value)">
+        {{ 'Done' | translate }}
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

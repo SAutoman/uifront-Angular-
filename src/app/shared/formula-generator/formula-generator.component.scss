@@ -1,0 +1,69 @@
+.close-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  border: solid thin #e0e0e0;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  app-icon {
+    stroke: #fc4b6c;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.drag-btn {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  width: 50px;
+  height: 30px;
+  border-radius: 24px;
+  border: solid thin #e0e0e0;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: move;
+
+  app-icon {
+    stroke: #fc4b6c;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.margin-bottom {
+  margin-bottom: 25px;
+}
+
+.result {
+  width: 400px;
+  word-wrap: break-word;
+}
+
+.errorResult {
+  width: 400px;
+  word-wrap: break-word;
+  color: #fc4b6c;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .functions {
+    flex: 2 1 auto;
+    max-width: 350px;
+    margin-right: 10px;
+  }
+}

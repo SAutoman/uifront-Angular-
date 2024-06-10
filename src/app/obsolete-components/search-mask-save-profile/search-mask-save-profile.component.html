@@ -1,0 +1,37 @@
+<!-- <mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="firstFormGroup" errorMessage="Name is required.">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Name</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Search Profile Name" formControlName="firstCtrl" required />
+        <mat-error>Name is required!</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button (click)="onDoneCloseClicked()">Close</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" errorMessage="Filter is required.">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Select Search Filters</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Filters" formControlName="secondCtrl" required />
+        <mat-error>Filter is required!</mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-button (click)="onDoneCloseClicked()">Close</button>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="onDoneCloseClicked(); onSubmit(firstFormGroup.value, secondFormGroup.value)">Done</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper> -->

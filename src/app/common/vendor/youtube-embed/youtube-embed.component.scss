@@ -1,0 +1,19 @@
+.editBtn {
+  position: absolute;
+  bottom: 100px;
+  right: -22px;
+  width: 25px;
+  height: 24px;
+  border-radius: 24px;
+  border: solid thin #e0e0e0;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+
+iframe {
+  width: 100%;
+}

@@ -1,0 +1,85 @@
+<button
+  [disabled]="to.disableButtons || to.readonly || to.disabled"
+  *ngIf="!to.multiple && internalFormControl.value"
+  class="reset-button"
+  mat-icon-button
+  color="warn"
+  (click)="resetValue($event)"
+>
+  <app-icon [name]="'close'"></app-icon>
+</button>
+
+<mat-select
+  [id]="id"
+  [formControl]="internalFormControl"
+  [formlyAttributes]="field"
+  [placeholder]="to.placeholder"
+  [tabIndex]="to.tabindex"
+  [required]="required"
+  [multiple]="to.multiple"
+  [disabled]="to.disabled"
+  (selectionChange)="change($event)"
+  [formlyAttributes]="field"
+>
+  <ng-container>
+    <input
+      placeholder="Search"
+      matInput
+      type="text"
+      [formControl]="searchInput"
+      class="searchInput"
+      (click)="$event.stopPropagation()"
+      (keydown)="ignoreSpaceKey($event)"
+    />
+  </ng-container>
+  <ng-container *ngIf="filteredOptions$ | async as selectOptions">
+    <ng-container
+      *ngIf="to.multiple && to.selectAllOption"
+      [ngTemplateOutlet]="selectAll"
+      [ngTemplateOutletContext]="{ selectOptions: selectOptions }"
+    >
+    </ng-container>
+    <ng-container *ngFor="let item of selectOptions">
+      <mat-option [value]="item.value" [disabled]="to.allowDisablingOptions && item.disabled">{{ item.key }}</mat-option>
+    </ng-container>
+  </ng-container>
+</mat-select>
+
+<mat-card class="outline mat-elevation-z0 case-fields mt-3" *ngIf="exposedData$ | async as exposedData">
+  <div *ngFor="let node of exposedData.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: node }"></div>
+</mat-card>
+
+<ng-template #fields let-data>
+  <div class="cell" [ngClass]="{ nested: data.type === fieldTypes.EmbededField }">
+    <ng-template #title>
+      <label>{{ data.displayName }}</label>
+    </ng-template>
+    <p class="step-title" *ngIf="data.fields; else title">{{ data.displayName }}</p>
+    <ng-container [ngSwitch]="data.type">
+      <ng-container *ngSwitchCase="fieldTypes.FileField">
+        <p class="file-attachment">
+          <ng-container *ngFor="let file of data?.value">
+            <a *ngIf="file.url" [href]="file.url">
+              {{ file.fileInfo.fileName }}
+            </a>
+          </ng-container>
+        </p>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="fieldTypes.EmbededField">
+        <div class="case-fields">
+          <ng-container *ngFor="let child of data.fields" [ngTemplateOutlet]="fields" [ngTemplateOutletContext]="{ $implicit: child }">
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <p *ngIf="data.value != undefined; else noValue" [innerHTML]="data.value" class="value-container"></p>
+        <p>
+          <ng-template #noValue>
+            <p>-</p>
+          </ng-template>
+        </p>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>

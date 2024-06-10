@@ -1,0 +1,25 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Tenant Settings' | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-container *ngIf="view$ | async as view">
+    <form [formGroup]="view.form">
+      <h5 class="my-3">{{ 'Turn on/off Raw Data on Single Case' | translate }}</h5>
+      <formly-form [form]="view.form" [fields]="view.fields" [model]="view.model" (modelChange)="emitModelChangeStatus(true)"></formly-form>
+      <div class="mat-expansion-panel-footer">
+        <button
+          [id]="'save_' + componentId"
+          [disabled]="view.form.invalid || view.form.pristine"
+          mat-flat-button
+          color="primary"
+          (click)="onSubmit(view)"
+        >
+          <app-icon [name]="'save'"></app-icon>
+          Save
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</mat-expansion-panel>

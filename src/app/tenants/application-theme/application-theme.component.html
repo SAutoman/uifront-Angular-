@@ -1,0 +1,59 @@
+<mat-expansion-panel [ngClass]="{ dark: dark }" class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Application Theme' | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="grid">
+    <mat-checkbox
+      [id]="'checkboxRed_' + componentId"
+      color="primary"
+      [(ngModel)]="danger"
+      (change)="darkgreen = green = blue = dark = false; checkThemeChangeHandler()"
+      class="text-danger margin-bottom"
+      >{{ 'Red' | translate }}</mat-checkbox
+    >
+    <mat-checkbox
+      [id]="'checkboxDarkGreen_' + componentId"
+      color="primary"
+      [(ngModel)]="darkgreen"
+      (change)="green = danger = blue = dark = false; checkThemeChangeHandler()"
+      class="text-dark-green margin-bottom"
+      >{{ 'Dark Green' | translate }}</mat-checkbox
+    >
+    <mat-checkbox
+      [id]="'checkboxTealGreen_' + componentId"
+      color="primary"
+      [(ngModel)]="green"
+      (change)="darkgreen = danger = blue = dark = false; checkThemeChangeHandler()"
+      class="text-megna margin-bottom"
+      >{{ 'Teal Green' | translate }}</mat-checkbox
+    >
+    <mat-checkbox
+      [id]="'checkboxPurple_' + componentId"
+      color="primary"
+      [(ngModel)]="blue"
+      (change)="darkgreen = green = danger = dark = false; checkThemeChangeHandler()"
+      class="text-purple"
+      >{{ 'Purple' | translate }}</mat-checkbox
+    >
+    <mat-checkbox
+      [id]="'checkboxDark_' + componentId"
+      color="primary"
+      [(ngModel)]="dark"
+      (change)="darkgreen = green = blue = danger = false; checkThemeChangeHandler()"
+      >{{ 'Dark Theme' | translate }}</mat-checkbox
+    >
+  </div>
+  <div class="mat-expansion-panel-footer">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="onSubmit()"
+      [ngClass]="{ danger: danger, blue: blue, green: green, darkgreen: darkgreen, dark: dark }"
+    >
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+</mat-expansion-panel>

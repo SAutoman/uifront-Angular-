@@ -1,0 +1,18 @@
+// app-user-groups-viewer {
+//   display: flex;
+//   flex-direction: column;
+//   flex-grow: 1;
+//   height: 100%;
+//   .group-loader {
+//     margin-top: 5px;
+//     margin-bottom: 29.5px !important;
+//   }
+//   .btn-wrapper {
+//     padding-left: 10px;
+//     display: flex;
+//   }
+// }
+.k-grid {
+  height: calc(100% - 48px) !important;
+  overflow-y: auto;
+}

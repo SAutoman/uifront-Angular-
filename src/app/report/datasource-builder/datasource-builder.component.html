@@ -1,0 +1,79 @@
+<div class="title-bar pl-3">
+  <h5 *ngIf="!datasource">{{ 'Create Datasource' | translate }}</h5>
+  <h5 *ngIf="datasource">{{ 'Update Datasource' | translate }}</h5>
+  <div class="tools">
+    <button
+      class="tool-button"
+      [disabled]="!form.valid || !nodesAreValid"
+      (click)="save()"
+      matTooltip="{{ 'Save' | translate }}"
+      matTooltipPosition="below"
+    >
+      <app-icon [name]="'save'"></app-icon>
+    </button>
+
+    <ng-container *ngIf="datasource">
+      <button
+        matRipple
+        [class]="isEditActivated ? 'selected' : ''"
+        class="tool-button"
+        (click)="toggleEdit()"
+        matTooltip="{{ 'Edit' | translate }}"
+        matTooltipPosition="below"
+      >
+        <app-icon [name]="'edit'"></app-icon>
+      </button>
+      <button
+        matRipple
+        [class]="isViewModeActivated ? 'selected' : ''"
+        class="tool-button"
+        (click)="toggleView()"
+        matTooltip="{{ 'View' | translate }}"
+        matTooltipPosition="below"
+      >
+        <app-icon [name]="'eye'"></app-icon>
+      </button>
+      <button
+        mat-icon-button
+        color="warn"
+        class="tool-button rounded-0"
+        (click)="removeDatasource()"
+        matTooltip="{{ 'Remove' | translate }}"
+        matTooltipPosition="below"
+      >
+        <app-icon [name]="'trash'"></app-icon>
+      </button>
+    </ng-container>
+  </div>
+</div>
+<form [formGroup]="form" class="d-block pt-3 px-3">
+  <mat-radio-group formControlName="reportType" class="mb-3">
+    <mat-radio-button [value]="reportType.GRID" class="mr-3"> {{ 'Grid Report' | translate }} </mat-radio-button>
+    <!-- <mat-radio-button [value]="reportType.PIVOT"> {{'Pivot Report' | translate}} </mat-radio-button> -->
+    <mat-radio-button [value]="reportType.AGGREGATION"> {{ 'Aggregation Report' | translate }} </mat-radio-button>
+  </mat-radio-group>
+
+  <mat-form-field appearance="outline" class="mt-2">
+    <mat-label>{{ 'Name' | translate }} </mat-label>
+    <input matInput type="text" formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'Select Workflow' | translate }}</mat-label>
+    <mat-select formControlName="workflowSchemaId">
+      <mat-option *ngFor="let wf of workflows" [value]="wf.id">{{ wf.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-card *ngIf="datasourceFieldsTree">
+    <div class="tree">
+      <app-tree-selectbox
+        [parentSelectionAllowed]="false"
+        [selectedItems]="selectedItems"
+        [rawDatasource]="datasourceFieldsTree"
+        [isReportGrid]="true"
+        [showAggregationSelectbox]="form.get('reportType').value === reportType.AGGREGATION"
+        (selectionEmitter)="fieldSelectionEmitted($event)"
+      ></app-tree-selectbox>
+    </div>
+  </mat-card>
+</form>

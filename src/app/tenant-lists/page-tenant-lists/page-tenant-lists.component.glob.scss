@@ -1,0 +1,10 @@
+.page-tenant-lists--create-list-dialog,
+.page-tenant-lists--edit-list-dialog {
+  .mat-dialog-container {
+    // padding: 0;
+  }
+  .mat-card {
+    margin: 0;
+    width: 100%;
+  }
+}

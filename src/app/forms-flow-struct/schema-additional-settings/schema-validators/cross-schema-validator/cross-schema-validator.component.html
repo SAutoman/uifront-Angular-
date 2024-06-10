@@ -1,0 +1,72 @@
+<form class="mb-2" [formGroup]="form">
+  <mat-form-field>
+    <mat-label>{{ 'Name' | translate }}</mat-label>
+    <input matInput type="text" formControlName="name" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-md-6 no-padding">
+    <mat-label>{{ 'Select Connector' | translate }}</mat-label>
+    <mat-select formControlName="connector">
+      <mat-option *ngFor="let connector of workflowConnectors" [value]="connector.id">
+        {{ connector.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-md-6 no-padding" *ngIf="selectedConnector">
+    <mat-label>{{ 'Select Workflow' | translate }}</mat-label>
+    <mat-select formControlName="workflowSchema">
+      <mat-option [value]="selectedConnector.workflowSchemaSource.id">
+        <b>{{ selectedConnector.workflowSchemaSource.name }}</b>
+        <small> (tenant: {{ selectedConnector.workflowSchemaSource.tenantName }})</small>
+      </mat-option>
+      <mat-option [value]="selectedConnector.workflowSchemaDestination.id">
+        <b>{{ selectedConnector.workflowSchemaDestination.name }}</b>
+        <small> (tenant: {{ selectedConnector.workflowSchemaDestination.tenantName }})</small>
+      </mat-option>
+    </mat-select>
+
+    <mat-hint> {{ 'Remote Cases which need to be checked against the validation' | translate }}</mat-hint>
+  </mat-form-field>
+
+  <div *ngIf="form?.get('ruleSet')?.value" class="mt-3">
+    <label>{{ 'Validation Rules are to be matched by:' | translate }}</label>
+
+    <mat-radio-group class="row mt-3" formControlName="summaryCondition">
+      <mat-radio-button class="col-md-12" [value]="condition.And">
+        {{ 'All' | translate }} <b>{{ valueSchema?.name || 'Remote' }}</b> {{ 'Cases' | translate }}
+      </mat-radio-button>
+      <mat-radio-button class="col-md-12" [value]="condition.Or">
+        {{ 'At Least One' | translate }} <b>{{ valueSchema?.name || 'Remote' }}</b> {{ 'Case' | translate }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <mat-card *ngIf="connectorSchemaFields" class="mat-elevation-z0 outline mt-3">
+    <h5>{{ 'Validation Rule(s)' | translate }}</h5>
+    <app-dynamic-rules-builder
+      [validatorRuleSet]="validatorRuleSet"
+      [currentSchemaFields]="currentSchemaFields"
+      [currentSchemaName]="currentSchema?.name"
+      [valueSchemaName]="valueSchema?.name"
+      [valueSchemaFields]="connectorSchemaFields"
+      (emitter)="ruleEmitted($event)"
+    ></app-dynamic-rules-builder>
+  </mat-card>
+
+  <mat-card class="mt-3 mat-elevation-z0 outline" *ngIf="form?.get('ruleSet')?.value">
+    <h5>{{ 'Action in case validation is not passed' | translate }}</h5>
+    <mat-radio-group class="col-md-12" aria-label="Select Validator Action" formControlName="validationAction">
+      <mat-radio-button class="mr-3" [value]="validationActionEnum.BLOCK">
+        {{ 'Block Processing' | translate }}
+      </mat-radio-button>
+      <mat-radio-button class="mr-3" [value]="validationActionEnum.ALERT">
+        {{ 'Alert The User' | translate }}
+      </mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field class="mt-4">
+      <mat-label>{{ 'Validation Message' | translate }}</mat-label>
+      <input matInput type="text" formControlName="validationMessage" />
+      <mat-hint>{{ 'Message to be shown' | translate }}</mat-hint>
+    </mat-form-field>
+  </mat-card>
+</form>

@@ -1,0 +1,11 @@
+<mat-card class="formatter-wrapper" *ngIf="view">
+  <form [formGroup]="view.form">
+    <formly-form class="row" [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+  </form>
+
+  <p *ngIf="staticNumber">
+    {{ 'Number' | translate }} {{ staticNumber }} {{ 'will be formatted to:' | translate }}
+    <br />
+    <b>{{ staticNumber | number: currentNumberFormat }}</b>
+  </p>
+</mat-card>

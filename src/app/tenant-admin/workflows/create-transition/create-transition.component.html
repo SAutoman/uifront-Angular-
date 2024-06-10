@@ -1,0 +1,47 @@
+<!-- <mat-card-header>
+    <mat-card-title> Create Transition </mat-card-title>
+  </mat-card-header> -->
+
+<div *ngIf="loading$ | async" class="w-100 h-100 d-flex justify-content-center align-items-center">
+  <mat-spinner></mat-spinner>
+</div>
+<form [formGroup]="transitionForm">
+  <mat-form-field>
+    <mat-select [placeholder]="'From Status' | translate" formControlName="fromStatusId" #stsFrom>
+      <mat-option *ngFor="let status of fromStatusesList" [value]="status.id" [disabled]="status.isDisabled">{{ status?.name }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="hasError('fromStatusId', 'required')">{{ 'Status "from" is required!' | translate }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select [placeholder]="'To Status' | translate" formControlName="toStatusId" #stsTo>
+      <mat-option *ngFor="let status of toStatusesList" [value]="status.id" [disabled]="status.isDisabled"> {{ status?.name }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="hasError('toStatusId', 'required')">{{ 'Status "to" is required!' | translate }}</mat-error>
+  </mat-form-field>
+</form>
+
+<div class="mb-3">
+  <app-expression-builder
+    [expressionConfig]="expressionConfig"
+    (expressionUpdated)="onExpressionUpdate($event)"
+    [expressionDto]="expressionsDef"
+  ></app-expression-builder>
+</div>
+<br />
+<mat-divider></mat-divider>
+<br />
+<div class="d-flex justify-content-end">
+  <button mat-flat-button color="warn" (click)="deleteTransition()" *ngIf="transition" class="mr-3">{{ 'Remove' | translate }}</button>
+  <button
+    [id]="'send_' + componentId"
+    mat-flat-button
+    color="primary"
+    (click)="onSubmit()"
+    matTooltip="{{ 'Create' | translate }}"
+    matTooltipPosition="below"
+    [disabled]="!isTransitionValid()"
+  >
+    {{ 'Save' | translate }}
+  </button>
+</div>

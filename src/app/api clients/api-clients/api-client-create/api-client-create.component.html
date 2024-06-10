@@ -1,0 +1,26 @@
+<h5 mat-dialog-title>{{ 'Create API Client' | translate }}</h5>
+<mat-dialog-content>
+  <br />
+  <form [formGroup]="apiClientForm">
+    <mat-form-field>
+      <mat-label>{{ 'Name' | translate }}</mat-label>
+      <input matInput type="text" autocomplete="off" formControlName="name" required />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{ 'Secret Key' | translate }}</mat-label>
+      <input matInput type="text" autocomplete="off" formControlName="secret" required />
+      <mat-hint>{{ 'Please copy and save the client secret key in a separate file' | translate }}.</mat-hint>
+    </mat-form-field>
+  </form>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" mat-dialog-close class="mr-2">
+    <app-icon name="close"></app-icon>
+    {{ 'Cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="!isValidForm()">
+    <app-icon name="save"></app-icon>
+    {{ 'Save' | translate }}
+  </button>
+</mat-dialog-actions>

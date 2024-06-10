@@ -1,0 +1,64 @@
+@import '../../../../assets/styles/variable.scss';
+
+::ng-deep {
+  app-formly-mat-time-picker {
+    .button-wrapper {
+      top: -8px !important;
+    }
+  }
+  .mat-expansion-panel-body {
+    formly-group {
+      display: block !important;
+      // width: calc(100% - 32px) !important;
+    }
+  }
+}
+// .button-wrapper {
+//   position: sticky;
+//   bottom: -24px;
+//   padding: 16px;
+//   background-color: white;
+//   z-index: 100;
+//   border-top: solid thin $dark-dividers;
+//   margin-left: -16px;
+//   margin-right: -16px;
+//   width: calc(100% + 32px);
+// }
+
+.margin-right-5 {
+  margin-right: 5px;
+}
+
+button[disabled] {
+  background-color: grey !important;
+  cursor: default;
+}
+::ng-deep {
+  .empty-connector-field {
+    .mat-form-field {
+      .mat-form-field-wrapper {
+        .mat-form-field-flex {
+          .mat-form-field-infix {
+            .mat-form-field-label-wrapper {
+              top: -10px !important;
+              .mat-form-field-label {
+                transform: translateY(-1.59375em) scale(0.75) !important;
+                width: 133.3333333333% !important;
+                background-color: white;
+                padding: 0 6px;
+                width: auto !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // It solves read-only hyperlink problem (WFM-3758)
+  .mat-form-field-readonly {
+    .formly-hyperlink-addon--field-ref {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,69 @@
+<div class="row h-100 overflow-auto">
+  <div class="col-md-7 mx-auto py-3">
+    <app-manual-creation-settings-by-schema
+      *ngIf="activeRawDataSchemas?.length"
+      class="col-xl-4 px-0"
+      [areaTitle]="areaTypeRawData"
+      [schemasData]="activeRawDataSchemas"
+      [showMultiCreationSetting]="true"
+      (formStatus)="updateSettingsStatus($event, allSettingsEnum?.schemaCreation)"
+    >
+    </app-manual-creation-settings-by-schema>
+
+    <app-manual-creation-settings-by-schema
+      *ngIf="activeCaseSchemas?.length"
+      class="col-xl-4 px-0"
+      [areaTitle]="areaTypeCases"
+      [schemasData]="activeCaseSchemas"
+      [showMultiCreationSetting]="true"
+      [showCaseViewSetting]="true"
+      (formStatus)="updateSettingsStatus($event, allSettingsEnum?.schemaCreation)"
+    >
+    </app-manual-creation-settings-by-schema>
+
+    <app-manual-creation-settings-by-schema
+      *ngIf="activeCommentSchemas?.length"
+      class="col-xl-4 px-0"
+      [areaTitle]="areaTypeComment"
+      [schemasData]="activeCommentSchemas"
+      [showMultiCreationSetting]="false"
+      (formStatus)="updateSettingsStatus($event, allSettingsEnum?.schemaCreation)"
+    >
+    </app-manual-creation-settings-by-schema>
+
+    <app-dynamic-entity-title-formatter
+      *ngIf="activeCaseSchemas?.length"
+      [caseSchemas]="activeCaseSchemas"
+    ></app-dynamic-entity-title-formatter>
+
+    <app-cases-setting (caseGroupChangeEmitter)="updateSettingsStatus($event, allSettingsEnum?.caseGroupChanges)"></app-cases-setting>
+
+    <app-print-preview-setting
+      (formStatus)="updateSettingsStatus($event, allSettingsEnum?.onPrintPreviewChanges)"
+    ></app-print-preview-setting>
+
+    <app-start-of-week (formStatus)="updateSettingsStatus($event, allSettingsEnum?.startOfWeekHasChanges)"></app-start-of-week>
+
+    <app-application-theme (themeUpdated)="updateSettingsStatus($event, allSettingsEnum?.applicationTheme)"> </app-application-theme>
+
+    <app-process-steps-relocation></app-process-steps-relocation>
+
+    <app-tenant-raw-data-setting></app-tenant-raw-data-setting>
+
+    <!-- <app-search-time-period
+      *ngIf="activeRawDataSchemas?.length"
+      [areaTitle]="areaTypeRawData"
+      [schemasData]="activeRawDataSchemas"
+      (formStatus)="updateSettingsStatus($event, allSettingsEnum?.searchTimePeriod)"
+    ></app-search-time-period>
+
+    <app-search-time-period
+      *ngIf="activeCaseSchemas?.length"
+      [areaTitle]="areaTypeCases"
+      [schemasData]="activeCaseSchemas"
+      (formStatus)="updateSettingsStatus($event, allSettingsEnum?.searchTimePeriod)"
+    ></app-search-time-period> -->
+
+    <app-upload-tenant-logo></app-upload-tenant-logo>
+  </div>
+</div>

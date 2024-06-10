@@ -1,0 +1,259 @@
+<div class="case-flow" [ngClass]="{ show: isActivityVisible }">
+  <ng-container *ngIf="errorMessage$ | async as errorMessage">
+    <div class="d-flex justify-content-end">
+      <button class="float-right font-weight-bold" mat-icon-button color="warn" (click)="closeWorkflowState(i)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="spinner" *ngIf="loading$ | async" class="loading-bg">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-container>
+
+  <div class="case-fields" *ngIf="workflowState && !(loading$ | async) && !(errorMessage$ | async)">
+    <app-workflow-state-case
+      [showCaseButtons]="showCaseButtons"
+      [showEditBtn]="showEditBtn"
+      [isSidePanel]="isSidePanel"
+      [lastComment]="lastComment"
+      [isEdit]="isEdit"
+      (toggleActivity)="isActivityVisible = !isActivityVisible"
+      (closeEvent)="closeWorkflowState()"
+      (refresh)="getWorkflowState()"
+    ></app-workflow-state-case>
+  </div>
+
+  <ng-container *ngIf="!isEdit && !(errorMessage$ | async)">
+    <ng-container *ngIf="workflowState && !(loading$ | async)">
+      <div class="process-steps-container" data-area="ALL-STEPS-CONTAINER">
+        <div class="process-steps" [ngClass]="{ hidden: stepsAreHidden }" id="process">
+          <button mat-icon-button (click)="toggleSteps()" class="btn-toggle" [ngClass]="{ hidden: stepsAreHidden }">
+            <span class="arrow-a sm {{ !stepsAreHidden ? 'right' : 'left' }}"></span>
+          </button>
+          <div class="process-steps-wrapper">
+            <div class="article-top-section d-flex align-items-center justify-content-between pl-3 pr-3">
+              <div *ngIf="(showRawDataMenu$ | async) && numberOfRawDataItems > 0" class="d-flex align-items-center">
+                <h6 class="m-0 p-0 font-bold mr-2">{{ numberOfRawDataItems || 0 }} {{ rawDataComponentTitle | translate }}</h6>
+                <button mat-stroked-button *ngIf="!isSidePanel" color="primary" (click)="reviewData()" class="mr-3 btn-sm">
+                  <app-icon [name]="'eye'"></app-icon>
+                  {{ 'Review' | translate }}
+                </button>
+              </div>
+
+              <mat-button-toggle-group #group="matButtonToggleGroup" [value]="caseStepsSelectedView">
+                <mat-button-toggle
+                  value="tabs"
+                  (click)="changeStepView(group.value)"
+                  matTooltip="{{ 'Tab View' | translate }}"
+                  [matTooltipPosition]="'above'"
+                >
+                  <app-icon [name]="'tabs'"></app-icon>
+                </mat-button-toggle>
+                <mat-button-toggle
+                  value="list"
+                  (click)="changeStepView(group.value)"
+                  matTooltip="{{ 'List View' | translate }}"
+                  [matTooltipPosition]="'above'"
+                >
+                  <app-icon [name]="'list'"></app-icon>
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div
+              class="p-16 process-steps-body"
+              cdkDropList
+              #selectedStep="cdkDropList"
+              [cdkDropListData]="workflowState.caseSteps"
+              (cdkDropListDropped)="drop($event)"
+              *ngIf="group.value === 'list'"
+            >
+              <div
+                *ngFor="let caseStepItem of workflowState.caseSteps; let i = index"
+                cdkDrag
+                [cdkDragData]="caseStepItem"
+                [cdkDragDisabled]="!caseStepItem.rights?.canEdit || !canRelocateSteps"
+                class="case-step-wrapper"
+                cdkDragLockAxis="y"
+              >
+                <div class="case-step">
+                  <mat-expansion-panel
+                    class="mat-elevation-z0 mb-3"
+                    [id]="'caseStepItem_' + componentId"
+                    (opened)="onStepOpened({ index: i })"
+                    [expanded]="i === workflowState.caseSteps?.length - 1"
+                  >
+                    <mat-expansion-panel-header>
+                      <div class="dragable-symbol-container" cdkDragHandle *ngIf="canRelocateSteps">
+                        <div class="dragable-symbol"></div>
+                      </div>
+                      <mat-panel-title class="d-flex flex-wrap align-items-center justify-content-between">
+                        <p class="newline-enabled">{{ caseStepItem.title || caseStepItem.name }}</p>
+                        <app-icon
+                          *ngIf="caseStepItem?.statusData && caseStepItem?.stepEntityHasResolutions"
+                          [name]="caseStepItem.statusData.icon"
+                          class="staus-icons {{ caseStepItem.statusData.color }}"
+                          [matTooltip]="caseStepItem.statusData.label"
+                        ></app-icon>
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <ng-container *ngIf="stepsToLoad[caseStepItem.visualElementId]">
+                      <app-workflow-state-case-step
+                        [stepFieldData]="stepFieldLink"
+                        [caseStep]="caseStepItem"
+                        [workflowStateId]="workflowState.id"
+                        [userId]="userId"
+                        (deleteStepEvent)="deleteStep($event)"
+                      >
+                      </app-workflow-state-case-step>
+                    </ng-container>
+                  </mat-expansion-panel>
+                </div>
+              </div>
+            </div>
+            <mat-tab-group
+              class="block"
+              *ngIf="group.value === 'tabs'"
+              (selectedTabChange)="onStepOpened($event)"
+              #stepTabs
+              [selectedIndex]="activeStepIndex"
+            >
+              <mat-tab *ngFor="let caseStepItem of workflowState.caseSteps">
+                <ng-template mat-tab-label>
+                  <span class="newline-enabled">{{ caseStepItem.title || caseStepItem.name }}</span>
+                  <app-icon
+                    *ngIf="caseStepItem.statusData"
+                    [name]="caseStepItem.statusData.icon"
+                    class="staus-icons {{ caseStepItem.statusData.color }}"
+                    [matTooltip]="caseStepItem.statusData.label"
+                  ></app-icon>
+                </ng-template>
+                <ng-container *ngIf="stepsToLoad[caseStepItem.visualElementId]">
+                  <app-workflow-state-case-step
+                    [stepFieldData]="stepFieldLink"
+                    [caseStep]="caseStepItem"
+                    [workflowStateId]="workflowState.id"
+                    (deleteStepEvent)="deleteStep($event)"
+                    (Status)="(currentStatus)"
+                  >
+                  </app-workflow-state-case-step>
+                </ng-container>
+              </mat-tab>
+              <mat-tab *ngIf="workflowState.caseSteps?.length" disabled="true"></mat-tab>
+            </mat-tab-group>
+            <div class="spinner inner" *ngIf="steploading$ | async">
+              <mat-spinner></mat-spinner>
+            </div>
+          </div>
+        </div>
+        <div
+          id="handler-right"
+          class="resize-handler handler-right"
+          [class.hideHandler]="stepsAreHidden"
+          #panelDragger
+          cdkDrag
+          cdkDragLockAxis="x"
+        ></div>
+        <div class="state-steps" id="state-step" [ngClass]="{ hidden: stepsAreHidden }">
+          <app-workflow-state-step-search
+            (filter)="filter($event)"
+            (clear)="clearFilter()"
+            [processSteps]="processSteps"
+          ></app-workflow-state-step-search>
+          <div class="state-steps-wrapper">
+            <button mat-icon-button (click)="toggleSteps()" class="btn-toggle" [ngClass]="{ hidden: stepsAreHidden }">
+              <span class="arrow-a sm {{ !stepsAreHidden ? 'right' : 'left' }}"></span>
+            </button>
+            <div
+              cdkDropList
+              #availableStep="cdkDropList"
+              [cdkDropListData]="processSteps"
+              [cdkDropListConnectedTo]="[selectedStep]"
+              (cdkDropListDropped)="drop($event)"
+            >
+              <div
+                class="box-step"
+                *ngFor="let step of processSteps"
+                cdkDrag
+                [cdkDragData]="step"
+                [cdkDragDisabled]="!step.canAdd"
+                [ngClass]="{ disabled: !step.canAdd }"
+              >
+                <div class="d-flex align-items-center box-wrapper">
+                  <button
+                    [id]="createId('btn_add')"
+                    mat-icon-button
+                    color="primary"
+                    (click)="onProcessStepAddClicked(step)"
+                    [disabled]="!step.canAdd"
+                    [ngClass]="{ disabled: !step.canAdd }"
+                  >
+                    <app-icon [name]="'add'"></app-icon>
+                  </button>
+                  <div [id]="createId('divCdk')" class="box-content">
+                    {{ step.name }}
+                  </div>
+                </div>
+                <div class="dragable-symbol"></div>
+              </div>
+              <div *ngIf="!processSteps.length" style="text-align: center; color: gray">
+                <span [id]="createId('divNoResult')">{{ 'No results found' | translate }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="spinner" *ngIf="loading$ | async" class="loading-bg">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div class="error-wrapper" *ngIf="errorMessage$ | async as errorMessage">
+      <span class="error">{{ errorMessage }}</span>
+      <div>
+        <button mat-button color="primary" (click)="closeWorkflowState()" class="mr-3 btn-sm">
+          {{ 'Close' | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isEdit">
+    <ng-container *ngIf="workflowState && !(loading$ | async)">
+      <div class="case-edit-wrapper">
+        <div
+          *ngIf="(showRawDataMenu$ | async) && numberOfRawDataItems > 0"
+          class="article-top-section d-flex align-items-center justify-content-between pl-3 pr-3"
+        >
+          <div class="d-flex align-items-center">
+            <h6 class="m-0 p-0 font-bold mr-2">{{ numberOfRawDataItems || 0 }} {{ rawDataComponentTitle | translate }}</h6>
+            <button mat-stroked-button color="primary" (click)="reviewData()" class="mr-3 btn-sm">
+              <app-icon [name]="'eye'"></app-icon>
+              {{ 'Review' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <app-workflow-state-case-edit
+          [rawDataComponentTitle]="rawDataComponentTitle"
+          (toggleActivity)="isActivityVisible = !isActivityVisible"
+          (closeEvent)="closeWorkflowState()"
+          (refresh)="getWorkflowState()"
+        ></app-workflow-state-case-edit>
+      </div>
+    </ng-container>
+    <div class="spinner" *ngIf="loading$ | async" class="loading-bg">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-container>
+</div>
+
+<ng-container *ngIf="workflowState && workflow && workflowState.case">
+  <app-workflow-state-case-activity
+    [caseId]="workflowState.case.id"
+    [tenantId]="tenant"
+    [schemaId]="workflow.caseSchemaId"
+    [wfStateId]="workflowStateId"
+    [wfSchemaId]="workflowSchemaId"
+    (closeActivity)="isActivityVisible = !isActivityVisible"
+    (lastComment)="handleLastComment($event)"
+  ></app-workflow-state-case-activity>
+</ng-container>

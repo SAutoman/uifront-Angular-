@@ -1,0 +1,13 @@
+<!-- 
+
+<form [formGroup]="fieldForm">
+  <mat-form-field>
+    <mat-label>Select Allowed File Types</mat-label>
+    <mat-select [id]="'select_' + componentId" (selectionChange)="onChange($event.value)" formControlName="allowedfiletypes" multiple>
+      <mat-option [id]="item.displayName + '_' + componentId" *ngFor="let item of selectableAllowedfiletypes" [value]="item.id">{{
+        item.displayName
+      }}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="allowedfiletypes.errors?.required && allowedfiletypes.touched">Allowed file types is required.</mat-error>
+  </mat-form-field>
+</form> -->

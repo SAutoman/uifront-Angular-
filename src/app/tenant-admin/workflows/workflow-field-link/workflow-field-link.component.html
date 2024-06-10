@@ -1,0 +1,43 @@
+<div>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Select Case Field' | translate }}</mat-label>
+      <mat-select formControlName="caseFieldControl">
+        <mat-option *ngFor="let field of caseFields" [value]="field.id">{{ field.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <div *ngIf="caseFieldControl?.value">
+    <div *ngFor="let rule of fieldLink?.caseFieldLinkOverrides; let i = index" class="link-wrapper">
+      <div>{{ i + 1 }}. {{ rule.name }}</div>
+      <div class="d-flex">
+        <button mat-stroked-button (click)="editLinkOverride(rule, i)" color="primary" class="mr-2 btn-icon btn-sm">
+          <app-icon [name]="'edit'"></app-icon>
+        </button>
+        <button mat-stroked-button (click)="removeLinkOverride(i)" color="warn" class="btn-icon btn-sm">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+      </div>
+    </div>
+    <div class="flex-buttons-start">
+      <button mat-stroked-button color="primary" (click)="addLinkOverride()" class="btn-sm mt-3">
+        <app-icon [name]="'add'" class="primary"></app-icon>
+        {{ 'New rule' | translate }}
+      </button>
+      <button mat-stroked-button mat-button [matMenuTriggerFor]="menu" class="btn-sm mt-3" *ngIf="fieldsWithLinks?.length">
+        {{ 'Copy Field Rules From' | translate }}
+        <app-icon [name]="'arrow-down'" class="primary"></app-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let linkData of fieldsWithLinks" (click)="copyRulesFrom(linkData)">{{ linkData.field.label }}</button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="flex-buttons-end">
+    <button mat-flat-button color="primary" (click)="saveFieldLink()" [disabled]="!hasUnsavedChanges">{{ 'Save' | translate }}</button>
+    <button mat-flat-button color="warn" (click)="deleteFieldLink()" *ngIf="fieldLink && fieldLink['id']">
+      {{ 'Delete' | translate }}
+    </button>
+  </div>
+</div>

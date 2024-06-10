@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@import '../src/assets/styles/fonts/_kendo-font.scss';
+@import '../node_modules/bootstrap/scss/functions';
+@import '../node_modules/bootstrap/scss/variables';
+@import '../node_modules/bootstrap/scss/mixins';
+
+@import '../node_modules/bootstrap/scss/utilities/sizing';
+@import '../node_modules/bootstrap/scss/utilities/position';
+@import '../node_modules/bootstrap/scss/utilities/text';
+@import '../node_modules/bootstrap/scss/utilities/borders';
+@import '../node_modules/bootstrap/scss/utilities/background';
+@import '../node_modules/bootstrap/scss/utilities/overflow';
+@import '../node_modules/bootstrap/scss/utilities/text';
+
+@import './styles-loader.scss';
+
+// app glob
+@import './app/raw-data/raw-data-grid/raw-data-grid.component.glob';
+@import './app/tenant-fields/page-tenant-fields/page-tenant-fields.component.glob';
+@import './app/tenant-lists/page-tenant-lists/page-tenant-lists.component.glob';
+
+app-form-builder-form-preview .mat-radio-button {
+  display: block !important;
+  margin-bottom: 5px;
+}

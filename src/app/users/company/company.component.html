@@ -1,0 +1,55 @@
+<mat-card-content class="mb-0">
+  <h4>{{ 'Company Address' | translate }}</h4>
+
+  <ng-container *ngIf="companyView?.form">
+    <form [formGroup]="companyView.form">
+      <formly-form [form]="companyView.form" [fields]="companyView.fields" [model]="companyView.model"> </formly-form>
+    </form>
+    <div class="text-right pr-1">
+      <button
+        *ngIf="companyId && companyView?.form"
+        [disabled]="companyView.form.invalid || loading"
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="onSubmit(companyView.model)"
+      >
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="invoiceView?.form">
+    <h4>{{ 'Invoice Address' | translate }}</h4>
+    <form [formGroup]="invoiceView.form">
+      <formly-form [form]="invoiceView.form" [fields]="invoiceView.fields" [model]="invoiceView.model"> </formly-form>
+    </form>
+    <div class="text-right pr-1">
+      <button
+        *ngIf="companyId && invoiceView?.form"
+        [disabled]="invoiceView.form?.invalid || loading"
+        mat-flat-button
+        color="primary"
+        type="submit"
+        (click)="onInvoiceSave()"
+      >
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+    </div>
+  </ng-container>
+
+  <div class="text-right pr-1">
+    <button
+      *ngIf="!companyId && companyView?.form"
+      [disabled]="companyView.form.invalid || invoiceView?.form.invalid || loading"
+      mat-flat-button
+      color="primary"
+      (click)="createCompanyAndInvoice()"
+    >
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Create' | translate }}
+    </button>
+  </div>
+</mat-card-content>

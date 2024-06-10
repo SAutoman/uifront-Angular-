@@ -1,0 +1,22 @@
+<ng-container *ngIf="listItems$ | async as items">
+  <div class="list-wrapper" cdkDropList (cdkDropListDropped)="onDrop($event)" [cdkDropListData]="items" id="list-bottom">
+    <app-editable-list-item
+      *ngFor="let item of items"
+      class="w-100 d-block app-editable-list-item"
+      cdkDrag
+      [item]="item"
+      [removeBtnCss]="['mx-3']"
+      [transformConfig]="transformConfigFn"
+      [valueProps$]="listItemProps$"
+      (update)="onUpdate($event, items)"
+      (remove)="onRemove(item, items)"
+    ></app-editable-list-item>
+  </div>
+  <div class="px-4 pt-3 pb-0 mx-auto">
+    <button color="primary" mat-stroked-button (click)="onCreateItem(items)">
+      <app-icon [name]="'add'"></app-icon>
+      <span *ngIf="!listData?.name">{{ 'Add Item' | translate }}</span>
+      <span *ngIf="listData?.name">{{ 'Add' | translate }} {{ listData.name }} {{ 'Item' | translate }}</span>
+    </button>
+  </div>
+</ng-container>

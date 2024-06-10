@@ -1,0 +1,14 @@
+<app-time-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  [showDynamicViewOption]="showDynamicViewOption"
+  *ngIf="field.type == fieldTypeIds.TimeField && field.searchFieldModel.searchType == searchTypes.Range"
+>
+</app-time-field>
+
+<app-time-field-equal-to
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.TimeField && field.searchFieldModel.searchType == searchTypes.EqualTo"
+>
+</app-time-field-equal-to>

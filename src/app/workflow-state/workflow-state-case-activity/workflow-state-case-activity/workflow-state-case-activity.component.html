@@ -1,0 +1,90 @@
+<div class="title-header">
+  <div class="d-flex align-items-center">
+    <button mat-icon-button color="primary" matRipple (click)="toggleActivity()">
+      <app-icon [name]="'back'"></app-icon>
+    </button>
+    <h4>{{ 'Case Activity' | translate }}</h4>
+  </div>
+
+  <button *ngIf="permissions?.add" mat-flat-button color="primary" matRipple (click)="closeComment()" class="mr-auto ml-4">
+    {{ 'Add Comment' | translate }}
+  </button>
+</div>
+<div class="loader-process">
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="errorMessage$ | async as errorMessage">
+    <span class="error">{{ errorMessage }}</span>
+  </div>
+  <mat-tab-group *ngIf="activityOpenState">
+    <!-- Comments Section -->
+    <mat-tab #matTab label="Comments" class="p-16">
+      <!-- adding comment  -->
+      <app-dynamic-entity-creator
+        style="z-index: 10"
+        *ngIf="showCreateComment"
+        [fields]="commentSchema?.fields"
+        [schema]="commentSchema"
+        [schemaId]="commentSchema?.id"
+        [areaTypeFromGrid]="areaTypeEnum.comment"
+        [allowActionsFor]="areaTypeEnum.comment"
+        [isEdit]="!!commentToUpdate"
+        [deItem]="commentToUpdate"
+        (closeCreator)="closeComment()"
+        (operationEmitter)="addCommentToWorkflowState($event)"
+        (reloadComments)="getWorkflowStateById()"
+      >
+      </app-dynamic-entity-creator>
+
+      <ng-container *ngIf="commentSchema && comments?.length">
+        <div class="comments-wrapper">
+          <mat-card class="mat-elevation-z0 outline activity-msg m-b-16" *ngFor="let comment of comments">
+            <ng-container *ngFor="let field of comment.fields">
+              <div
+                class="cell"
+                *ngIf="field.type !== fieldTypes.FileField && field.type !== fieldTypes.DecimalField"
+                [ngClass]="{ content: field.type === fieldTypes.TextareaField }"
+              >
+                <label>{{ field.label }}</label>
+                <p *ngIf="!field?.isUrl">{{ field.value }}</p>
+                <div *ngIf="field?.isUrl" [innerHTML]="field.url | sanitize: 'html'"></div>
+              </div>
+              <div class="cell text-break" *ngIf="field.type === fieldTypes.DecimalField">
+                <label>{{ field.label }}</label>
+                <p *ngIf="!field?.isUrl">{{ field.value | customNumberFormat: field.value:commentSchema }}</p>
+                <div *ngIf="field?.isUrl" [innerHTML]="field.url | sanitize: 'html'"></div>
+              </div>
+              <div class="cell document" *ngIf="field.type === fieldTypes.FileField && field.value">
+                <label>{{ field.label }}</label>
+                <div *ngIf="field?.value?.length > 0">
+                  <a
+                    *ngFor="let doc of field.value"
+                    [href]="doc?.url"
+                    target="_blank"
+                    rel="noopener"
+                    class="link-btn m-t-8"
+                    title="{{ doc?.fileInfo?.fileName }}"
+                  >
+                    <app-icon [name]="'download'"></app-icon>
+                    <span>{{ doc?.fileInfo?.fileName }}</span>
+                  </a>
+                </div>
+              </div>
+              <button *ngIf="permissions?.edit" class="edit-btn">
+                <app-icon [name]="'edit'" (click)="editComment(comment.id)"></app-icon>
+              </button>
+              <button *ngIf="permissions?.delete" class="delete-btn" (click)="deleteComment(comment)">
+                <app-icon [name]="'trash'"></app-icon>
+              </button>
+            </ng-container>
+          </mat-card>
+        </div>
+      </ng-container>
+    </mat-tab>
+
+    <!-- History Section -->
+    <!-- <mat-tab [id]="'history_' + componentId" #matTab label="History">
+      <app-case-activity-history [caseId]="caseId" [tenantId]="tenantId"></app-case-activity-history>
+    </mat-tab> -->
+  </mat-tab-group>
+</div>
+<div #bottom></div>

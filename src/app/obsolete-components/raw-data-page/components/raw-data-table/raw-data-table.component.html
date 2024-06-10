@@ -1,0 +1,168 @@
+<!-- <ng-container *ngIf="view$ | async as view; else loading">
+  <div *ngIf="!view.loading && (view.gridSettings || view.rawDataColumns)" class="grid-container">
+    <kendo-grid
+      #grid
+      class="grid"
+      [data]="view.kendo.gridData"
+      [pageSize]="view.kendo.state.take"
+      [skip]="view.kendo.state.skip"
+      [selectedKeys]="view.kendo.selectedKeys"
+      [sort]="view.kendo.sort"
+      [selectable]="view.kendo.selectableSettings"
+      [sortable]="{
+        allowUnsort: true,
+        mode: 'multiple'
+      }"
+      [columnMenu]="{ sort: false }"
+      [pageable]="true"
+      scrollable="scrollable"
+      [resizable]="true"
+      [reorderable]="true"
+      kendoGridSelectBy="id"
+      (sortChange)="onSortChange(view, $event)"
+      (columnReorder)="onReorder(view)"
+      (columnResize)="onResize(view)"
+      (columnVisibilityChange)="onVisibilityChange(view)"
+      (pageChange)="onPageChange(view, $event)"
+      (dataStateChange)="onDataStateChanged(view, $event)"
+      (selectedKeysChange)="onSelectedKeysChange(view, $event)"
+      [rowClass]="view.tsRawDataOnSingleCase ? getDisabledRowClassObject : allEnabledRowsClassObject"
+    >
+      <kendo-grid-checkbox-column [id]="'checkbox_' + componentId" width="70"></kendo-grid-checkbox-column>
+      <kendo-grid-column [sortable]="false" title="Info" width="80" [columnMenu]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <a [id]="dataItem.name + '_' + componentId" (click)="openDialogRawDataInfo(dataItem)">
+            <mat-icon aria-hidden="false" aria-label="info" class="info-icon">info</mat-icon>
+          </a>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-column [sortable]="false" title="Actions" width="100" [columnMenu]="false">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button
+            [id]="'edit_' + componentId"
+            style="margin: 0px -7px"
+            mat-raised-button
+            color="primary"
+            (click)="openDialogUpdateRawData(dataItem)"
+            [disabled]="!view.permission.edit"
+          >
+            {{ 'Edit' | translate }}
+          </button>
+        </ng-template>
+      </kendo-grid-column>
+
+      <ng-container *ngFor="let col of view.kendo.gridSettings.columnsConfig">
+        <kendo-grid-column
+          *ngIf="col.title && col.field !== 'Discontinued'"
+          [columnMenu]="false"
+          [field]="col.field"
+          [title]="col.title"
+          [width]="col._width"
+          [filter]="col.filter"
+          [filterable]="col.filterable"
+          [hidden]="col.hidden"
+          [reorderable]="true"
+          [sortable]="true"
+        ></kendo-grid-column>
+      </ng-container>
+
+      <ng-template kendoPagerTemplate>
+        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+        <kendo-pager-info></kendo-pager-info>
+        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+        <kendo-pager-page-sizes [pageSizes]="view.kendo.pageSize"></kendo-pager-page-sizes>
+      </ng-template>
+
+      <ng-template kendoGridToolbarTemplate position="bottom">
+        <app-grid-layout-options
+          [type]="'grid'"
+          [appSettingName]="view.kendo.appSettingName"
+          [allowExports]="view.kendo.allowExports"
+          [grid]="grid"
+          [gridSettingsName]="view.kendo.gridSettingsName"
+          [allowSharing]="view.kendo.allowSharing"
+          [schemaAreaType]="areaTypeEnum.rawData"
+        >
+          <div class="add container-start-content controls--raw-actions">
+            <button
+              class="m-1 ml-0"
+              [id]="'addRawData_' + componentId"
+              mat-stroked-button
+              (click)="openDialogAddRawData(view)"
+              [disabled]="!view.permission.add"
+            >
+              {{ 'Add' | translate }} {{ 'Raw Data' | translate }}
+            </button>
+
+            <button
+              class="m-1 ml-0"
+              [id]="'addRawData_' + componentId"
+              mat-stroked-button
+              (click)="openDialogDeleteSelectedRows(view)"
+              *ngIf="view.isTenantAdmin && view.hasSomeCheckFlag && view.permission.delete"
+            >
+              {{ 'Delete' | translate }} {{ 'Raw Data' | translate }}
+            </button>
+          </div>
+        </app-grid-layout-options>
+      </ng-template>
+
+      <kendo-grid-excel fileName="raw_data.xlsx">
+        <ng-container *ngFor="let item of view.kendo.rawDataColumns">
+          <kendo-excelexport-column [field]="getKendoFieldName(item.id)" [title]="item.viewName" width="190"> </kendo-excelexport-column>
+        </ng-container>
+      </kendo-grid-excel>
+      <kendo-grid-pdf fileName="raw_data.pdf">
+        <ng-container *ngFor="let item of view.kendo.rawDataColumns">
+          <kendo-grid-column [field]="getKendoFieldName(item.id)" [title]="item.viewName" width="190"></kendo-grid-column>
+        </ng-container>
+      </kendo-grid-pdf>
+    </kendo-grid>
+
+    <div #actions *ngIf="view.hasSomeCheckFlag">
+      <mat-card class="case-actions">
+        <button
+          [id]="'createCase_' + componentId"
+          class="my-0,mx-1"
+          #createCaseBtn
+          mat-raised-button
+          [color]="isCreateCaseButtonClicked ? 'accent' : 'primary'"
+          (click)="onCreateCaseBtnClick(view); scrollToElement(createCaseTmpl)"
+        >
+          {{ 'Create Case' | translate }}
+        </button>
+        <button
+          [id]="'addToCase_' + componentId"
+          style="margin: 0px 5px"
+          mat-raised-button
+          [color]="view.isAddToCaseClicked ? 'accent' : 'primary'"
+          (click)="onAddToCaseBtnClick(view); scrollToElement(addToCaseTmpl)"
+        >
+          {{ 'Add to Case' | translate }}
+        </button>
+      </mat-card>
+    </div>
+
+    <div #createCaseTmpl>
+      <app-raw-data-create-case *ngIf="view.hasSomeCheckFlag && view.isCreateCaseButtonClicked"> </app-raw-data-create-case>
+
+    </div>
+    <div #addToCaseTmpl>
+      <app-raw-data-add-to-case
+        *ngIf="view.hasSomeCheckFlag && view.isAddToCaseClicked"
+        [rawDataColumns]="view.caseRawDataColumns"
+        [selectedRawDataRows]="getSelectedRows(view)"
+        [tenantId]="view.tenantId"
+        [authState]="view.authState"
+      >
+      </app-raw-data-add-to-case>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!view.loading; else loading"></ng-container>
+</ng-container>
+
+<ng-template #loading>
+  <div class="k-i-loading"></div>
+</ng-template> -->

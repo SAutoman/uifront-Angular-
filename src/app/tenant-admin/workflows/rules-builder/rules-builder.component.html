@@ -1,0 +1,57 @@
+<h2 mat-dialog-title *ngIf="expressionConfig.title">{{ expressionConfig.title }}</h2>
+
+<div *ngIf="view">
+  <div *ngIf="expressionConfig.userRolesLabel">
+    <form class="" [formGroup]="view.userRoles.form">
+      <formly-form
+        class="d-flex w-100"
+        [form]="view.userRoles.form"
+        [fields]="view.userRoles.fields"
+        [model]="view.userRoles.model"
+      ></formly-form>
+    </form>
+  </div>
+
+  <div *ngIf="expressionConfig.userGroupsLabel">
+    <form class="" [formGroup]="view.userGroups.form">
+      <formly-form
+        class="d-flex w-100"
+        [form]="view.userGroups.form"
+        [fields]="view.userGroups.fields"
+        [model]="view.userGroups.model"
+      ></formly-form>
+    </form>
+  </div>
+
+  <div *ngIf="expressionConfig.rules">
+    <h5>{{ expressionConfig.rulesLabel }}</h5>
+
+    <form class="" [formGroup]="view.condition.form">
+      <formly-form
+        class="d-flex w-100"
+        [form]="view.condition.form"
+        [fields]="view.condition.fields"
+        [model]="view.condition.model"
+      ></formly-form>
+    </form>
+    <ng-container *ngFor="let rule of view.rules">
+      <form class="" [formGroup]="rule.form">
+        <formly-form
+          class="d-flex"
+          [form]="rule.form"
+          [fields]="rule.fields"
+          [model]="rule.model"
+          (modelChange)="onModelChange()"
+        ></formly-form>
+      </form>
+    </ng-container>
+
+    <button class="mb-3 btn-sm" (click)="addRule()" mat-stroked-button color="primary">
+      <app-icon [name]="'add'"></app-icon>
+      {{ 'Add Rule' | translate }}
+    </button>
+  </div>
+</div>
+<button *ngIf="expressionConfig.buttons" mat-raised-button color="primary" (click)="onSubmit()">
+  {{ 'Save' | translate }}
+</button>

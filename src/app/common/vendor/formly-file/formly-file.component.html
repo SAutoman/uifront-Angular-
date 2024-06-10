@@ -1,0 +1,97 @@
+<div>
+  <app-formly-drop-zone
+    [accept]="to?.accept"
+    [disableUpload]="to.disabled || loading || to.disableButtons || to.readonly"
+    [allowMultipleFiles]="isThumbnailEnabled ? false : true"
+    (filesListEmitter)="onFilesAdded($event)"
+  ></app-formly-drop-zone>
+</div>
+<div *ngIf="isPlatformMobile" class="text-center p-1">
+  <p class="my-3">--- {{ 'OR' | translate }} ---</p>
+  <button
+    (click)="openCameraComponent()"
+    mat-stroked-button
+    color="primary"
+    class="mr-2 w-100"
+    mat-button
+    [disabled]="to?.readonly || to?.disabled"
+  >
+    <app-icon [name]="'camera'"></app-icon>
+    {{ 'Open Camera' | translate }}
+  </button>
+</div>
+<div class="file-field" *ngIf="formControl">
+  <input
+    matInput
+    [id]="id"
+    [class]="'file-mat-input'"
+    [readonly]="to.readonly"
+    [required]="to.required"
+    [errorStateMatcher]="errorStateMatcher"
+    [formControl]="formControl"
+    [formlyAttributes]="field"
+    [tabindex]="to.tabindex"
+    [placeholder]="to.placeholder"
+  />
+  <div class="file-description mt-2">
+    <div *ngIf="fileInfo$ | async as fi; else fileNotFound">
+      <ng-container *ngFor="let fileItem of fi?.items">
+        <div class="d-flex justify-content-between my-2">
+          <a *ngIf="getFileType(fileItem) === 'image'; else docType" class="picture-file">
+            <img [src]="fileItem.url" alt="fileItem.fileInfo.fileName" />
+          </a>
+          <ng-template #docType>
+            <div class="d-flex align-items-center">
+              <app-icon [name]="getFileType(fileItem)" class="mr-2"></app-icon>
+              <span
+                style="
+                  max-width: 100px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  width: 100%;
+                  font-weight: 400;
+                  color: black;
+                "
+                title="{{ fileItem?.fileInfo?.fileName }}"
+              >
+                {{ fileItem?.fileInfo?.fileName }}
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="file-actions align-self-center">
+            <button
+              type="button"
+              color="warn"
+              class="mr-2 btn-icon btn-sm"
+              mat-stroked-button
+              (click)="resetValue(fileItem.id)"
+              [disabled]="to.disableButtons || to.readonly"
+            >
+              <app-icon [name]="'delete'" class="m-0"></app-icon>
+            </button>
+
+            <button
+              class="mr-2 btn-icon btn-sm"
+              mat-stroked-button
+              color="primary"
+              type="button"
+              (click)="showPreview(fileItem.url)"
+              *ngIf="getFileType(fileItem) === 'image'"
+            >
+              <app-icon [name]="'eye'" class="m-0"></app-icon>
+            </button>
+            <a class="btn-icon btn-sm" mat-stroked-button color="primary" type="button" [href]="fileItem.url">
+              <app-icon [name]="'download'" class="m-0"></app-icon>
+            </a>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate" class="mt-1"></mat-progress-bar>
+  </div>
+</div>
+
+<ng-template #fileNotFound>{{ fileNotFoundDescription | translate }}</ng-template>

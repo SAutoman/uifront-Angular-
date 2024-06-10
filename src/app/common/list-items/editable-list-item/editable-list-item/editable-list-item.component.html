@@ -1,0 +1,38 @@
+<div class="list-item border border-primary p-2 my-3">
+  <div class="d-flex w-100 justify-content-between align-items-center">
+    <button class="move" mat-icon-button color="primary" cdkDragHandle>
+      <app-icon [name]="'drag-indicator'"></app-icon>
+    </button>
+
+    <ng-container *ngIf="view">
+      <form [ngClass]="formCss" [@fadeIn] [formGroup]="view.form">
+        <formly-form [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+      </form>
+    </ng-container>
+
+    <!-- <button
+      class="col-md-1 col-2"
+      *ngIf="useEdit"
+      mat-icon-button
+      color="primary"
+      (click)="onEdit($event)"
+      matTooltip="{{'Edit' | translate}}"
+      matTooltipPosition="after"
+    >
+      <app-icon [name]="'edit'" class="primary"></app-icon>
+    </button> -->
+
+    <button
+      class="col-md-1 col-2"
+      *ngIf="useRemove"
+      mat-icon-button
+      color="warn"
+      (click)="onRemove($event)"
+      matTooltip="{{ 'Remove' | translate }}"
+      matTooltipPosition="after"
+      [ngClass]="removeBtnCss"
+    >
+      <app-icon [name]="'trash'" class="danger"></app-icon>
+    </button>
+  </div>
+</div>

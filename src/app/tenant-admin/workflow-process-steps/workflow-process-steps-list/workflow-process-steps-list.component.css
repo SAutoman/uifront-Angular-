@@ -1,0 +1,1 @@
+:host ::ng-deep app-wfm-workflow-grid .k-grid{height:calc(100% - 48px)}@media(max-width: 540px){:host ::ng-deep .k-pager-wrap{display:inherit !important}}

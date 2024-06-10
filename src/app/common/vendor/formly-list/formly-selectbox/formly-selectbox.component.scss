@@ -1,0 +1,29 @@
+@import '../../../../../assets/styles/variable.scss';
+.reset-button {
+  position: absolute;
+  right: 16px;
+  top: 0;
+  z-index: 2;
+}
+.cascadeSelect {
+  display: block;
+  padding: 13px 9px;
+  border: 1px solid darken($border, 40%);
+  border-radius: 4px;
+  margin-bottom: 16px;
+  margin-top: 4px;
+}
+
+.cascade-wrapper {
+  padding-top: 30px;
+  .reset-button {
+    right: -12px;
+    top: -6px;
+  }
+}
+
+.searchInput {
+  height: 50px;
+  padding: 8px 15px;
+  box-sizing: border-box;
+}

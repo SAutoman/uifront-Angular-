@@ -1,0 +1,12 @@
+@import '../../../assets/styles/variable.scss';
+.img-container {
+  width: 200px;
+  height: 112px;
+  border: solid thin $dark-dividers;
+  padding: 16px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

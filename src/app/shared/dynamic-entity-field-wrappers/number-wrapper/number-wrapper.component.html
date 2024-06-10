@@ -1,0 +1,13 @@
+<app-number-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type === fieldTypeIds.IntField && field.searchFieldModel.searchType === searchTypes.Range"
+>
+</app-number-field>
+
+<app-number-field-equal-to
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type === fieldTypeIds.IntField && field.searchFieldModel.searchType === searchTypes.EqualTo"
+>
+</app-number-field-equal-to>

@@ -1,0 +1,55 @@
+<!-- <div class="upload-wrapper" *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.visible">
+  <div>{{ fieldControlApiData.fieldMetadata.name }}</div>
+
+  <button
+    [id]="'upload_' + componentId"
+    [disabled]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+    mat-raised-button
+    color="primary"
+    (click)="file.click()"
+  >
+    Upload
+  </button>
+  <input
+    #file
+    hidden
+    type="file"
+    accept="{{ acceptedFiles }}"
+    multiple
+    (change)="upload(file.files)"
+    [disabled]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+  />
+
+  <div class="files" *ngFor="let item of files">
+    <div class="file">
+      <app-icon [name]="'file'"></app-icon>
+      {{ item.name }}
+    </div>
+    <div class="file-controls-wrapper">
+      <button
+        [id]="'open_' + componentId"
+        class="button"
+        mat-raised-button
+        color="primary"
+        *ngIf="isOpenVisible(item)"
+        (click)="onFileOpen(item)"
+      >
+        Open
+      </button>
+
+      <button
+        [id]="'remove_' + componentId"
+        [disabled]="!fieldControlApiData.fieldMetadata.funcFieldProps.editable || !canEditField"
+        class="button"
+        mat-raised-button
+        color="primary"
+        color="warn"
+        (click)="onSelectedFileRemove(item)"
+        *ngIf="fieldControlApiData.fieldMetadata.funcFieldProps.editable"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+</div>
+<mat-error *ngIf="showRequiredError && files.length < 1">This field is required.</mat-error> -->

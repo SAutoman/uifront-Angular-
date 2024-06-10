@@ -1,0 +1,42 @@
+<div class="form-scroll">
+  <!-- <div class="grid-container">
+    <ng-container class="wrapper" *ngIf="gridData">
+      <kendo-grid
+        #grid
+        class="grid"
+        [data]="gridData"
+        [scrollable]="true"
+        [resizable]="true"
+        [reorderable]="true"
+        kendoGridSelectBy="publicId"
+      >
+        <ng-container>
+          <kendo-grid-column title="Actions" width="100">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button
+                [id]="'remove_' + componentId"
+                mat-icon-button
+                type="button"
+                color="warn"
+                *ngFor="let action of actions"
+                (click)="actionClicked(dataItem, action.id)"
+              >
+                <mat-icon>{{ action.icon }}</mat-icon>
+              </button>
+            </ng-template>
+          </kendo-grid-column>
+        </ng-container>
+        <ng-container *ngFor="let col of columnsConfig">
+          <kendo-grid-column
+            [columnMenu]="false"
+            [field]="col.field"
+            [title]="col.title"
+            [width]="col._width"
+            [reorderable]="true"
+            [sortable]="true"
+          ></kendo-grid-column>
+        </ng-container>
+      </kendo-grid>
+    </ng-container>
+  </div> -->
+</div>

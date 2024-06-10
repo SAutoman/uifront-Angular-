@@ -1,0 +1,151 @@
+<div class="case-header">
+  <div
+    class="d-flex p-l-16 align-items-center"
+    style="flex: 1; cursor: pointer !important"
+    [style.maxWidth]="!showCaseButtons ? 'calc(100% - 80px)' : 'calc(100% - 276px)'"
+  >
+    <button *ngIf="!isSidePanel" mat-icon-button matRipple>
+      <app-icon [name]="'back'" (click)="back()"></app-icon>
+    </button>
+
+    <div
+      class="newline-enabled case-details"
+      [innerHTML]="caseForUi?.title | sanitize: 'html'"
+      [matTooltip]="caseForUi?.title"
+      matTooltipPosition="below"
+    ></div>
+
+    <button class="mr-1" *ngIf="!isSidePanel" mat-icon-button matRipple [matTooltip]="'To workflow' | translate" matTooltipPosition="above">
+      <app-icon [name]="'workflow'" (click)="toWorkflowGrid()"></app-icon>
+    </button>
+
+    <ng-container *ngIf="statusEnabled; else statusDisabled">
+      <div class="status-group">
+        <span mat-button class="badge {{ workflowState?.currentStatus?.configuration?.color }}">
+          {{ workflowState?.currentStatus?.name }}
+        </span>
+        <button mat-button color="primary" class="dropdown ml-3" [matMenuTriggerFor]="statusMenu" *ngIf="isSidePanel">
+          {{ 'Change Status' | translate }}
+        </button>
+        <mat-menu #statusMenu>
+          <app-workflow-state-status></app-workflow-state-status>
+        </mat-menu>
+      </div>
+      <mat-menu #statusMenu>
+        <app-workflow-state-status></app-workflow-state-status>
+      </mat-menu>
+      <app-workflow-state-status *ngIf="!isSidePanel"></app-workflow-state-status>
+    </ng-container>
+
+    <ng-template #statusDisabled>
+      <span mat-button class="badge {{ workflowState?.currentStatus?.configuration?.color }}">
+        {{ workflowState?.currentStatus?.name }}
+      </span>
+    </ng-template>
+  </div>
+
+  <div class="buttons d-flex">
+    <ng-container *ngIf="mobileQuery.matches && showCaseButtons">
+      <button [disabled]="isDownloading" matTooltip="{{ 'Download' | translate }}" [matTooltipPosition]="'above'" mat-icon-button matRipple>
+        <app-icon [name]="'download'" (click)="onDownload()"></app-icon>
+      </button>
+
+      <button mat-icon-button matRipple matTooltip="{{ 'Print' | translate }}" [matTooltipPosition]="'above'">
+        <app-icon [name]="'print'" (click)="onPrint()"></app-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matRipple
+        *ngIf="isSidePanel"
+        class="full-screen"
+        matTooltip="{{ 'Full Screen' | translate }}"
+        [matTooltipPosition]="'above'"
+      >
+        <app-icon [name]="'full-screen'" (click)="onFullScreen()"></app-icon>
+      </button>
+
+      <div class="message">
+        <button mat-icon-button matRipple [matTooltipPosition]="'above'" matTooltip="{{ 'Message' | translate }}">
+          <app-icon [name]="'message'" (click)="toggle()"></app-icon>
+        </button>
+        <div class="dot" *ngIf="lastComment" [matTooltipPosition]="'above'" [matTooltip]="lastComment"></div>
+      </div>
+
+      <button
+        mat-icon-button
+        (click)="getWorkflowState()"
+        matRipple
+        matTooltip="{{ 'Refresh' | translate }}"
+        [matTooltipPosition]="'above'"
+      >
+        <app-icon [name]="'refresh'"></app-icon>
+      </button>
+
+      <button
+        *ngIf="showEditBtn && !isEdit"
+        mat-icon-button
+        (click)="editCase()"
+        matRipple
+        matTooltip="{{ 'Edit' | translate }}"
+        [matTooltipPosition]="'above'"
+      >
+        <app-icon [name]="'edit'"></app-icon>
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="!mobileQuery.matches || !showCaseButtons">
+      <button mat-icon-button [matMenuTriggerFor]="optionMenu">
+        <app-icon [name]="'more'"></app-icon>
+      </button>
+      <mat-menu #optionMenu="matMenu">
+        <button mat-menu-item (click)="onDownload()" [disabled]="isDownloading">
+          <app-icon [name]="'download'"></app-icon>{{ 'Download' | translate }}
+        </button>
+
+        <button mat-menu-item (click)="onPrint()"><app-icon [name]="'print'"></app-icon>{{ 'Print' | translate }}</button>
+
+        <button mat-menu-item *ngIf="isSidePanel" class="full-screen" (click)="onFullScreen()">
+          <app-icon [name]="'full-screen'"></app-icon>{{ 'Full Screen' | translate }}
+        </button>
+
+        <button mat-menu-item (click)="toggle()" class="relative">
+          <app-icon [name]="'message'"></app-icon>
+          {{ 'Message' | translate }}
+          <span class="dot" *ngIf="lastComment" [matTooltipPosition]="'above'" [matTooltip]="lastComment"></span>
+        </button>
+
+        <button mat-menu-item (click)="getWorkflowState()"><app-icon [name]="'refresh'"></app-icon>{{ 'Refresh' | translate }}</button>
+
+        <button mat-menu-item (click)="editCase()" *ngIf="showEditBtn && !isEdit">
+          <app-icon [name]="'edit'"></app-icon>{{ 'Edit' | translate }}
+        </button>
+      </mat-menu>
+    </ng-container>
+
+    <button
+      *ngIf="isSidePanel"
+      (click)="closeWorkflowState()"
+      matRipple
+      mat-icon-button
+      color="primary"
+      matTooltip="{{ 'Close' | translate }}"
+      [matTooltipPosition]="'above'"
+    >
+      <app-icon [name]="'close'"></app-icon>
+    </button>
+  </div>
+</div>
+<ng-template #caseUpdate *ngIf="caseSchema && isUpdateClicked">
+  <h4 mat-dialog-title>{{ 'Update Case' | translate }}</h4>
+
+  <app-form-builder-form-preview
+    [isUpdate]="true"
+    [fields$]="caseSchemaFields$"
+    [allowActionsFor]="areaType.case"
+    [schema]="caseSchema"
+    [dynamicEntityId]="caseDeId"
+    [systemFields]="caseSystemFields"
+    (caseProceed)="onCaseFieldsUpdateEvent($event)"
+  ></app-form-builder-form-preview>
+</ng-template>

@@ -1,0 +1,50 @@
+<h4 *ngIf="fieldSettings.controls?.length">{{ 'Hide Fields In Grid' | translate }}</h4>
+
+<form [formGroup]="form" *ngIf="form">
+  <mat-form-field class="col-md-12">
+    <mat-label>{{ 'Select Fields' | translate }}</mat-label>
+    <mat-select multiple formControlName="selectedFields">
+      <mat-option *ngFor="let field of fieldOptions" [value]="field.value" (onSelectionChange)="optionChanged($event)">
+        {{ field.key }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div formArrayName="fieldSettings">
+    <ng-container *ngFor="let settingForm of fieldSettings.controls; let settingIndex = index">
+      <mat-expansion-panel class="mat-elevation-z0 my-3">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <p>{{ settingForm?.controls['displayName']?.value }}</p>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="row" [formGroupName]="settingIndex">
+          <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>{{ 'Hide Field For These Roles' | translate }}</mat-label>
+            <mat-select multiple formControlName="roles">
+              <mat-option *ngFor="let role of roles" [value]="role.value">
+                {{ role.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>{{ 'Hide Field For These Groups' | translate }}</mat-label>
+            <mat-select multiple formControlName="groups">
+              <mat-option *ngFor="let group of groups" [value]="group.value">
+                {{ group.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-error
+            class="col-md-12"
+            *ngIf="fieldSettings?.controls[settingIndex]?.touched && fieldSettings?.controls[settingIndex]?.errors?.invalidHideFieldSetting"
+          >
+            {{ 'Select at least one Role or Group' | translate }}
+          </mat-error>
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
+  </div>
+</form>

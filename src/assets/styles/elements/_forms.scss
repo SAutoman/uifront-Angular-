@@ -1,0 +1,438 @@
+.mat-expansion-panel-body {
+  padding: 16px !important;
+  formly-group {
+    width: 100% !important;
+  }
+}
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  top: 4px;
+}
+.mat-form-field-infix,
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 12px 0 12px 0 !important;
+  border-top-width: 12px !important;
+  .mat-form-field-label-wrapper {
+    top: -14px !important;
+  }
+}
+.mat-form-field-appearance-outline .mat-form-field-flex {
+  min-height: 48px;
+}
+formly-field {
+  formly-field-group-wrapper {
+    .mat-expansion-panel {
+      box-shadow: 0 0 0 !important;
+      border-radius: 4px !important;
+      border: solid thin $dark-dividers !important;
+    }
+  }
+  .mat-expansion-panel-content {
+    display: block !important;
+    .mat-expansion-panel-body {
+      padding: 16px !important;
+    }
+  }
+  // .date-cancel-buttons {
+  //   top: -17px !important;
+  // }
+  app-formly-mat-date-time-picker {
+    .date-cancel-buttons {
+      top: -1px !important;
+    }
+  }
+  app-formly-mat-time-picker {
+    .buttons-wrapper {
+      top: 1px !important;
+    }
+  }
+  formly-wrapper-mat-form-field {
+    .mat-form-field-appearance-outline {
+      .mat-form-field-infix {
+        border-top-width: 8px !important;
+      }
+      &.mat-form-field-should-float {
+        .mat-form-field-label-wrapper {
+          top: -10px !important;
+        }
+      }
+    }
+  }
+  &.mat-form-field-readonly {
+    cursor: not-allowed;
+    .cascade-wrapper {
+      mat-label {
+        opacity: 0.4;
+      }
+    }
+    .cascadeSelect {
+      border-color: lighten($border, 5%);
+    }
+  }
+  &.red {
+    > formly-wrapper-mat-form-field {
+      > .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $danger !important;
+        border-right: solid 2px $danger !important;
+        border-bottom: solid 2px $danger !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $danger !important;
+        border-bottom: solid 2px $danger !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $danger !important;
+        border-left: solid 2px $danger !important;
+        border-bottom: solid 2px $danger !important;
+      }
+      > .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      > .mat-expansion-panel {
+        border: solid 2px $danger !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-label {
+        margin-top: -0.25em;
+      }
+    }
+    > formly-field-group-wrapper {
+      > .mat-expansion-panel {
+        border: solid 2px $danger !important;
+      }
+    }
+  }
+  &.yellow {
+    > formly-wrapper-mat-form-field {
+      > .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $warning !important;
+        border-right: solid 2px $warning !important;
+        border-bottom: solid 2px $warning !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $warning !important;
+        border-bottom: solid 2px $warning !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $warning !important;
+        border-left: solid 2px $warning !important;
+        border-bottom: solid 2px $warning !important;
+      }
+      > .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      > .mat-expansion-panel {
+        border: solid 2px $warning !important;
+      }
+    }
+    > formly-field-group-wrapper {
+      > .mat-expansion-panel {
+        border: solid 2px $warning !important;
+      }
+    }
+  }
+  &.green {
+    > formly-wrapper-mat-form-field {
+      > .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $success !important;
+        border-right: solid 2px $success !important;
+        border-bottom: solid 2px $success !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $success !important;
+        border-bottom: solid 2px $success !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $success !important;
+        border-left: solid 2px $success !important;
+        border-bottom: solid 2px $success !important;
+      }
+      > .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      > .mat-expansion-panel {
+        border: solid 2px $success !important;
+      }
+    }
+    > formly-field-group-wrapper {
+      > .mat-expansion-panel {
+        border: solid 2px $success !important;
+      }
+    }
+  }
+  &.blue {
+    > formly-wrapper-mat-form-field {
+      > .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $info !important;
+        border-right: solid 2px $info !important;
+        border-bottom: solid 2px $info !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $info !important;
+        border-bottom: solid 2px $info !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $info !important;
+        border-left: solid 2px $info !important;
+        border-bottom: solid 2px $info !important;
+      }
+      > .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      > .mat-expansion-panel {
+        border: solid 2px $info !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-label {
+        margin-top: -0.25em;
+      }
+    }
+    > formly-field-group-wrapper {
+      > .mat-expansion-panel {
+        border: solid 2px $info !important;
+      }
+    }
+  }
+  .mat-form-field-label-wrapper {
+    width: calc(100% - 30px) !important;
+  }
+  // for WFM-2245
+  &.activatedFormlyField {
+    > formly-wrapper-mat-form-field {
+      > .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px rgb(247, 20, 247) !important;
+        border-right: solid 2px rgb(247, 20, 247) !important;
+        border-bottom: solid 2px rgb(247, 20, 247) !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px rgb(247, 20, 247) !important;
+        border-bottom: solid 2px rgb(247, 20, 247) !important;
+      }
+      > .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px rgb(247, 20, 247) !important;
+        border-left: solid 2px rgb(247, 20, 247) !important;
+        border-bottom: solid 2px rgb(247, 20, 247) !important;
+      }
+      > .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      > .mat-expansion-panel {
+        border: solid 2px rgb(247, 20, 247) !important;
+      }
+    }
+    > formly-field-group-wrapper {
+      > .mat-expansion-panel {
+        border: solid 2px rgb(247, 20, 247) !important;
+      }
+    }
+  }
+  > formly-field {
+    &.green {
+      formly-wrapper-mat-form-field {
+        .mat-form-field-appearance-outline .mat-form-field-outline-end {
+          border-top: solid 2px $success !important;
+          border-right: solid 2px $success !important;
+          border-bottom: solid 2px $success !important;
+        }
+        .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+          border-top: solid 2px $success !important;
+          border-bottom: solid 2px $success !important;
+        }
+        .mat-form-field-appearance-outline .mat-form-field-outline-start {
+          border-top: solid 2px $success !important;
+          border-left: solid 2px $success !important;
+          border-bottom: solid 2px $success !important;
+        }
+        .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+          border-top-color: transparent !important;
+        }
+        .mat-expansion-panel {
+          border: solid 2px $success !important;
+        }
+      }
+      formly-field-group-wrapper {
+        .mat-expansion-panel {
+          border: solid 2px $success !important;
+        }
+      }
+    }
+  }
+  > formly-field {
+    &.blue {
+      .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $info !important;
+        border-right: solid 2px $info !important;
+        border-bottom: solid 2px $info !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $info !important;
+        border-bottom: solid 2px $info !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $info !important;
+        border-left: solid 2px $info !important;
+        border-bottom: solid 2px $info !important;
+      }
+      .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      .mat-expansion-panel {
+        border: solid 2px $info !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-label {
+        margin-top: -0.25em;
+      }
+    }
+  }
+  > formly-field {
+    &.red {
+      .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $danger !important;
+        border-right: solid 2px $danger !important;
+        border-bottom: solid 2px $danger !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $danger !important;
+        border-bottom: solid 2px $danger !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $danger !important;
+        border-left: solid 2px $danger !important;
+        border-bottom: solid 2px $danger !important;
+      }
+      .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      .mat-expansion-panel {
+        border: solid 2px $danger !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-label {
+        margin-top: -0.25em;
+      }
+    }
+  }
+  > formly-field {
+    &.yellow {
+      .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-top: solid 2px $warning !important;
+        border-right: solid 2px $warning !important;
+        border-bottom: solid 2px $warning !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-outline-gap {
+        border-top: solid 2px $warning !important;
+        border-bottom: solid 2px $warning !important;
+      }
+      .mat-form-field-appearance-outline .mat-form-field-outline-start {
+        border-top: solid 2px $warning !important;
+        border-left: solid 2px $warning !important;
+        border-bottom: solid 2px $warning !important;
+      }
+      .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-outline-gap {
+        border-top-color: transparent !important;
+      }
+      > .mat-expansion-panel {
+        border: solid 2px $warning !important;
+      }
+    }
+  }
+}
+
+formly-field-mat-radio {
+  .mat-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    .mat-radio-button {
+      margin-right: 24px;
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}
+.mat-radio-button {
+  .mat-radio-label {
+    .mat-radio-label-content {
+      word-break: break-all;
+      white-space: normal;
+    }
+  }
+}
+.mat-form-field {
+  &.mb-0 {
+    .mat-form-field-wrapper {
+      padding: 0 !important;
+    }
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+.mat-form-field-required-marker {
+  font-size: 18px;
+  color: $danger;
+  vertical-align: -4px;
+}
+formly-field.mat-form-field-readonly {
+  .mat-form-field-disabled {
+    .mat-form-field-label {
+      color: $black !important;
+    }
+    .mat-input-element:disabled {
+      color: $black !important;
+    }
+  }
+  .mat-icon-button:disabled {
+    color: $black !important;
+  }
+}
+.formly-nested-checkbox-addon--field-content {
+  .picker-buttons {
+    top: -15px !important;
+  }
+}
+
+formly-field-mat-checkbox {
+  .mat-checkbox {
+    &.mat-checkbox-checked {
+      .mat-checkbox-background {
+        background-color: transparent !important;
+        border: solid 2px $themecolor !important;
+        svg {
+          path {
+            stroke: $themecolor !important;
+            stroke-width: 4px;
+          }
+        }
+      }
+      .mat-checkbox-frame {
+        border: solid 2px $themecolor !important;
+      }
+    }
+    &.mat-checkbox-indeterminate {
+      .mat-checkbox-background {
+        background-color: transparent !important;
+        border: solid thin $themecolor !important;
+        svg {
+          display: none !important;
+        }
+        &:after {
+          content: '';
+          width: 9px;
+          height: 9px;
+          background-color: $themecolor;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+      .mat-checkbox-frame {
+        border: solid 2px $themecolor !important;
+      }
+    }
+  }
+}

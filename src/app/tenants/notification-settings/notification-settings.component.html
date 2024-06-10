@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-5 mx-auto py-4">
+      <mat-card class="outline mat-elevation-z0">
+        <h4 class="mb-3">{{ 'Notifications Settings' | translate }}</h4>
+        <div class="text-center">
+          <button id="nfTrigger" mat-flat-button color="primary" (click)="triggerNotification()" [disabled]="loading">
+            {{ 'Notification Trigger' | translate }}
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

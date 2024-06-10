@@ -1,0 +1,41 @@
+<app-user-profile-sidebar
+  [tenant]="userProfileSidebarView"
+  (signOutEmitter)="onSignOut()"
+  (selectedTenant)="switchSystem($event)"
+  (menuTypeOutput)="onChangeMenu($event)"
+></app-user-profile-sidebar>
+<mat-tab-group
+  class="m-t-10"
+  *ngIf="role === roles.TenantAdmin; else noTabs"
+  [(selectedIndex)]="selectedTabIndex"
+  (selectedTabChange)="onTabChanged($event)"
+>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-column align-items-center">
+        <app-icon [name]="'layout'" class="pb-1"></app-icon>
+        <span>{{ 'Workflows' | translate }}</span>
+      </div>
+    </ng-template>
+    <app-user-items-sidebar></app-user-items-sidebar>
+  </mat-tab>
+
+  <mat-tab *ngIf="role === roles.TenantAdmin">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-column align-items-center">
+        <app-icon [name]="'settings'" class="pb-1"></app-icon>
+        <span>{{ 'Settings' | translate }}</span>
+      </div>
+    </ng-template>
+    <app-admin-items-sidebar
+      [menuType]="userProfileSidebarView.menuType"
+      [adminMenuItems]="userProfileSidebarView.adminMenu"
+    ></app-admin-items-sidebar>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #noTabs>
+  <mat-nav-list appAccordion>
+    <app-user-items-sidebar></app-user-items-sidebar>
+  </mat-nav-list>
+</ng-template>

@@ -1,0 +1,43 @@
+<!-- <div class="container">
+  <h2 style="text-align: center" *ngIf="isNew">Create Custom Field</h2>
+
+  <form [formGroup]="customField" (ngSubmit)="onSubmit(customField.value)" #formRef="ngForm">
+    <mat-form-field>
+      <mat-label>Field Name</mat-label>
+      <input [id]="'inputCustom_' + componentId" matInput color="primary" type="text" formControlName="name" class="name" required />
+      <mat-error>field name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Field Type</mat-label>
+      <mat-select [id]="'select_' + componentId" formControlName="type" required class="select" (selectionChange)="onSelectedType($event)">
+        <mat-option [id]="'type.typeName_' + componentId" *ngFor="let type of fieldTypes" [value]="type.typeValue">
+          {{ type.typeName }}
+        </mat-option>
+      </mat-select>
+      <mat-error>field type is required</mat-error>
+    </mat-form-field>
+
+    <app-form-field-wrapper
+      (currentFieldId)="onFieldEdited($event)"
+      [fieldId]="field.id"
+      *ngIf="selectedFieldType"
+      [validators]="validators"
+      [fieldType]="selectedFieldType"
+      [listItems]="listItems"
+    ></app-form-field-wrapper>
+     <app-form-field-wrapper (currentFieldId)="onFieldEdited(item)" [validators]="item.model.validators" [fieldType]="item.type" [fieldId]="item.id" [listItems]="item.listItems"></app-form-field-wrapper>
+
+    <div class="button-wrapper" *ngIf="this.isCustom || this.isNew">
+      <button
+        [id]="'addSave_' + componentId"
+        mat-flat-button
+        color="primary"
+        [disabled]="customField.invalid || customField.pristine"
+        type="submit"
+      >
+        <app-icon [name]="'add'" *ngIf="isNew"></app-icon>
+        <app-icon [name]="'save'" *ngIf="!isNew"></app-icon>
+      </button>
+    </div>
+  </form>
+</div> -->

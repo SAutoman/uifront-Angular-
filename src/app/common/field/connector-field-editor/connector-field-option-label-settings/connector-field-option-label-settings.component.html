@@ -1,0 +1,80 @@
+<div *ngIf="form && fieldOptions?.length">
+  <form [formGroup]="form">
+    <mat-card-content>
+      <div class="row">
+        <mat-form-field appearance="outline" class="col-md-6">
+          <mat-label>{{ 'Key/Value Separator' | translate }}</mat-label>
+          <input matInput type="text" formControlName="keyValueSeparator" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-md-6">
+          <mat-label>{{ 'Fields Separator' | translate }}</mat-label>
+          <mat-select formControlName="fieldSeparator">
+            <mat-option *ngFor="let separator of fieldSeparators" [value]="separator">
+              {{ separator }}
+            </mat-option>
+          </mat-select>
+          <mat-hint *ngIf="form?.controls?.fieldSeparator?.value === 'New Line'">
+            {{ 'Each field shown on a new line' | translate }}
+          </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-md-12">
+          <mat-label>{{ 'Select Fields' | translate }}</mat-label>
+          <mat-select multiple formControlName="fields">
+            <mat-option *ngFor="let field of fieldOptions" [value]="field.value" (onSelectionChange)="optionChanged($event)">
+              {{ field.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div
+        formArrayName="fieldSettings"
+        *ngIf="fieldSettings()?.controls?.length"
+        cdkDropList
+        [cdkDropListData]="fieldSettings()?.value"
+        (cdkDropListDropped)="onDrag($event)"
+      >
+        <ng-container *ngFor="let settingForm of fieldSettings().controls; let settingIndex = index">
+          <mat-expansion-panel class="mat-elevation-z0 my-3" cdkDrag>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <button class="move" mat-icon-button color="primary" (click)="$event.stopPropagation()">
+                  <app-icon [name]="'drag-indicator'"></app-icon>
+                </button>
+                <p>{{ settingForm?.controls['displayName']?.value }}</p>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="row" [formGroupName]="settingIndex" (mousedown)="stopDrag($event)">
+              <mat-form-field appearance="outline" class="col-md-6">
+                <mat-label>{{ 'FieldName: number of visible symbols' | translate }}</mat-label>
+                <input matInput type="number" formControlName="numberOfSymbolsFieldName" />
+                <mat-hint>0: {{ 'Full FieldName' | translate }}, -1: {{ 'FieldName Hidden' | translate }}</mat-hint>
+                <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldName?.errors?.isInteger">
+                  {{ 'Please provide integer' | translate }}
+                </mat-error>
+                <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldName?.errors?.required">
+                  {{ 'Required field' | translate }}
+                </mat-error>
+                <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldName?.errors?.min">
+                  {{ 'Number must be equal or greater than -1' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="col-md-6">
+                <mat-label>{{ 'Value: number of visible symbols' | translate }}</mat-label>
+                <input matInput type="number" formControlName="numberOfSymbolsFieldValue" />
+                <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldValue?.errors?.isInteger">
+                  {{ 'Please provide integer' | translate }}
+                </mat-error>
+                <mat-error *ngIf="settingForm?.controls?.numberOfSymbolsFieldValue?.errors?.min">
+                  {{ 'Number must be equal or greater than 0' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </ng-container>
+      </div>
+    </mat-card-content>
+  </form>
+</div>

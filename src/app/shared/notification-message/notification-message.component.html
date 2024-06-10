@@ -1,0 +1,13 @@
+<div *ngIf="showMessage && !isSeen && isMessage" class="message {{ type }}">
+  <p>{{ message | translate }}</p>
+
+  <button
+    [id]="'close_' + componentId"
+    mat-icon-button
+    matTooltip="{{ 'Close message' | translate }}"
+    aria-label="Hide message"
+    (click)="hideMessage()"
+  >
+    <app-icon [name]="'close'"></app-icon>
+  </button>
+</div>

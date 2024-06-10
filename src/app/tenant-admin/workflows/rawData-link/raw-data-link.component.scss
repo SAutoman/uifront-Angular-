@@ -1,0 +1,24 @@
+.flex-buttons-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  button {
+    margin-left: 5px;
+  }
+}
+
+.flex-buttons-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  button {
+    margin-right: 5px;
+  }
+}
+
+.link-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}

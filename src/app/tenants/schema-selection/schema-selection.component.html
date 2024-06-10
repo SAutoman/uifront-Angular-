@@ -1,0 +1,27 @@
+<ng-container *ngIf="schemas && schemas.length >= 0; else loading">
+  <div class="d-flex mt-2">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Select schema' | translate }}</mat-label>
+      <mat-select [(ngModel)]="schemaId" (ngModelChange)="onSchemaChange($event)">
+        <mat-option *ngFor="let schema of schemas" [value]="schema.id">
+          {{ schema.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="showSchemaFields && showSchemaFields?.length" class="ml-2" appearance="outline">
+      <mat-label>{{ 'Select Field' | translate }} </mat-label>
+      <mat-select [(ngModel)]="selectedSchemaField" (ngModelChange)="onFieldChange($event)">
+        <mat-option *ngFor="let field of schemaFields" [value]="field.fieldName">
+          {{ field.displayName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <div [@fadeIn] class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

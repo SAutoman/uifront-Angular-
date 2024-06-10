@@ -1,0 +1,27 @@
+<h3 mat-dialog-title>{{ 'Create Case' | translate }}</h3>
+<mat-dialog-content>
+  <br />
+  <app-custom-number-input
+    *ngIf="!hideMultiCreationButton"
+    label="{{ 'Number Of Entities' | translate }}"
+    [control]="numberOfEntitiesControl"
+  >
+  </app-custom-number-input>
+
+  <app-form-builder-form-preview
+    [isUpdate]="false"
+    [fields$]="caseSchemaFields$"
+    [allowActionsFor]="areaTypes.case"
+    [createDirectly]="true"
+    [schema]="caseSchema"
+    (formValue)="create($event)"
+  >
+  </app-form-builder-form-preview>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" *ngIf="!caseSchemaFields$">
+  <button mat-stroked-button color="primary" mat-dialog-close>
+    <app-icon name="close"></app-icon>
+    Close
+  </button>
+</mat-dialog-actions>

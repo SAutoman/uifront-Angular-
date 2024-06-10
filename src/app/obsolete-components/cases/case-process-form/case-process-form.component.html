@@ -1,0 +1,57 @@
+<mat-spinner style="margin: 0 auto" [diameter]="25" *ngIf="isLoading"></mat-spinner>
+
+<mat-accordion *ngIf="form.visible">
+  <mat-expansion-panel
+    [id]="'formPanel_' + componentId"
+    style="margin: 5px 0 10px 0"
+    [expanded]="form.expanded"
+    (opened)="onFormExpanded()"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title
+        >{{ form.metadata.name }}
+
+        <div class="icon-folder-wrapper">
+          <app-icon [name]="'check-circle'" *ngIf="form.isFormHasAnyValues" matTooltip="Form has data" class="success"></app-icon>
+          <app-icon [name]="'warning'" ngIf="!form.isFormHasAnyValues" matTooltip="Form is empty" class="danger"></app-icon>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-expansion-panel *ngIf="form.metadata.documentId" style="margin-bottom: 20px">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Form Image</mat-panel-title>
+        <mat-panel-description>Expand for Image</mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <img class="responsive" src="{{ image }}" alt="..." />
+    </mat-expansion-panel>
+
+    <form>
+      <ng-container *ngFor="let field of form.fields; trackBy: trackByItemID">
+        <app-case-field-wrapper
+          [canEditCase]="canEditCase"
+          (onFieldUpdated)="onFieldChanged($event)"
+          [field]="field"
+        ></app-case-field-wrapper>
+      </ng-container>
+
+      <div class="btn-submit-wrapper">
+        <button
+          [id]="'saveForm_' + componentId"
+          style="margin: 5px"
+          mat-raised-button
+          color="primary"
+          (click)="onFormSave()"
+          *ngIf="canEditCase"
+        >
+          Save
+        </button>
+
+        <mat-error [id]="'error_' + componentId" class="error" *ngIf="!canEditCase">
+          <app-icon [name]="'warning'"></app-icon>
+          <strong>{{ canEditCaseError }}</strong>
+        </mat-error>
+      </div>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>

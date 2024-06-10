@@ -1,0 +1,7 @@
+<ng-container *ngIf="tenantId$ | async as tenantId; else loadingTmpl">
+  <app-user-groups-viewer [users$]="users$" [tenantId]="tenantId"></app-user-groups-viewer>
+</ng-container>
+
+<ng-template #loadingTmpl>
+  <div class="k-i-loading k-i-loading--gray k-i-loading--flex k-i-loading--xl k-i-loading--absolute"></div>
+</ng-template>

@@ -1,0 +1,31 @@
+<mat-card *ngIf="form" class="mat-elevation-z0 outline">
+  <div [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Select RawData Reference to be linked to this Steps' | translate }}</mat-label>
+      <mat-select formControlName="rawDataRef">
+        <mat-option *ngFor="let field of rawDataRefFields" [value]="field.id">{{ field.label }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="form.get('rawDataRef').value && rawDataFieldsOptions?.length">
+      <mat-label>{{ 'Which fields of rawData are to be referenced' | translate }}</mat-label>
+      <mat-select multiple [placeholder]="'Select Raw Data fields' | translate" formControlName="rawDataFields">
+        <mat-option
+          *ngFor="let field of rawDataFieldsOptions"
+          [value]="field.value.pathString"
+          (onSelectionChange)="optionChanged($event, field)"
+          >{{ field.key }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div cdkDropList [cdkDropListData]="selectedFields" (cdkDropListDropped)="onDrag($event)">
+    <mat-card class="mat-elevation-z0 draggable-panel outline" *ngFor="let field of selectedFields; let fieldIndex = index" cdkDrag>
+      <button class="move" mat-icon-button color="primary" (click)="$event.stopPropagation()">
+        <app-icon [name]="'drag-indicator'"></app-icon>
+      </button>
+      {{ field.key }}
+    </mat-card>
+  </div>
+</mat-card>

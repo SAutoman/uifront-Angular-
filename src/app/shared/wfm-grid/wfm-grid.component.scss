@@ -1,0 +1,63 @@
+@import '../../../assets/styles/variable.scss';
+:host ::ng-deep {
+  .btn-create {
+    height: fit-content;
+    align-self: center;
+  }
+  .k-detail-row {
+    border-bottom: solid thin $border !important;
+    .k-hierarchy-cell {
+      display: none !important;
+    }
+    .k-detail-cell {
+      padding: 0 !important;
+    }
+  }
+  .k-grid-toolbar {
+    padding: 0;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .k-grid {
+    height: 100%;
+  }
+  kendo-grid .k-grid-content {
+    height: 100%;
+  }
+
+  @media (max-width: 540px) {
+    .k-pager-wrap {
+      display: block !important;
+    }
+  }
+
+  .k-grouping-header .k-group-indicator .k-link .k-icon {
+    display: none;
+  }
+
+  .tool-button {
+    height: 48px;
+    width: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    border: none;
+    background-color: transparent;
+    border-right: solid thin #e0e0e0;
+    border-left: solid thin #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .k-i-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 64px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(3px);
+    color: gray;
+    z-index: 10;
+  }
+}

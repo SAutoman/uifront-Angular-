@@ -1,0 +1,14 @@
+<app-date-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  [showDynamicViewOption]="showDynamicViewOption"
+  *ngIf="field.type == fieldTypeIds.DateField && field.searchFieldModel.searchType == searchTypes.Range"
+>
+</app-date-field>
+
+<app-date-field-equal-to
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.DateField && field.searchFieldModel.searchType == searchTypes.EqualTo"
+>
+</app-date-field-equal-to>

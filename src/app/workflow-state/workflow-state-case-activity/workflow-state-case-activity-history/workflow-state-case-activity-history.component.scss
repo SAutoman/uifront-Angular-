@@ -1,0 +1,43 @@
+.history-wrapper {
+  padding: 16px;
+}
+
+.history-header {
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-header-meta {
+  padding: 20px 10px 20px 10px;
+  border-bottom: 1px solid #e4e4e4;
+  border-radius: 3px;
+}
+
+.history-header-meta:hover {
+  background: #f4f5f7;
+  border-left: 5px solid #1b5e20;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.history-header-icon {
+  display: inline;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.history-header-name {
+  color: #0052cc;
+  display: inline;
+  margin-right: 5px;
+}
+
+.history-header-date {
+  display: inline;
+}
+
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+}

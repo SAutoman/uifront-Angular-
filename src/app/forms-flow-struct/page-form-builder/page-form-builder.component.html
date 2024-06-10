@@ -1,0 +1,279 @@
+<div class="title-bar" *ngIf="!isUpdateMode && isDeskTop">
+  <h3 class="ml-3">{{ 'Create Schema' | translate }}</h3>
+</div>
+<div class="title-bar" *ngIf="isUpdateMode && isDeskTop">
+  <h3 class="ml-3">{{ 'Update Schema' | translate }}</h3>
+  <small class="mr-3" *ngIf="schema?.updatedAt"
+    >{{ 'Last updated at' | translate }} {{ schema.updatedAt | customDateFormat: userDateTimeFormat }}</small
+  >
+</div>
+<div class="builder-container">
+  <div class="builder-section" #builderSection>
+    <div class="title-bar" *ngIf="layoutSetup.useToolBar()">
+      <h4 class="ml-3 d-block">{{ layoutSetup.getFormTitle(isUpdateMode) | translate }}</h4>
+      <div class="tools">
+        <button class="tool-button button-show-preview" (click)="showPreviewSection()">
+          <app-icon [name]="'eye'" *ngIf="!showPreview"></app-icon>
+          <app-icon [name]="'eye-no'" *ngIf="showPreview"></app-icon>
+        </button>
+        <ng-container *ngIf="!isDeskTop">
+          <button class="tool-button" [matMenuTriggerFor]="menu">
+            <app-icon name="more"></app-icon>
+            <button
+              class="notification-menu"
+              mat-menu-item
+              [matBadge]="countOfFunctionsAndSchemaSettings"
+              matBadgePosition="after"
+              matBadgeColor="accent"
+            ></button>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button *ngIf="layoutSetup.isSupportedFeature('addField')" mat-menu-item (click)="openDialogAddField(addFieldTmpl)">
+              <app-icon [name]="'add'"></app-icon>
+              {{ 'Add custom field' | translate }}
+            </button>
+            <button
+              *ngIf="layoutSetup.isSupportedFeature('manageFunctions')"
+              mat-menu-item
+              (click)="openDialogAddFunctions(addFunctionsTmpl)"
+              [matBadge]="iExpressions ? iExpressions.length : '0'"
+              matBadgePosition="after"
+              matBadgeColor="accent"
+            >
+              <app-icon [name]="'check-circle'"></app-icon>
+              {{ 'Conditions' | translate }}
+            </button>
+
+            <button
+              *ngIf="
+                layoutSetup.isSupportedFeature('fastCreateSettings') ||
+                layoutSetup.isSupportedFeature('conditionalFormatting') ||
+                layoutSetup.isSupportedFeature('linkedListFields') ||
+                layoutSetup.isSupportedFeature('fieldsVisibilityInGrid')
+              "
+              mat-menu-item
+              [matBadge]="schemaSettingsCount"
+              matBadgePosition="after"
+              matBadgeColor="accent"
+              (click)="openDialogSchemaSettings()"
+            >
+              <app-icon [name]="'settings'"></app-icon>
+              {{ 'Schema Settings' | translate }}
+            </button>
+          </mat-menu>
+        </ng-container>
+      </div>
+      <div class="tools" *ngIf="isDeskTop">
+        <button
+          [id]="'addField_' + componentId"
+          *ngIf="layoutSetup.isSupportedFeature('addField')"
+          class="tool-button text"
+          (click)="openDialogAddField(addFieldTmpl)"
+          title="{{ 'Add custom field' | translate }}"
+        >
+          <app-icon [name]="'add'"></app-icon>
+          <span class="truncate-text"> {{ 'Add custom field' | translate }}</span>
+        </button>
+        <button
+          [id]="'addcondition_' + componentId"
+          *ngIf="layoutSetup.isSupportedFeature('manageFunctions')"
+          class="tool-button text"
+          (click)="openDialogAddFunctions(addFunctionsTmpl)"
+          [matBadge]="iExpressions ? iExpressions.length : '0'"
+          matBadgePosition="after"
+          matBadgeColor="accent"
+          title="{{ 'Add Condition' | translate }}"
+        >
+          <app-icon [name]="'check-circle'"></app-icon>
+          <span class="truncate-text">
+            {{ 'Conditions' | translate }}
+          </span>
+        </button>
+
+        <button
+          [id]="'addcondition_' + componentId"
+          *ngIf="
+            layoutSetup.isSupportedFeature('fastCreateSettings') ||
+            layoutSetup.isSupportedFeature('conditionalFormatting') ||
+            layoutSetup.isSupportedFeature('linkedListFields') ||
+            layoutSetup.isSupportedFeature('fieldsVisibilityInGrid')
+          "
+          [matBadge]="schemaSettingsCount"
+          matBadgePosition="after"
+          matBadgeColor="accent"
+          class="tool-button text"
+          (click)="openDialogSchemaSettings()"
+          title="{{ 'Schema Settings' | translate }}"
+        >
+          <app-icon [name]="'settings'"></app-icon>
+          <span class="truncate-text">{{ 'Schema Settings' | translate }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="scrollable-area">
+      <div [formGroup]="form" class="row pt-3 m-0" *ngIf="!schemaId">
+        <div class="col-md-4">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'Select Template Area' | translate }}</mat-label>
+            <mat-select formControlName="areaSelect">
+              <mat-option *ngFor="let area of areaTypes" [value]="area.id">
+                {{ area.title | translate }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4" *ngIf="schemasListForCopying?.length">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'Copy Existing Schema' | translate }}</mat-label>
+            <mat-select (selectionChange)="onSchemaSelection($event)">
+              <mat-option *ngFor="let schema of schemasListForCopying" [value]="schema.id">
+                {{ schema.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <app-form-builder-form
+        class="d-flex flex-column p-3 flex-grow-1"
+        [schemaId]="schemaId"
+        [layout]="layoutSetup"
+        [setName$]="setName$"
+        [setFields$]="setFields$"
+        [allFields$]="allFields$"
+        (update)="onFormUpdate($event)"
+        [expressions]="iExpressions"
+        [linkedListFields]="linkedListFields"
+        [areaType]="areaType"
+        [ngClass]="{ 'show-preview': showPreview, 'create-mode': !isUpdateMode }"
+        [isExternalFieldIdentifierPresent]="isExternalFieldIdentifierPresent"
+        (externalIdentifierEmitter)="onExtIdentifierUpdate($event)"
+      >
+      </app-form-builder-form>
+    </div>
+
+    <div class="d-flex p-3 border-t" *ngIf="layoutSetup.useToolBar()">
+      <button
+        [id]="'addImage_' + componentId"
+        *ngIf="layoutSetup.isSupportedFeature('addImage')"
+        mat-flat-button
+        class="mr-3"
+        color="primary"
+        (click)="openDialogAddImage(addImageTmpl)"
+      >
+        <app-icon [name]="'photo'" *ngIf="file"></app-icon>
+        <app-icon [name]="'camera'" *ngIf="!file"></app-icon>
+        {{ 'Add Image' | translate }}
+      </button>
+
+      <button
+        [id]="'save_' + componentId"
+        *ngIf="!isUpdateMode && layoutSetup.isSupportedFeature('saveForm')"
+        class="mr-3"
+        mat-flat-button
+        color="primary"
+        [disabled]="!isValidForm() || pending"
+        (click)="onSaveForm()"
+      >
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+
+      <button
+        [id]="'update_' + componentId"
+        *ngIf="isUpdateMode && layoutSetup.isSupportedFeature('updateForm')"
+        class="mr-3"
+        mat-flat-button
+        color="primary"
+        [disabled]="!isValidForm() || !isChangedForm()"
+        (click)="onSaveForm()"
+      >
+        <app-icon [name]="'refresh'"></app-icon>
+        {{ 'Update' | translate }}
+      </button>
+
+      <button [id]="'cancel_' + componentId" mat-stroked-button color="primary" (click)="backToList()">
+        <app-icon [name]="'close'"></app-icon>
+        {{ 'Cancel' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="builder-preview">
+    <mat-card class="h-100 outline mat-elevation-z0" [ngClass]="{ 'show-preview': showPreview }">
+      <mat-card-header class="mb-0">
+        <mat-card-title>{{ layoutSetup.getFormPreviewTitle() | translate }}</mat-card-title>
+      </mat-card-header>
+      <app-form-builder-form-preview [fields$]="viewFields$" [schema]="schema" class="d-flex col-12 p-3 flex-grow-1">
+      </app-form-builder-form-preview>
+    </mat-card>
+  </div>
+</div>
+
+<div *ngIf="pending" class="pending-container px-3">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<ng-template #addFieldTmpl>
+  <h3 mat-dialog-title>{{ 'Create Field' | translate }}</h3>
+  <mat-dialog-content>
+    <mat-tab-group class="m-t-10">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div>Basic Field</div>
+        </ng-template>
+        <ng-template matTabContent>
+          <app-field-editor
+            class="d-flex"
+            [isSchemaBuilder]="true"
+            [useApplyTo]="false"
+            [areaType]="areaType"
+            (save)="onAddField($event)"
+            [allowExternalIdentifier]="!isExternalFieldIdentifierPresent"
+          >
+          </app-field-editor>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div>{{ 'Connector Field' | translate }}</div>
+        </ng-template>
+
+        <ng-template matTabContent>
+          <app-connector-field-editor
+            (save)="onAddField($event)"
+            [useApplyTo]="false"
+            [ownerSchemaFields$]="selectedFields$"
+            [ownerSchemaName]="schemaName"
+          ></app-connector-field-editor>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+</ng-template>
+
+<ng-template #addImageTmpl>
+  <app-formly-file-uploader
+    (uploaded)="onFileUpload($event)"
+    usePreview="true"
+    label="Upload image"
+    [fileId]="file?.id"
+    [accept]="fileTypes"
+  ></app-formly-file-uploader>
+  <div mat-dialog-actions class="row mt-5 mx-0">
+    <button [id]="'okUpload_' + componentId" mat-flat-button color="primary" [mat-dialog-close]="true" [disabled]="!file">Ok</button>
+  </div>
+</ng-template>
+
+<ng-template #addFunctionsTmpl>
+  <app-form-function-builder
+    [fieldsObservable$]="selectedFields$"
+    [inputExpressions]="iExpressions"
+    [tenantId]="tenant"
+    [isUpdateMode]="isUpdateMode"
+    (update)="onFunctionsUpdate($event)"
+    (close)="closeDialog()"
+  >
+  </app-form-function-builder>
+</ng-template>

@@ -1,0 +1,80 @@
+<div class="container-fluid h-100 overflow-auto">
+  <div class="row py-3">
+    <div class="col-md-7 mx-auto">
+      <mat-card class="outline mat-elevation-z0">
+        <mat-card-header class="header mb-0" *ngIf="isDeskTop">
+          <mat-card-title>{{ title | translate }}</mat-card-title>
+        </mat-card-header>
+        <div class="d-flex justify-content-between py-3 sticky-top">
+          <mat-form-field class="w-50 mb-0 align-self-start" appearance="outline">
+            <mat-label>{{ 'Quick Search' | translate }}</mat-label>
+            <input matInput color="primary" [formControl]="searchTermCtrl" />
+          </mat-form-field>
+          <button
+            [id]="createId('addListBtn')"
+            class="my-1 align-self-start"
+            mat-flat-button
+            color="primary"
+            (click)="openDialogAddList(createTenantListTmpl)"
+            [disabled]="disabled"
+          >
+            <app-icon [name]="'add'"></app-icon>
+            {{ 'Add List' | translate }}
+          </button>
+        </div>
+        <mat-card class="outline mat-elevation-z0">
+          <ng-container *ngIf="state$ | async as state">
+            <ng-container *ngIf="!state.loading || state.silent; else loading">
+              <div class="scrollable-content p-2 pt-0">
+                <ng-container *ngIf="state.workItems$ | async as items">
+                  <div class="list-container">
+                    <app-list-item
+                      class="app-list-item"
+                      *ngFor="let item of items"
+                      [name]="item.name"
+                      [useDragEndDrop]="false"
+                      [disabled]="disabled"
+                      (edit)="openDialogEditList($event, updateTenantFieldTmpl, item)"
+                      (remove)="onRemove($event, item)"
+                    ></app-list-item>
+                  </div>
+
+                  <ng-container *ngIf="!items.length">
+                    {{ 'No items found' | translate }}
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </mat-card>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<ng-template #createTenantListTmpl>
+  <mat-card class="outline mat-elevation-z0 p-0">
+    <h3 mat-dialog-title>{{ 'Add List' | translate }}</h3>
+
+    <app-tenant-list-editor class="d-flex" (save)="onListItemSave($event)" [lists]="allLists"></app-tenant-list-editor>
+  </mat-card>
+</ng-template>
+
+<ng-template #updateTenantFieldTmpl>
+  <mat-card class="moutline mat-elevation-z0 p-0 m-0">
+    <h3 mat-dialog-title>{{ 'Update List' | translate }}</h3>
+
+    <app-tenant-list-editor
+      class="d-flex"
+      (save)="onListItemSave($event)"
+      [listField]="updateItem"
+      [lists]="allLists"
+    ></app-tenant-list-editor>
+  </mat-card>
+</ng-template>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

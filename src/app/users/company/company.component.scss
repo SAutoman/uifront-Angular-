@@ -1,0 +1,29 @@
+.flex {
+  display: flex;
+}
+
+.margin {
+  margin-right: 15px;
+}
+
+.btn-wrapper {
+  text-align: right;
+}
+
+.checkbox {
+  margin: 15px 0;
+}
+
+form {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .flex {
+    display: block;
+  }
+
+  .margin {
+    margin: 0;
+  }
+}

@@ -1,0 +1,9 @@
+<div>
+  <app-auto-increment-field-selector
+    [schemaId]="currentProcessStep ? currentProcessStep?.schemaId : workflow?.caseSchemaId"
+    [areaType]="currentProcessStep ? areaTypeEnum?.stepForm : areaTypeEnum?.case"
+    [selectedFieldsForTree]="selectedFieldsForTree"
+    (fieldsEmitter)="onFieldUpdate($event)"
+  >
+  </app-auto-increment-field-selector>
+</div>

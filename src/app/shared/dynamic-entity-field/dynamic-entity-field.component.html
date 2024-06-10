@@ -1,0 +1,106 @@
+<app-search-buttons
+  *ngIf="field.allowedSearchTypes?.length > 1"
+  [allowedSearchTypes]="field.allowedSearchTypes"
+  [searchTypeIn]="searchType"
+  (searchTypeOut)="onSearchTypeOut($event)"
+></app-search-buttons>
+
+<app-number-wrapper (isFieldChanged)="onFieldChanged()" [field]="field" *ngIf="field.type === fieldTypeIds.IntField"></app-number-wrapper>
+
+<app-decimal-wrapper
+  (isFieldChanged)="onFieldChanged()"
+  [field]="field"
+  *ngIf="field.type === fieldTypeIds.DecimalField"
+></app-decimal-wrapper>
+
+<app-date-wrapper
+  (isFieldChanged)="onFieldChanged()"
+  [field]="field"
+  [showDynamicViewOption]="showDynamicViewOption"
+  *ngIf="field.type === fieldTypeIds.DateField"
+>
+</app-date-wrapper>
+
+<app-date-time-wrapper
+  (isFieldChanged)="onFieldChanged()"
+  [field]="field"
+  [showDynamicViewOption]="showDynamicViewOption"
+  *ngIf="field.type === fieldTypeIds.DateTimeField"
+></app-date-time-wrapper>
+
+<app-time-wrapper
+  (isFieldChanged)="onFieldChanged()"
+  [field]="field"
+  [showDynamicViewOption]="showDynamicViewOption"
+  *ngIf="field.type === fieldTypeIds.TimeField"
+>
+</app-time-wrapper>
+
+<app-str-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.StringField && field.searchFieldModel?.searchType == searchTypes.Like"
+>
+</app-str-field>
+
+<app-textarea-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.TextareaField && field.searchFieldModel?.searchType == searchTypes.Like"
+>
+</app-textarea-field>
+
+<app-boolean-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  [renderType]="field.configuration?.renderType"
+  *ngIf="field.type == fieldTypeIds.BoolField && field.searchFieldModel?.searchType == searchTypes.EqualTo"
+>
+</app-boolean-field>
+
+<app-list-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  [displaySetting]="field.configuration?.listItemDisplaySetting"
+  *ngIf="
+    (field.type === fieldTypeIds.ListField || fieldTypeIds.MultiselectListField) && field.searchFieldModel?.searchType == searchTypes.List
+  "
+>
+</app-list-field>
+
+<app-connector-field
+  (isFieldChanged)="onFieldChanged()"
+  [field]="field"
+  *ngIf="field.type == fieldTypeIds.ConnectorField"
+></app-connector-field>
+
+<app-suppliers-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="
+    field.searchFieldModel?.searchType == searchTypes.Custom && field.searchFieldModel?.customSearchType === customSearchTypes.SupplierIds
+  "
+></app-suppliers-field>
+
+<app-auditors-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="
+    field.searchFieldModel?.searchType == searchTypes.Custom && field.searchFieldModel?.customSearchType === customSearchTypes.AuditorIds
+  "
+></app-auditors-field>
+
+<app-status-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.searchFieldModel?.searchType == searchTypes.Custom && customSearchTypes.Status === field.searchFieldModel?.customSearchType"
+>
+</app-status-field>
+
+<app-external-key-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="
+    field.searchFieldModel?.searchType == searchTypes.Custom && customSearchTypes.ExternalKey === field.searchFieldModel?.customSearchType
+  "
+></app-external-key-field>

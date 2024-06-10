@@ -1,0 +1,10 @@
+[kendogridfiltercell] {
+  padding: 0 !important;
+  .k-filtercell {
+    width: 100% !important;
+    .k-textbox {
+      min-width: calc(100% - 50px) !important;
+      padding-left: 8px;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<input
+  matInput
+  [id]="id"
+  *ngIf="formControl"
+  [placeholder]="to.placeholder"
+  [formControl]="formControl"
+  [formlyAttributes]="field"
+  [format]="24"
+  [tabindex]="to.tabindex"
+  [required]="to.required"
+  [readonly]="to.disableManualInput"
+  [disableClick]="to.readonly"
+  (keypress)="checkCharCode($event)"
+  (keyup)="checkForResetEvent($event)"
+  autocomplete="off"
+/>
+<div class="buttons-wrapper">
+  <button type="button" mat-button class="button" (click)="setTimeToNow()" [disabled]="to.disableButtons || to.readonly">
+    {{ 'Now' | translate }}
+  </button>
+  <button
+    type="button"
+    *ngIf="formControl.value"
+    color="warn"
+    mat-icon-button
+    (click)="resetValue()"
+    [disabled]="to.disableButtons || to.readonly"
+  >
+    <app-icon [name]="'close'"></app-icon>
+  </button>
+  <ngx-material-timepicker-toggle
+    matSuffix
+    [for]="timePicker"
+    [disabled]="to.disableButtons || to.readonly"
+  ></ngx-material-timepicker-toggle>
+</div>
+<ngx-material-timepicker #timePicker (timeChanged)="onTimeChangeFromPicker($event)" [format]="24"></ngx-material-timepicker>

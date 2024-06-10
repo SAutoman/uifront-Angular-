@@ -1,0 +1,20 @@
+<div *ngFor="let failedRuleData of failures; let i = index" class="failedRule">
+  {{ i + 1 }}. {{ 'Workflow' | translate }}: <b>{{ failedRuleData.workflowName }}</b
+  >:
+  <div>
+    {{ 'Failed Rules' | translate }}:
+    <ul>
+      <li *ngFor="let failedRule of failedRuleData.failedRules">
+        <p class="m-0">
+          {{ 'Name' | translate }}: <b>{{ failedRule?.overrideName }}</b>
+        </p>
+        <p class="m-0" *ngIf="failedRule?.ruleType">
+          {{ 'Type of Rule' | translate }} : <b>{{ failedRule?.ruleType }}</b>
+        </p>
+        <p class="m-0" *ngIf="failedRule?.rule">
+          {{ 'Details' | translate }}: <b>"{{ failedRule.rule }}"</b>
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+@import '../../../assets/styles/variable.scss';
+// @import '../../../../node_modules/bootstrap/scss/functions';
+// @import '../../../../node_modules/bootstrap/scss/variables';
+// @import '../../../../node_modules/bootstrap/scss/mixins';
+
+app-page-field-settings-visibility {
+  .row-form {
+    display: block;
+    border-radius: 4px;
+    padding: 8px 16px;
+    border: solid thin $dark-dividers;
+    margin-bottom: 16px;
+  }
+  .row-form > formly-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: 991px) {
+      display: block;
+    }
+  }
+
+  .row-name {
+    flex: 2;
+    .mat-form-field-underline {
+      display: none;
+    }
+  }
+  .option-item,
+  .row-name {
+    .mat-form-field-infix,
+    .mat-form-field-wrapper {
+      padding: 0;
+      border-top: 0;
+    }
+  }
+  .option-item {
+    flex: 1;
+  }
+  .mat-checkbox-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+mat-card-actions {
+  position: sticky;
+  bottom: -16px;
+  background-color: $white;
+  border-top: solid thin $dark-dividers;
+  margin-left: -16px !important;
+  margin-right: -16px !important;
+}

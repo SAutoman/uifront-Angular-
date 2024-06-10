@@ -1,0 +1,34 @@
+@import '../../style';
+
+.list-item {
+  border-radius: 4px;
+  .list-item-content {
+    max-width: calc(100% - 256px);
+    word-break: break-word;
+    padding: 8px 0;
+  }
+  @media (max-width: 768px) {
+    .d-flex {
+      flex-wrap: wrap;
+      .list-item-content {
+        max-width: calc(100% - 41px);
+        min-width: calc(100% - 41px);
+      }
+    }
+  }
+}
+.text-muted {
+  font-size: 0.65rem;
+}
+
+.chips-div {
+  padding: 3px 0 3px 48px;
+  border-top: dotted lightgrey 1px;
+}
+
+.mat-custom-chip {
+  height: 10px !important;
+  min-height: 10px !important;
+  font-size: 0.65rem !important;
+  margin: 0 0 0 0;
+}

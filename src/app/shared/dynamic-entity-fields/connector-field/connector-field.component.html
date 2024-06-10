@@ -1,0 +1,7 @@
+<p class="font-16 font-medium my-2">{{ field.displayName }}</p>
+
+<ng-container *ngIf="view">
+  <form [formGroup]="view.form">
+    <formly-form class="w-100" [form]="view.form" [fields]="view.fields" [model]="view.model" (modelChange)="onChange()"></formly-form>
+  </form>
+</ng-container>

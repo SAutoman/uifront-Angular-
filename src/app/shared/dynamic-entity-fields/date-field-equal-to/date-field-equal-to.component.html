@@ -1,0 +1,8 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field>
+  <mat-label>{{ 'Date' | translate }}</mat-label>
+  <input [id]="'inputData_' + componentId" matInput [matDatepicker]="date" [formControl]="equalTo" required />
+  <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+  <mat-datepicker #date></mat-datepicker>
+  <mat-error *ngIf="equalTo.invalid"> {{ 'Date is required' | translate }} </mat-error>
+</mat-form-field>

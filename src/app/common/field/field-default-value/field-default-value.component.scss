@@ -1,0 +1,20 @@
+.edit-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  border: solid thin #e0e0e0;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  app-icon {
+    stroke: grey;
+    width: 18px;
+    height: 18px;
+  }
+}

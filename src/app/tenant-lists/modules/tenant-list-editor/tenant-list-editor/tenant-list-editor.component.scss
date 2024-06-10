@@ -1,0 +1,33 @@
+@import '../../../../../assets/styles/variable.scss';
+app-tenant-list-editor {
+  .form-group-container {
+    max-width: 500px;
+  }
+  .list-container {
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    @media (min-height: 580px) {
+      max-height: 40vh;
+    }
+    @media (min-height: 700px) {
+      max-height: 50vh;
+    }
+    @media (min-height: 900px) {
+      max-height: 60vh;
+    }
+  }
+
+  .list-wrapper {
+    overflow-y: auto;
+  }
+
+  .list-wrapper .mat-expansion-panel-body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+.action-buttons-wrapper {
+  margin-top: 16px;
+  border-top: solid thin $dark-dividers;
+}

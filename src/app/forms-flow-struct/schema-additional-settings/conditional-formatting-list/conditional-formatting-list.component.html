@@ -1,0 +1,58 @@
+<div class="d-flex flex-column w-100">
+  <div class="py-3">
+    <button class="w-100" color="primary" mat-stroked-button (click)="createConditionalFormatting()">
+      <app-icon [name]="'add'"></app-icon>
+      {{ 'New Formatting' | translate }}
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="mt-3">
+    <mat-accordion>
+      <ng-container *ngIf="formattings">
+        <mat-expansion-panel
+          *ngFor="let formatting of formattings; let i = index"
+          [expanded]="formatting.expanded"
+          (opened)="onExpanded(formatting)"
+          (closed)="onCollapse(formatting)"
+          class="mat-elevation-z0 mb-3"
+        >
+          <mat-expansion-panel-header>
+            <div class="d-flex align-items-center w-100">
+              <div class="mr-2">
+                <app-icon
+                  *ngIf="!formatting.isDisabled"
+                  [name]="'check'"
+                  class="success"
+                  matTooltip="{{ 'Active' | translate }}"
+                  matTooltipPosition="after"
+                ></app-icon>
+                <app-icon
+                  *ngIf="formatting.isDisabled"
+                  [name]="'close'"
+                  class="disable"
+                  matTooltip="{{ 'Disabled' | translate }}"
+                  matTooltipPosition="after"
+                ></app-icon>
+              </div>
+              <div style="flex: 1">
+                {{ formatting.name }}
+              </div>
+              <button
+                (click)="onDelete($event, formatting)"
+                matTooltip="{{ 'Remove' | translate }}"
+                mat-icon-button
+                color="warn"
+                class="mr-3"
+              >
+                <app-icon [name]="'trash'" class="danger"></app-icon>
+              </button>
+            </div>
+          </mat-expansion-panel-header>
+
+          <app-conditional-formatting [fields]="fields" [conditionalFormatting]="formatting" (update)="updateFormattingData($event, i)">
+          </app-conditional-formatting>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
+  </div>
+</div>

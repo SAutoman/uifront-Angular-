@@ -1,0 +1,58 @@
+<form [formGroup]="form">
+  <mat-form-field>
+    <mat-label>{{ 'Select Source' | translate }}</mat-label>
+    <mat-select formControlName="source">
+      <mat-option *ngFor="let source of selectedSources" [value]="source.name">
+        {{ source.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Uncomment upon request -->
+
+  <!-- <mat-form-field>
+    <mat-label>{{ 'Select type of filtering' | translate }}</mat-label>
+    <mat-select formControlName="filterType" >
+      <mat-option [value]="aggregateFilterEnum.RULES" disabled>
+        {{ 'Conditions (can be added upon request)' | translate }}
+      </mat-option>
+      <mat-option [value]="aggregateFilterEnum.COMPARISON">
+        {{ 'Comparison' | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
+  <!-- <ng-container *ngIf="filterType.value === aggregateFilterEnum.RULES">
+    <app-rules-builder
+    [expressionConfig]="expressionConfig"
+    [expressionDto]="expressionsDef"
+    [schema]="schema"
+    (expressionUpdated)="expressionUpdated($event)"
+  ></app-rules-builder>
+  </ng-container> -->
+  <ng-container *ngIf="form.get('filterType').value === aggregateFilterEnum.COMPARISON && form.get('source').value">
+    <label id="comparison-type">{{ 'Keep items with:' | translate }}</label>
+
+    <mat-radio-group class="d-flex mt-2" formControlName="comparisonType" aria-labelledby="comparison-type">
+      <mat-radio-button [value]="compareOperatorEnum.MIN" class="mr-2"> {{ 'MIN value' | translate }} </mat-radio-button>
+      <mat-radio-button [value]="compareOperatorEnum.MAX"> {{ 'MAX value' | translate }} </mat-radio-button>
+    </mat-radio-group>
+
+    <mat-expansion-panel class="mat-elevation-z0 mt-3" *ngIf="fieldsTreeNodes">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-bold"> {{ fieldLabel }} </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <span *ngIf="!hasNodes">{{ 'No Fields Found (Number, Decimal, Date, DateTime)' | translate }}</span>
+      <app-tree-selectbox
+        *ngIf="hasNodes"
+        [selectedItems]="selectedField"
+        [rawDatasource]="fieldsTreeNodes"
+        [parentSelectionAllowed]="false"
+        [multipleSelection]="false"
+        (selectionEmitter)="fieldPathUpdated($event)"
+      >
+      </app-tree-selectbox>
+    </mat-expansion-panel>
+  </ng-container>
+</form>

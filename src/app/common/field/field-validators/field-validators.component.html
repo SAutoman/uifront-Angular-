@@ -1,0 +1,5 @@
+<ng-container *ngIf="view$ | async as view">
+  <form [formGroup]="view.form">
+    <formly-form class="row" [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+  </form>
+</ng-container>

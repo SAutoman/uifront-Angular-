@@ -1,0 +1,26 @@
+@import '../../../../../assets/styles/variable';
+:host {
+  display: block;
+  padding: 12px;
+}
+.formly-right-button-addon--button {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  border: solid thin $dark-dividers;
+  background-color: $white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  app-icon {
+    width: 14px;
+    height: 14px;
+  }
+  &:hover {
+    background-color: $light;
+  }
+}

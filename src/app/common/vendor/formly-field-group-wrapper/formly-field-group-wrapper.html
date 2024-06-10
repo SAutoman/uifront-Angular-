@@ -1,0 +1,19 @@
+<!-- <div [id]="'formlyWrapper_' + componentId" class="wrapper mat-card">
+  <h3 class="mat-card-header">{{ to.label }}</h3>
+  <div class="mat-card-body">
+    <ng-container #fieldComponent></ng-container>
+    <small class="hintText" *ngIf="to.description">{{ to.description }}</small>
+  </div>
+</div> -->
+
+<mat-expansion-panel [id]="'formlyWrapper_' + componentId" class="mat-elevation-z0 mb-3" [expanded]="to.isExpanded">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ to.label }}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div>
+    <ng-container #fieldComponent></ng-container>
+    <small class="hintText" *ngIf="to.description">{{ to.description }}</small>
+  </div>
+</mat-expansion-panel>

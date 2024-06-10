@@ -1,0 +1,53 @@
+<!-- <div class="items-wrapper" *ngFor="let item of selectedItems">
+  <div class="item-info">
+    <div class="item-name">
+      {{ getName(item) }}
+    </div>
+
+    <div class="remove-wrapper">
+      <button
+        [id]="'close_' + componentId"
+        class="right"
+        mat-icon-button
+        color="warn"
+        matTooltip="Remove"
+        matTooltipPosition="above"
+        (click)="onRemoveSelectedOutputItem(item)"
+      >
+        <app-icon [name]="'close'"></app-icon>
+      </button>
+    </div>
+
+    <button
+      [id]="'open_' + componentId"
+      *ngIf="state === 'small'"
+      class="right"
+      mat-icon-button
+      matTooltip="expand"
+      matTooltipPosition="above"
+      (click)="animate()"
+    >
+      <app-icon [name]="'arrow-down'"></app-icon>
+    </button>
+
+    <button
+      [id]="'collapse_' + componentId"
+      *ngIf="state === 'large'"
+      class="right"
+      mat-icon-button
+      matTooltip="collapse"
+      matTooltipPosition="above"
+      (click)="animate()"
+    >
+      <app-icon [name]="'arrow-up'"></app-icon>
+    </button>
+  </div>
+
+  <div class="collapsed" [@collapse]="state">
+    <app-function-output-checkbox
+      [currentField]="item"
+      [allowedFieldPropertiesIn]="item.propertyTypes"
+      [currentFieldDefault]="getSelectedItemDefault(item)"
+    ></app-function-output-checkbox>
+  </div>
+</div> -->

@@ -1,0 +1,45 @@
+@import '../../../assets/styles/variable.scss';
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 24px;
+  max-width: 24px;
+  width: 24px;
+  height: 24px;
+  stroke: #000000;
+
+  &.danger,
+  &.red {
+    stroke: $danger !important;
+  }
+  &.white {
+    stroke: $white;
+  }
+  &.primary {
+    stroke: $primary !important;
+  }
+
+  &.success {
+    stroke: $success !important;
+  }
+  &.warning {
+    stroke: $warning !important;
+  }
+  &.info {
+    stroke: $info;
+  }
+  &.accent {
+    stroke: $purple;
+  }
+  &.warn {
+    stroke: $warning !important;
+  }
+  &.disable {
+    stroke: $secondary !important;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}

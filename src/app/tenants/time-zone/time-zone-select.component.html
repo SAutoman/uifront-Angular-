@@ -1,0 +1,28 @@
+<div class="mt-3 grid">
+  <form [formGroup]="tzForm">
+    <mat-form-field class="form">
+      <mat-label>{{ 'Choose Tenant Timezone' | translate }}</mat-label>
+      <mat-select formControlName="timezone">
+        <div>
+          <input
+            class="mx-2 my-1"
+            type="text"
+            [placeholder]="'Search Timezones' | translate"
+            matInput
+            autocomplete="off"
+            formControlName="tzSearchTerm"
+            (click)="$event.stopPropagation()"
+          />
+        </div>
+
+        <mat-option *ngFor="let timezone of filteredTzOptions" [value]="timezone.name">
+          <b>{{ timezone.name }}</b> {{ timezone.abbreviation }} ({{ timezone.alternativeName }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <div>{{ 'Current date in selected timezone' | translate }}: {{ currentDate }}</div>
+  <div>{{ 'Current time in selected timezone' | translate }}: {{ currentTime }}</div>
+  <div>{{ 'Offset from UTC' | translate }}: {{ currentOffset }} hours</div>
+</div>

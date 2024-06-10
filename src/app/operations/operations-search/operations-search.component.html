@@ -1,0 +1,76 @@
+<div style="margin-bottom: 20px">
+  <mat-accordion>
+    <mat-expansion-panel
+      [id]="'panelOperations_' + componentId"
+      (opened)="loadData()"
+      [expanded]="expanded"
+      class="field-info mat-elevation-z0 mb-3"
+    >
+      <mat-expansion-panel-header (click)="expandedState()">
+        <mat-panel-description>
+          <app-icon [name]="'search'"></app-icon>
+          {{ 'Search' | translate }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="search-wrapper">
+        <mat-card class="selectedFields">
+          <mat-card-content>
+            <div>
+              <div class="search-select">
+                <mat-form-field>
+                  <mat-label>{{ 'Select User' | translate }}</mat-label>
+                  <mat-select [id]="'selectUser_' + componentId" (selectionChange)="onUserSelected($event)" [(ngModel)]="selectedUser">
+                    <mat-option [id]="'optionUser_' + i + '_' + componentId" *ngFor="let user of users; let i = index" [value]="user">
+                      {{ user.title }} {{ user?.name }} {{ user?.lastName }} - {{ user.email }} ({{ user.role }})
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="search-select">
+                <mat-form-field>
+                  <mat-label>{{ 'Select Status' | translate }}</mat-label>
+                  <mat-select
+                    [id]="'selectStatus_' + componentId"
+                    (selectionChange)="onStatusSelected($event)"
+                    [(ngModel)]="selectedStatus"
+                  >
+                    <mat-option
+                      [id]="'optionStatus_' + i + '_' + componentId"
+                      *ngFor="let status of statuses; let i = index"
+                      [value]="status"
+                    >
+                      {{ status }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <button
+                [id]="'search_' + componentId"
+                mat-raised-button
+                color="primary"
+                class="ml"
+                (click)="onSearch()"
+                matTooltip="{{ 'Search' | translate }}"
+              >
+                {{ 'Search' | translate }}
+              </button>
+              <button
+                [id]="'reset_' + componentId"
+                mat-raised-button
+                color="primary"
+                class="ml"
+                (click)="onReset()"
+                matTooltip="{{ 'Reset' | translate }}"
+              >
+                {{ 'Reset' | translate }}
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

@@ -1,0 +1,10 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'Equal to' | translate }}</mat-label>
+  <input [id]="'inputDecimal_' + componentId" matInput type="number" [formControl]="equalTo" required />
+  <mat-error *ngIf="equalTo?.touched && equalTo?.errors?.required"> {{ 'Equal to value is required' | translate }} </mat-error>
+  <mat-error *ngIf="equalTo?.touched && equalTo?.errors?.maxLength"> {{ 'Max allowed length is 50' | translate }} </mat-error>
+  <mat-error *ngIf="equalTo?.touched && equalTo?.errors?.decimalPlacesLengthExceed">
+    {{ 'Allowed up to 2 places of decimal' }}
+  </mat-error>
+</mat-form-field>

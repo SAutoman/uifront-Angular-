@@ -1,0 +1,15 @@
+<ng-container *ngIf="form">
+  <div [formGroup]="form">
+    <mat-checkbox color="primary" class="col-md-12 mb-3" formControlName="enableBarcodeScanning">
+      {{ 'Enable Barcode Scanning' | translate }}
+    </mat-checkbox>
+    <mat-form-field appearance="outline" class="col-md-12">
+      <mat-label>{{ 'Select Fields For Fast Create' | translate }}</mat-label>
+      <mat-select multiple formControlName="fastCreateFields">
+        <mat-option *ngFor="let field of fieldOptions" [value]="field.value?.pathJoined">
+          {{ field.key }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>

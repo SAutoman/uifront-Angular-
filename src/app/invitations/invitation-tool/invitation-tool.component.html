@@ -1,0 +1,52 @@
+<div class="d-flex w-100 h-100 justify-content-center align-items-center px-3">
+  <mat-card class="outline mat-elevation-z0">
+    <mat-card-header *ngIf="isDeskTop">
+      <mat-card-title> {{ 'Invite Users' | translate }} </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="invitation" (ngSubmit)="onSubmit(invitation.value)">
+        <mat-checkbox formControlName="multipleRegistrations" class="mb-3">
+          {{ 'Allow Multiple Registration' | translate }}
+        </mat-checkbox>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Email' | translate }}</mat-label>
+          <input [id]="'inputEmailAddress_' + componentId" matInput type="email" formControlName="emailAddress" required />
+          <mat-error *ngIf="hasError('emailAddress', 'required')">{{ 'Email is required!' | translate }}</mat-error>
+          <mat-error *ngIf="hasError('emailAddress', 'email')">{{ 'Provide a valid email!' | translate }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Select Role' | translate }}</mat-label>
+          <mat-select [id]="'selectRole_' + componentId" formControlName="role" required>
+            <mat-option [id]="'option_' + i + '_' + componentId" *ngFor="let role of slicedRoles; let i = index" [value]="role">
+              {{ role | translate }}
+            </mat-option>
+          </mat-select>
+          <mat-error>{{ 'Role is required!' | translate }} </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="userGroups?.length > 0">
+          <mat-label>{{ 'Select UserGroup' | translate }}</mat-label>
+          <mat-select [id]="'selectUserGroup_' + componentId" formControlName="userGroupId">
+            <mat-option [id]="'option_' + i + '_' + componentId" *ngFor="let group of userGroups; let i = index" [value]="group.id">
+              {{ group.name | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Tenant System Name' | translate }}</mat-label>
+          <input matInput type="text" [value]="tenantName" disabled />
+        </mat-form-field>
+
+        <div class="d-flex justify-content-center">
+          <button [id]="'send_' + componentId" [disabled]="invitation.invalid" mat-flat-button color="primary">
+            <app-icon [name]="'send'"></app-icon>
+            {{ 'Send Invitation' | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

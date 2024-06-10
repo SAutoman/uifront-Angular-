@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>
+  <span *ngIf="notifications?.length">
+    {{ notifications.length }}
+  </span>
+  {{ 'Notifications' | translate }}
+</h2>
+<mat-dialog-content class="mat-typography pt-4">
+  <div *ngIf="isLoading" class="spinner">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+  <br />
+  <div *ngIf="!isLoading">
+    <ng-container class="case-list" *ngIf="notifications?.length; else noData">
+      <mat-card *ngFor="let notification of notifications" class="mb-4 outline mat-elevation-z0">
+        <mat-card-subtitle>{{ 'Sent on' | translate }} {{ notification.createDateTime }}</mat-card-subtitle>
+        <mat-card-content>
+          <mat-chip-list>
+            <mat-chip color="primary" *ngFor="let recipient of notification.to">{{ recipient }} </mat-chip>
+            <mat-chip color="primary" *ngIf="!notification.to.length">{{ 'Notification has no recipients' | translate }}</mat-chip>
+          </mat-chip-list>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <ng-template #noData>
+    <mat-list-item>
+      <h4>{{ 'No notifications sent' | translate }}</h4>
+    </mat-list-item>
+  </ng-template>
+  <br />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button id="'ok_' + componentId" mat-flat-button color="primary" [mat-dialog-close]="false">
+    <app-icon name="check"></app-icon>{{ 'OK' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,37 @@
+// loader extensions
+.k-i-loading.k-i-loading--flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.k-i-loading.k-i-loading--button--icon {
+  top: 10px;
+}
+.k-i-loading.k-i-loading--gray {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: gray;
+}
+.k-i-loading.k-i-loading--xl {
+  font-size: 64px;
+  height: 64px;
+}
+.k-i-loading.k-i-loading--m {
+  font-size: 32px;
+  height: 32px;
+}
+.k-i-loading.k-i-loading--s {
+  font-size: 16px;
+  height: 16px;
+}
+.k-i-loading.k-i-loading--xs {
+  font-size: 8px;
+  height: 8px;
+}
+.k-i-loading.k-i-loading--absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+}

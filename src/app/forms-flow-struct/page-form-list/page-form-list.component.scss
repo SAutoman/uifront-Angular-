@@ -1,0 +1,15 @@
+:host ::ng-deep {
+  .k-grid {
+    height: calc(100% - 48px) !important;
+    .k-grid-content {
+      max-height: 100% !important;
+    }
+  }
+  @media (max-width: 540px) {
+    .title-bar {
+      h3 {
+        display: none;
+      }
+    }
+  }
+}

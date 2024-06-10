@@ -1,0 +1,32 @@
+<!-- <section class="properties-section">
+  <ng-container *ngFor="let allowedFieldProperty of allowedFieldPropertiesFields">
+    <mat-radio-group
+      [id]="'radio_' + componentId"
+      class="start-page-buttons"
+      (change)="onPropertyType($event, allowedFieldProperty.propertyType)"
+      [(ngModel)]="allowedFieldProperty.isSelected"
+    >
+      {{ allowedFieldProperty.propertyName }}
+      <mat-radio-button [id]="'yes_' + componentId" color="primary" [value]="true" class="start-page-btn-radio">Yes</mat-radio-button>
+      <mat-radio-button [id]="'yes_' + componentId" color="primary" [value]="false" class="start-page-btn-radio">No</mat-radio-button>
+    </mat-radio-group>
+
+    <app-case-field-wrapper
+      [canEditCase]="true"
+      (onFieldUpdated)="onFieldChanged($event)"
+      [field]="wrapperField"
+      *ngIf="allowedFieldProperty.propertyType === FieldPropertyType.DefaultValues && isDefaultValues"
+    ></app-case-field-wrapper>
+
+
+    <mat-form-field *ngIf="allowedFieldProperty.propertyType === FieldPropertyType.HintMessage && isHintMessage">
+      <input
+        [id]="'inputHint_' + componentId"
+        matInput
+        placeholder="Hint message"
+        [(ngModel)]="currentField.hintMessage"
+        #hintMessage="ngModel"
+      />
+    </mat-form-field>
+  </ng-container>
+</section> -->

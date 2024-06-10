@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  padding: 12px;
+  ::ng-deep {
+    formly-group.row {
+      margin: 0 !important;
+    }
+    formly-field {
+      padding: 0 !important;
+    }
+  }
+}
+mat-hint {
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 10px;
+  position: absolute;
+  right: 3px;
+  border: 1px solid;
+}

@@ -1,0 +1,369 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3" style="position: relative; max-height: 100%">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ 'Permissions for' | translate }} {{ areaName | translate }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="row mx-0">
+    <div class="col-md-6">
+      <app-schema-selection [data]="schemasData" (schemaIdEmitter)="getSchemaId($event)"> </app-schema-selection>
+    </div>
+  </div>
+  <div *ngIf="selectedSchemaId">
+    <h5 class="mb-3 mt-0">{{ 'Permissions per roles' | translate }}</h5>
+    <mat-tab-group class="full-width" class="no-scroll">
+      <mat-tab label="{{ 'Tenant Admin User ' | translate }}">
+        <div class="mb-2" data-area="tenant admin user">
+          <div class="d-flex">
+            <app-schema-rights
+              class="w-50"
+              [schemaPermissions]="rolePermissions[roleEnum.TenantAdmin]"
+              [areaType]="areaType"
+              [role]="roleEnum.TenantAdmin"
+              [schemaId]="selectedSchemaId"
+              (schemaRightsEmitter)="onSchemaRightsEmitted($event)"
+            ></app-schema-rights>
+            <app-layout-settings
+              *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case"
+              class="w-50"
+              [existingLayoutId]="defaultLayoutRolePermissions[roleEnum.TenantAdmin]?.defaultLayoutId"
+              [layouts]="layoutsPerRole[roleEnum.TenantAdmin]"
+              [role]="roleEnum.TenantAdmin"
+              (layoutSettingEmitter)="onDefaultLayoutChange($event)"
+            >
+            </app-layout-settings>
+          </div>
+          <ng-container
+            *ngIf="searchProfilesPerRole[roleEnum.TenantAdmin] && (areaType === gridAreaType?.rawData || areaType === gridAreaType?.case)"
+          >
+            <app-select-search-profile
+              [areaType]="areaType"
+              [userId]="tenantAuthState?.profile?.id"
+              [searchProfiles]="searchProfilesPerRole[roleEnum.TenantAdmin]"
+              [role]="roleEnum.TenantAdmin"
+              [searchProfileSetting]="searchProfileRolePermissions[roleEnum.TenantAdmin]"
+              (searchProfileEmitter)="onSearchProfilechange($event)"
+            >
+            </app-select-search-profile>
+          </ng-container>
+          <ng-container
+            *ngIf="
+              areaType === gridAreaType?.case &&
+              rolePermissions[roleEnum.TenantAdmin]?.permission?.delete &&
+              disabledCaseStatusesRolePermissions[roleEnum.TenantAdmin]
+            "
+          >
+            <app-select-case-statuses
+              [schemaId]="selectedSchemaId"
+              [workflowStatuses]="allWorkflowStatuses"
+              [role]="roleEnum.TenantAdmin"
+              [casePermissionSetting]="disabledCaseStatusesRolePermissions[roleEnum.TenantAdmin]"
+              (selectedStausesEmitter)="onStatusChange($event)"
+            ></app-select-case-statuses>
+          </ng-container>
+        </div>
+      </mat-tab>
+      <mat-tab label="{{ 'Tenant User' | translate }}">
+        <div class="mb-2" data-area="tenant user">
+          <div class="d-flex">
+            <app-schema-rights
+              class="w-50"
+              [schemaPermissions]="rolePermissions[roleEnum.Tenant]"
+              [areaType]="areaType"
+              [role]="roleEnum.Tenant"
+              [schemaId]="selectedSchemaId"
+              (schemaRightsEmitter)="onSchemaRightsEmitted($event)"
+            ></app-schema-rights>
+            <app-layout-settings
+              *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case"
+              class="w-50"
+              [existingLayoutId]="defaultLayoutRolePermissions[roleEnum.Tenant]?.defaultLayoutId"
+              [layouts]="layoutsPerRole[roleEnum.Tenant]"
+              [role]="roleEnum.Tenant"
+              (layoutSettingEmitter)="onDefaultLayoutChange($event)"
+            >
+            </app-layout-settings>
+          </div>
+          <div
+            *ngIf="searchProfilesPerRole[roleEnum.Tenant] && (areaType === gridAreaType?.rawData || areaType === gridAreaType?.case)"
+            class="d-flex mt-2"
+          >
+            <app-select-search-profile
+              class="w-100 d-flex"
+              [areaType]="areaType"
+              [userId]="tenantAuthState?.profile?.id"
+              [searchProfiles]="searchProfilesPerRole[roleEnum.Tenant]"
+              [role]="roleEnum.Tenant"
+              [searchProfileSetting]="searchProfileRolePermissions[roleEnum.Tenant]"
+              (searchProfileEmitter)="onSearchProfilechange($event)"
+            >
+            </app-select-search-profile>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="
+            areaType === gridAreaType?.case &&
+            rolePermissions[roleEnum.Tenant]?.permission?.delete &&
+            disabledCaseStatusesRolePermissions[roleEnum.Tenant]
+          "
+        >
+          <app-select-case-statuses
+            [schemaId]="selectedSchemaId"
+            [workflowStatuses]="allWorkflowStatuses"
+            [role]="roleEnum.Tenant"
+            [casePermissionSetting]="disabledCaseStatusesRolePermissions[roleEnum.Tenant]"
+            (selectedStausesEmitter)="onStatusChange($event)"
+          ></app-select-case-statuses>
+        </ng-container>
+      </mat-tab>
+      <mat-tab label="{{ 'Supplier' | translate }}">
+        <div class="mb-2" data-area="supplier">
+          <div class="d-flex">
+            <app-schema-rights
+              class="w-50"
+              [schemaPermissions]="rolePermissions[roleEnum.Supplier]"
+              [areaType]="areaType"
+              [role]="roleEnum.Supplier"
+              [schemaId]="selectedSchemaId"
+              (schemaRightsEmitter)="onSchemaRightsEmitted($event)"
+            ></app-schema-rights>
+            <app-layout-settings
+              *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case"
+              class="w-50"
+              [existingLayoutId]="defaultLayoutRolePermissions[roleEnum.Supplier]?.defaultLayoutId"
+              [layouts]="layoutsPerRole[roleEnum.Supplier]"
+              [role]="roleEnum.Supplier"
+              (layoutSettingEmitter)="onDefaultLayoutChange($event)"
+            >
+            </app-layout-settings>
+          </div>
+          <div
+            *ngIf="searchProfilesPerRole[roleEnum.Supplier] && (areaType === gridAreaType?.rawData || areaType === gridAreaType?.case)"
+            class="d-flex mt-2"
+          >
+            <app-select-search-profile
+              class="w-100 d-flex"
+              [areaType]="areaType"
+              [userId]="tenantAuthState?.profile?.id"
+              [searchProfiles]="searchProfilesPerRole[roleEnum.Supplier]"
+              [role]="roleEnum.Supplier"
+              [searchProfileSetting]="searchProfileRolePermissions[roleEnum.Supplier]"
+              (searchProfileEmitter)="onSearchProfilechange($event)"
+            >
+            </app-select-search-profile>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="
+            areaType === gridAreaType?.case &&
+            rolePermissions[roleEnum.Supplier]?.permission?.delete &&
+            disabledCaseStatusesRolePermissions[roleEnum.Supplier]
+          "
+        >
+          <app-select-case-statuses
+            [schemaId]="selectedSchemaId"
+            [workflowStatuses]="allWorkflowStatuses"
+            [role]="roleEnum.Supplier"
+            [casePermissionSetting]="disabledCaseStatusesRolePermissions[roleEnum.Supplier]"
+            (selectedStausesEmitter)="onStatusChange($event)"
+          ></app-select-case-statuses>
+        </ng-container>
+      </mat-tab>
+      <mat-tab label="{{ 'Auditor' | translate }}">
+        <div data-area="auditor" class="mb-2">
+          <div class="d-flex">
+            <app-schema-rights
+              class="w-50"
+              [schemaPermissions]="rolePermissions[roleEnum.Auditor]"
+              [areaType]="areaType"
+              [role]="roleEnum.Auditor"
+              [schemaId]="selectedSchemaId"
+              (schemaRightsEmitter)="onSchemaRightsEmitted($event)"
+            ></app-schema-rights>
+            <app-layout-settings
+              *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case"
+              class="w-50"
+              [existingLayoutId]="defaultLayoutRolePermissions[roleEnum.Auditor]?.defaultLayoutId"
+              [layouts]="layoutsPerRole[roleEnum.Auditor]"
+              [role]="roleEnum.Auditor"
+              (layoutSettingEmitter)="onDefaultLayoutChange($event)"
+            >
+            </app-layout-settings>
+          </div>
+          <div
+            *ngIf="searchProfilesPerRole[roleEnum.Auditor] && (areaType === gridAreaType?.rawData || areaType === gridAreaType?.case)"
+            class="d-flex mt-2"
+          >
+            <app-select-search-profile
+              class="w-100 d-flex"
+              [areaType]="areaType"
+              [userId]="tenantAuthState?.profile?.id"
+              [searchProfiles]="searchProfilesPerRole[roleEnum.Auditor]"
+              [role]="roleEnum.Auditor"
+              [searchProfileSetting]="searchProfileRolePermissions[roleEnum.Auditor]"
+              (searchProfileEmitter)="onSearchProfilechange($event)"
+            >
+            </app-select-search-profile>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="
+            areaType === gridAreaType?.case &&
+            rolePermissions[roleEnum.Auditor]?.permission?.delete &&
+            disabledCaseStatusesRolePermissions[roleEnum.Auditor]
+          "
+        >
+          <app-select-case-statuses
+            [schemaId]="selectedSchemaId"
+            [workflowStatuses]="allWorkflowStatuses"
+            [role]="roleEnum.Auditor"
+            [casePermissionSetting]="disabledCaseStatusesRolePermissions[roleEnum.Auditor]"
+            (selectedStausesEmitter)="onStatusChange($event)"
+          ></app-select-case-statuses>
+        </ng-container>
+      </mat-tab>
+    </mat-tab-group>
+    <div *ngIf="userGroups?.length">
+      <hr />
+      <h5 class="mb-3 mt-3">{{ 'Permissions per groups' | translate }}</h5>
+      <div class="row ml-0 mr-0">
+        <div class="col-md-6 px-0">
+          <div class="d-flex">
+            <mat-form-field appearance="outline" class="flex-1 mr-3">
+              <mat-label>{{ 'User Groups' | translate }}</mat-label>
+              <mat-select *ngIf="groupOptions" [(ngModel)]="selectedGroupId" (selectionChange)="onSelectionChange()">
+                <mat-option *ngFor="let group of groupOptions" [value]="group.id">{{ group?.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button
+              [disabled]="!selectedGroupId"
+              mat-stroked-button
+              color="primary"
+              class="btn-icon btn-xl mt-1"
+              matRipple
+              (click)="onGroupSelected(selectedGroupId, true)"
+              matTooltip="{{ 'Add Group Permissions' | translate }}"
+            >
+              <app-icon [name]="'add'"></app-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <mat-card class="outline mat-elevation-z0 pb-0 mb-3" *ngFor="let group of groupsWithPermissions; let i = index">
+        <button color="warn" (click)="removeGroupControl(group.id)" mat-icon-button class="close-btn">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+        <div class="mb-3">
+          <label>{{ group.name }}</label>
+          <br />
+          <div class="d-flex">
+            <app-schema-rights
+              class="w-50"
+              [schemaPermissions]="groupPermissions[group.id]"
+              [areaType]="areaType"
+              [groupId]="group.id"
+              [schemaId]="selectedSchemaId"
+              (schemaRightsEmitter)="onSchemaRightsEmitted($event)"
+            ></app-schema-rights>
+            <app-layout-settings
+              *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case"
+              class="w-50"
+              [existingLayoutId]="defaultLayoutGroupPermissions[group.id]?.defaultLayoutId"
+              [layouts]="layoutsPerGroup[group.id]"
+              [groupId]="group.id"
+              (layoutSettingEmitter)="onDefaultLayoutChange($event)"
+            >
+            </app-layout-settings>
+          </div>
+          <div
+            class="d-flex mt-2"
+            *ngIf="searchProfilesPerGroup[group.id] && (areaType === gridAreaType?.rawData || areaType === gridAreaType?.case)"
+          >
+            <app-select-search-profile
+              class="w-100 d-flex gap-3"
+              [areaType]="areaType"
+              [userId]="tenantAuthState?.profile?.id"
+              [searchProfiles]="searchProfilesPerGroup[group.id]"
+              [groupId]="group.id"
+              [searchProfileSetting]="searchProfileGroupPermissions[group.id]"
+              (searchProfileEmitter)="onSearchProfilechange($event)"
+            >
+            </app-select-search-profile>
+          </div>
+          <ng-container
+            *ngIf="
+              areaType === gridAreaType?.case &&
+              groupPermissions[group.id]?.permission?.delete &&
+              disabledCaseStatusesGroupPermissions[group.id]
+            "
+          >
+            <app-select-case-statuses
+              [schemaId]="selectedSchemaId"
+              [workflowStatuses]="allWorkflowStatuses"
+              [groupId]="group.id"
+              [casePermissionSetting]="disabledCaseStatusesGroupPermissions[group.id]"
+              (selectedStausesEmitter)="onStatusChange($event)"
+            ></app-select-case-statuses>
+          </ng-container>
+        </div>
+      </mat-card>
+    </div>
+    <div *ngIf="showMultiCreationSetting" class="my-2">
+      <hr />
+      <div data-area="Disable multiple creation">
+        <mat-checkbox color="primary" class="mt-1 mr-4" [(ngModel)]="disableMultiCreation" (change)="onSelectionChange()">{{
+          'Disable multiple creation' | translate
+        }}</mat-checkbox>
+      </div>
+    </div>
+    <hr />
+    <div class="row ml-0 mr-0">
+      <div class="col-md-6 p-0">
+        <app-create-another
+          *ngIf="selectedSchema"
+          [schema]="selectedSchema"
+          [setting]="createAnotherItemSetting"
+          (createAnotherSettingEmitter)="createAnotherSettingUpdated($event)"
+        ></app-create-another>
+      </div>
+    </div>
+    <hr *ngIf="showCaseViewSetting" />
+    <div *ngIf="showCaseViewSetting" data-area="Enable Status Change From Grid">
+      <mat-checkbox color="primary" class="my-1 mr-4" [(ngModel)]="gridStatusChangeSettingEnabled" (change)="onSelectionChange()"
+        >{{ 'Enable Status Change From Grid' | translate }}
+      </mat-checkbox>
+      <hr />
+    </div>
+    <div *ngIf="showCaseViewSetting" class="row">
+      <div class="col-md-7 mt-2">
+        <mat-label>{{ 'Default Cases View' | translate }}</mat-label>
+        <div class="mt-3">
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="currentCaseViewSetting">
+            <mat-radio-button class="mr-3" [value]="caseViewEnum?.Grid" (change)="onSelectionChange()">{{
+              'Grid' | translate
+            }}</mat-radio-button>
+            <mat-radio-button class="mr-3" [value]="caseViewEnum?.Kanban" (change)="onSelectionChange()">{{
+              'Kanban' | translate
+            }}</mat-radio-button>
+            <mat-radio-button class="mr-3" [value]="caseViewEnum?.VisualPlan" (change)="onSelectionChange()">{{
+              'Visualization' | translate
+            }}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <hr *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case" />
+    <div *ngIf="areaType === gridAreaType?.rawData || areaType === gridAreaType?.case" class="row">
+      <mat-slide-toggle class="ml-2" [checked]="loadSearchAutomatically" (change)="onToggle($event)">
+        {{ 'Load Search Automatically' | translate }}
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <div class="mat-expansion-panel-footer">
+    <button [id]="'save_' + componentId" [disabled]="!hasUnsavedChanges" mat-flat-button color="primary" (click)="onSubmit()">
+      <app-icon [name]="'save'"></app-icon>
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+</mat-expansion-panel>

@@ -1,0 +1,30 @@
+<!-- <div class="btn-wrapper">
+  <button mat-raised-button color="primary" (click)="onAddFunction()">Add Function</button>
+</div>
+
+<mat-accordion *ngIf="functions && functions.length">
+  <ng-container *ngFor="let item of functions">
+    <ng-container *ngIf="!functionErrors.get(item.id)">
+      <mat-expansion-panel
+        [id]="'panelAddfunction_' + componentId"
+        [expanded]="item.expanded"
+        (opened)="onFunctionExpanded(item)"
+        (closed)="onFunctionCollapse(item)"
+        class="mat-elevation-z0 mb-3"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ item.name }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <app-function-builder
+          [items]="items"
+          [tenant]="tenant"
+          [currentExpression]="item"
+          (deletedFunction)="onDeletedFunction($event)"
+          (error)="functionErrors.set(item.id, $event)"
+        ></app-function-builder>
+      </mat-expansion-panel>
+    </ng-container>
+    <div class="text-danger p-2" *ngIf="functionErrors.get(item.id)">Error: {{ functionErrors.get(item.id) }}</div>
+  </ng-container>
+</mat-accordion> -->

@@ -1,0 +1,20 @@
+.picker-buttons-1 {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: -8px;
+  top: -3px;
+  button {
+    app-icon {
+      stroke: rgba(0, 0, 0, 0.54);
+    }
+  }
+}
+
+.mat-icon-button {
+  &:disabled {
+    color: grey !important;
+    cursor: default;
+  }
+}

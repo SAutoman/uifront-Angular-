@@ -1,0 +1,61 @@
+<form class="" [formGroup]="nameForm">
+  <formly-form [form]="nameForm" [fields]="nameFieldFormlyField" [model]="nameModel" (modelChange)="onNameChange()"></formly-form>
+</form>
+
+<p class="mb-1">
+  <b>* {{ 'IF' | translate }}</b>
+</p>
+
+<hr />
+
+<ng-container *ngIf="ruleFieldOptions && systemFieldOptionsLoaded">
+  <app-form-rule-builder
+    class="d-flex flex-column"
+    [listOptions]="ruleFieldOptions"
+    [modelRef]="modelRef"
+    [expressionId]="expression?.id"
+    addDefaultRuleIfEmpty="true"
+    (update)="onRuleUpdate($event)"
+    (conditionFormChanges)="onConditionChanges($event)"
+  ></app-form-rule-builder>
+</ng-container>
+
+<ng-container *ngIf="rules$ | async as r">
+  <ng-container *ngIf="hasRules(r)">
+    <hr />
+    <div class="mb-1 flex-actions">
+      <b>{{ 'THEN Apply to (optional)' | translate }}</b>
+    </div>
+    <ng-container *ngFor="let targetField of targetFields; let i = index">
+      <div class="d-flex justify-content-between align-items-center">
+        <h6>{{ i + 1 }}</h6>
+        <button mat-icon-button color="warn" (click)="onDelete(i)">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+      </div>
+
+      <form class="" [formGroup]="targetField.fieldForm">
+        <formly-form
+          [form]="targetField.fieldForm"
+          [fields]="targetField.selectFieldFormlyField"
+          [model]="targetField.fieldModel"
+        ></formly-form>
+      </form>
+      <ng-container *ngIf="targetField.fieldSettings$ | async as selectedFieldSettings">
+        <app-form-function-field-settings
+          class="d-flex"
+          [settings$]="targetField.fieldSettingsStream$"
+          (update)="onSettingsUpdate($event, selectedFieldSettings, targetField)"
+          (modelChangeEmitter)="onFieldSettingsChange()"
+        >
+        </app-form-function-field-settings>
+      </ng-container>
+      <hr />
+    </ng-container>
+    <div class="d-flex justify-content-end">
+      <button mat-stroked-button color="primary" (click)="addTargetField()">
+        <app-icon name="add"></app-icon>{{ 'Add Field' | translate }}
+      </button>
+    </div>
+  </ng-container>
+</ng-container>

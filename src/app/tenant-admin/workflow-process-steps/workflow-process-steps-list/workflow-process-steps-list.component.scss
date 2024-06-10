@@ -1,0 +1,12 @@
+:host ::ng-deep {
+  app-wfm-workflow-grid {
+    .k-grid {
+      height: calc(100% - 48px);
+    }
+  }
+  @media (max-width: '540px') {
+    .k-pager-wrap {
+      display: inherit !important;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+<div *ngIf="isLoading" class="k-i-loading"></div>
+
+<div class="" [hidden]="isLoading">
+  <div class="d-flex justify-content-between align-items-center" style="margin-bottom: -44px" *ngIf="allowActionsFor == areaType.comment">
+    <h4>{{ 'Add Comment' | translate }}</h4>
+    <button matRipple mat-icon-button color="primary" (click)="toggleCreator()">
+      <app-icon [name]="'close'"></app-icon>
+    </button>
+  </div>
+
+  <ng-container *ngIf="title || selectedGridItems">
+    <h4 mat-dialog-title *ngIf="title">{{ title | translate }}</h4>
+    <!-- <button *ngIf="selectedGridItems" mat-flat-button color="primary" (click)="previewCase()">{{ 'Preview' | translate }}</button> -->
+  </ng-container>
+
+  <ng-container *ngIf="!isLoading">
+    <mat-dialog-content>
+      <app-custom-number-input
+        *ngIf="allowActionsFor === areaType.rawData && !isEdit && !hideMultiCreationButton"
+        [label]="'Number Of Entities'"
+        [control]="numberOfEntitiesControl"
+      ></app-custom-number-input>
+
+      <app-form-builder-form-preview
+        [fields$]="schemaFields$"
+        [allowActionsFor]="allowActionsFor"
+        [schema]="schema"
+        [isFormDisabled]="isFormDisabled"
+        [isStepResolved]="isStepResolved"
+        [allowStepHighlighting]="allowStepHighlighting"
+        [activeFieldPath]="activeFieldPath"
+        [isUpdate]="isEdit"
+        [dynamicEntityId]="deItem?.publicId || stepDe?.id"
+        [hideCreateAndProceedBtn]="hideCreateAndProceedBtn"
+        [systemFields]="systemFields"
+        (formValue)="onSubmit($event)"
+        (close)="closeDialog($event)"
+        (caseProceed)="onCaseProceed($event)"
+        (stepFormValueEmitter)="stepFormValueEmitted($event)"
+        (stepHighlightsEmitter)="onStepHighlightsEmit($event)"
+        (fieldPathEmitter)="fieldPathEmitted($event)"
+      >
+      </app-form-builder-form-preview>
+    </mat-dialog-content>
+  </ng-container>
+</div>

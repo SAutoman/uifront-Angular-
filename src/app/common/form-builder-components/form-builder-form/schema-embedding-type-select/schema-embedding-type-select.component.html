@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>{{ 'How to reference this schema?' | translate }}</h2>
+
+<mat-dialog-content>
+  <mat-form-field class="form">
+    <mat-select [formControl]="selectControl" [placeholder]="'Select action' | translate" panelClass="mob-selector">
+      <mat-option *ngFor="let option of options" [value]="option.type">
+        {{ option.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button [disabled]="!selectControl.valid" mat-flat-button color="primary" class="mr-2" (click)="select()">
+    {{ 'Select' | translate }}
+  </button>
+  <button mat-stroked-button color="primary" (click)="close()">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>

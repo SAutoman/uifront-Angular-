@@ -1,0 +1,125 @@
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+<div class="container-fluid h-100 overflow-auto" *ngIf="!(loading$ | async); else loading">
+  <div class="row my-3">
+    <mat-card class="col-lg-6 mx-auto">
+      <mat-card-header class="ml-0">
+        <mat-card-title> {{ 'Notification Settings' | translate }} </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="mt-3">
+        <div *ngIf="!notificationId">
+          <div class="mb-3">
+            <button *ngIf="!showExisitngTopicsList" mat-flat-button color="primary" type="button" (click)="showTopicsList()">
+              <app-icon [name]="'add'"></app-icon>
+              {{ 'Copy existing notification topic' | translate }}
+            </button>
+          </div>
+          <div *ngIf="showExisitngTopicsList">
+            <mat-form-field>
+              <mat-select [placeholder]="'Select Notification Topic' | translate" (selectionChange)="onNotificationTopicChange($event)">
+                <mat-option *ngFor="let topic of notificationTopicsList" [value]="topic.id">{{ topic.name }} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <form [formGroup]="notificationSettingsForm" (ngSubmit)="onSubmit()">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'Notification Topic Name' | translate }}</mat-label>
+              <input type="text" matInput formControlName="name" />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'Notification Topic Subject' | translate }}</mat-label>
+              <input type="text" matInput formControlName="subject" />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'Notification Topic Description' | translate }}</mat-label>
+              <input type="text" matInput formControlName="description" />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-select
+                [disabled]="notificationId ? true : false"
+                [placeholder]="'Select Notification Topic Area' | translate"
+                [(ngModel)]="topicType"
+                [ngModelOptions]="{ standalone: true }"
+                (selectionChange)="onTopicTypeChange()"
+              >
+                <mat-option *ngFor="let type of topicTypes" [value]="type.value">{{ type.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="topicType" class="form my-2">
+              <mat-label>{{ 'Select Topic Kind' | translate }}</mat-label>
+              <mat-select
+                formControlName="topicKind"
+                (selectionChange)="onTopicKindChange($event)"
+                [disabled]="notificationId ? true : false"
+              >
+                <mat-option *ngFor="let topic of topicKinds" [value]="topic.value">
+                  {{ topic.label }}
+                </mat-option>
+              </mat-select>
+              <mat-hint
+                *ngIf="
+                  topicType === topicTypeEnum?.CaseProcess &&
+                  notificationSettingsForm?.get('topicKind')?.value &&
+                  !isTopicKindAutoTriggerable
+                "
+                >{{ 'This topic will not be triggered automatically.' | translate }}
+                {{ 'Please set Post Actions in the workflow buider.' | translate }}
+              </mat-hint>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="form">
+              <mat-label>{{ 'Select Notification Template' | translate }}</mat-label>
+              <mat-select formControlName="topicTemplateId">
+                <mat-option *ngFor="let template of notificationTemplates" [value]="template.id"> {{ template.name }} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="notificationSettingsForm?.get('roles')">
+            <mat-form-field class="form">
+              <mat-label>{{ 'Select user roles' | translate }}</mat-label>
+              <mat-select formControlName="roles" multiple>
+                <mat-option *ngFor="let group of allRoles" [value]="group.value"> {{ group?.name }} </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="notificationSettingsForm?.get('userGroups')">
+            <mat-form-field class="form">
+              <mat-label>{{ 'Select user groups' | translate }}</mat-label>
+              <mat-select formControlName="userGroups" multiple>
+                <mat-option *ngFor="let group of userGroups" [value]="group.id">{{ group?.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="notificationSettingsForm?.get('days')">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'Interval Days' | translate }}</mat-label>
+              <input type="number" matInput formControlName="days" />
+              <mat-error *ngIf="hasError('days', 'pattern')"
+                >{{ 'Please provide an integer greater than or equal to 0' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div>
+            <button [disabled]="notificationSettingsForm.invalid" mat-flat-button color="primary" type="submit">
+              <app-icon [name]="'save'"></app-icon>
+              {{ 'Save' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

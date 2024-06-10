@@ -1,0 +1,10 @@
+<form [formGroup]="highlightForm">
+  <mat-checkbox formControlName="allowHighlighting"> {{ 'Allow Highlighting This Field' | translate }} </mat-checkbox>
+
+  <mat-form-field appearance="outline" *ngIf="allowHighlighting.value">
+    <mat-label>{{ 'Select Highlight Color' | translate }}</mat-label>
+    <mat-select formControlName="highlightColor">
+      <mat-option *ngFor="let color of highlightColors" [value]="color.key" [ngClass]="color.key">{{ color.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

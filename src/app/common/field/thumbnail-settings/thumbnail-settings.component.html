@@ -1,0 +1,36 @@
+<form [formGroup]="thumbnailSettingForm">
+  <mat-checkbox formControlName="enableSetting">
+    {{ 'Enable thumbnail rendering in the grid' | translate }} ({{ 'Images Only' | translate }})
+  </mat-checkbox>
+  <p class="text-danger" *ngIf="thumbnailSettingForm?.get('enableSetting')?.value">
+    {{ 'Maximum image size allowed is 50 Kb' | translate }}.
+  </p>
+  <mat-form-field class="mt-2" *ngIf="thumbnailSettingForm?.get('enableSetting')?.value" appearance="outline">
+    <mat-label>{{ 'Max Image Height' | translate }} ({{ 'px' }})</mat-label>
+    <input matInput type="number" required formControlName="imageMaxSize" />
+    <mat-error
+      *ngIf="
+        thumbnailSettingForm?.get('imageMaxSize')?.touched &&
+        (thumbnailSettingForm?.get('imageMaxSize')?.errors?.min || thumbnailSettingForm?.get('imageMaxSize')?.errors?.max)
+      "
+    >
+      {{ 'Allowed Image Height: Min: 1px; Max: 200px' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-checkbox *ngIf="thumbnailSettingForm?.get('enableSetting')?.value" formControlName="aspectRatio">
+    {{ 'Aspect Ratio' | translate }} ({{ 'optional' | translate }})
+  </mat-checkbox>
+
+  <div *ngIf="thumbnailSettingForm?.get('enableSetting')?.value && thumbnailSettingForm?.get('aspectRatio')?.value" class="d-flex">
+    <mat-form-field class="mt-2 w-25 mr-2" appearance="outline">
+      <mat-label>{{ 'Width' | translate }} </mat-label>
+      <input matInput type="number" formControlName="aspectRatioWidth" />
+    </mat-form-field>
+    <div class="mt-4">:</div>
+    <mat-form-field class="mt-2 w-25 ml-2" appearance="outline">
+      <mat-label>{{ 'Height' | translate }}</mat-label>
+      <input matInput type="number" formControlName="aspectRatioHeight" />
+    </mat-form-field>
+  </div>
+</form>

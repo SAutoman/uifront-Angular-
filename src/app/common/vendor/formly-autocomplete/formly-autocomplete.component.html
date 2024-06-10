@@ -1,0 +1,13 @@
+<input matInput [matAutocomplete]="auto" [formControl]="formControl" [formlyAttributes]="field" />
+<mat-autocomplete #auto="matAutocomplete">
+  <ng-container *ngFor="let x of filter$ | async">
+    <mat-option *ngIf="!x?.group" [value]="x">
+      {{ getOptionLabel(x) }}
+    </mat-option>
+    <mat-optgroup *ngIf="x?.group" [label]="x?.label">
+      <mat-option *ngFor="let child of x.group" [value]="child" [disabled]="child?.disabled">
+        {{ child?.value?.viewName }}
+      </mat-option>
+    </mat-optgroup>
+  </ng-container>
+</mat-autocomplete>

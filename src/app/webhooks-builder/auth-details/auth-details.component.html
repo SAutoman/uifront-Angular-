@@ -1,0 +1,60 @@
+<form [formGroup]="authDetailsForm">
+  <div *ngIf="showBasicAuth">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Username' | translate }}</mat-label>
+      <input type="text" matInput formControlName="username" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Password' | translate }}</mat-label>
+      <input type="password" placeholder="****" matInput formControlName="password" />
+    </mat-form-field>
+  </div>
+  <div *ngIf="showGrantType">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Grant Type' | translate }}</mat-label>
+      <input type="number" matInput formControlName="grantType" />
+    </mat-form-field>
+  </div>
+  <div *ngIf="showClientCreds">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Token End Point' | translate }}</mat-label>
+      <input type="text" matInput formControlName="tokenEndpoint" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Client Id' | translate }}</mat-label>
+      <input type="text" matInput formControlName="clientId" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Client Secret' | translate }}</mat-label>
+      <input type="text" matInput formControlName="clientSecret" />
+    </mat-form-field>
+    <div class="d-flex">
+      <mat-form-field appearance="outline" class="w-25">
+        <mat-label>{{ 'Scopes' | translate }}</mat-label>
+        <input type="text" matInput formControlName="scopes" #scope />
+      </mat-form-field>
+      <button class="ml-3" mat-icon-button color="primary" (click)="addScope(scope.value)">
+        <app-icon [name]="'add'"></app-icon>{{ 'Add' | translate }}
+      </button>
+    </div>
+    <div *ngIf="scopesList.length > 0" class="d-flex w-100 my-3">
+      <mat-chip-list>
+        <mat-chip color="primary" *ngFor="let scope of scopesList; let i = index" (removed)="removeScope(i)">
+          {{ scope | titlecase | translate }}
+          <app-icon [name]="'close'" matChipRemove></app-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+  <div *ngIf="showApiKeyInfo">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Key' | translate }}</mat-label>
+      <input type="text" matInput formControlName="key" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'Value' | translate }}</mat-label>
+      <input type="text" matInput formControlName="value" />
+    </mat-form-field>
+    <mat-checkbox formControlName="addToHeader">{{ 'Add to header' | translate }}</mat-checkbox>
+  </div>
+</form>

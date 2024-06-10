@@ -1,0 +1,89 @@
+<h3 mat-dialog-title [id]="'title_' + componentId">{{ title | translate }}</h3>
+<div *ngIf="isUpdateMode">
+  <mat-form-field>
+    <mat-label>{{ 'Quick Search' | translate }}</mat-label>
+    <input type="text" matInput [(ngModel)]="searchTerm" />
+  </mat-form-field>
+</div>
+<ng-container *ngIf="fields$ | async as fields">
+  <mat-dialog-content>
+    <ng-container *ngIf="hasFields(fields); else emptyMessageTmpl">
+      <div class="py-3">
+        <!-- <ng-container *ngIf="expressions$ | async as exs"> -->
+        <!-- <div class="w-100 d-flex align-self-center text-warning" *ngIf="!exs.length">{{ 'Please add some function' | translate }}</div> -->
+        <!-- </ng-container> -->
+        <button [id]="'add_' + componentId" class="w-100" color="primary" mat-stroked-button (click)="createExpression(fields)">
+          <app-icon [name]="'add'"></app-icon>
+          {{ 'New Condition' | translate }}
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mt-3">
+        <mat-accordion>
+          <div *ngIf="expressions$ | async as exs" cdkDropList [cdkDropListData]="exs" (cdkDropListDropped)="onFunctionDrag($event, exs)">
+            <mat-expansion-panel
+              [id]="'panelExpressions_' + componentId"
+              *ngFor="let expression of exs | filterFields: searchTerm"
+              [expanded]="expression.configuration.expanded"
+              (opened)="onExpanded(expression)"
+              (closed)="onCollapse(expression)"
+              class="mat-elevation-z0 mb-3"
+              cdkDrag
+              [cdkDragData]="expression"
+            >
+              <mat-expansion-panel-header>
+                <div class="row w-100 align-items-center">
+                  <button class="col-1 move" mat-icon-button color="primary" cdkDragHandle>
+                    <app-icon [name]="'drag-indicator'"></app-icon>
+                  </button>
+                  <div class="col-10" [class.text-danger]="!expression.name || expression.name === defaultExprName">
+                    <span *ngIf="expression.name && expression.name !== defaultExprName">{{ expression.name }}</span>
+                    <span *ngIf="!expression.name || expression.name === defaultExprName">{{ defaultExprName | translate }}</span>
+                  </div>
+                  <div class="col-1">
+                    <button
+                      [id]="'remove_' + componentId"
+                      (click)="confirmDeleteExpression($event, expression)"
+                      matTooltip="{{ 'Remove' | translate }}"
+                      mat-icon-button
+                      color="warn"
+                    >
+                      <app-icon [name]="'trash'" class="danger"></app-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-expansion-panel-header>
+
+              <app-form-function-item
+                class="mt-3 d-block"
+                [expression]="expression"
+                [fieldIds]="expression.selectedFieldIds"
+                [modelRef]="expression?.expressionModel"
+                (update)="onExpressionUpdate($event, expression)"
+                (conditions)="onConditionsUpdate($event)"
+              >
+              </app-form-function-item>
+            </mat-expansion-panel>
+          </div>
+        </mat-accordion>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="expressions$ | async as exs">
+      <mat-dialog-actions align="end">
+        <button color="primary" mat-stroked-button (click)="cancelDialog()" class="mr-2">
+          <app-icon [name]="'close'"></app-icon>
+          {{ 'Cancel' | translate }}
+        </button>
+        <button color="primary" mat-flat-button (click)="onSave(exs)" [disabled]="!isValid(exs)">
+          <app-icon [name]="'save'"></app-icon>
+          {{ 'Save' | translate }}
+        </button>
+      </mat-dialog-actions>
+    </ng-container>
+  </mat-dialog-content>
+</ng-container>
+
+<ng-template #emptyMessageTmpl>
+  <p>{{ 'Please add fields to create functions' | translate }}</p>
+</ng-template>

@@ -1,0 +1,26 @@
+@import '../../../assets/styles/variable.scss';
+:host ::ng-deep {
+  display: block;
+  margin-top: -4px;
+  border-bottom: solid thin $dark-dividers;
+  margin-left: -16px;
+  width: calc(100% + 32px);
+
+  mat-button-toggle-group {
+    width: 100%;
+    background-color: $bodycolor;
+    z-index: 2;
+    border: none !important;
+    overflow: visible;
+
+    .mat-button-toggle {
+      background-color: $bodycolor;
+    }
+    .mat-button-toggle-checked {
+      color: $white !important;
+      position: relative;
+      border-right: solid thin $dark-dividers;
+      z-index: 2;
+    }
+  }
+}

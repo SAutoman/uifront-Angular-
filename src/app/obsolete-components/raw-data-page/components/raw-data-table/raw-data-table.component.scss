@@ -1,0 +1,122 @@
+// app-raw-data-table {
+//   display: flex;
+//   flex-direction: column;
+//   flex-grow: 1;
+//   height: calc(100% - 65px);
+//   position: relative;
+
+//   .case-actions {
+//     margin: 20px 0 20px 0;
+//     padding: 20px !important;
+//   }
+
+//   .k-disabled input {
+//     user-select: none !important;
+//     pointer-events: none !important;
+//     opacity: 0.6;
+//   }
+//   app-grid-layout-options {
+//     .container {
+//       justify-content: flex-start;
+//       align-items: center;
+//       .controls--raw-actions {
+//       }
+//       .controls--layouts {
+//         order: 4;
+//         margin-left: auto;
+//       }
+//       .controls--exports {
+//         display: inline-flex;
+//         .btn {
+//           margin: 0 0.25rem;
+//         }
+//         .controls--exports-export-btn {
+//           order: -1;
+//         }
+//       }
+//     }
+//   }
+
+//   .primary {
+//     color: #005e16;
+//   }
+
+//   .reply {
+//     color: rgba(0, 0, 0, 0.719);
+//     -webkit-transform: scaleX(-1);
+//     transform: scaleX(-1);
+//   }
+
+//   .container {
+//     display: flex;
+//     justify-content: flex-end;
+//   }
+
+//   .layouts {
+//     margin-right: 15px;
+//     width: 35%;
+//   }
+
+//   .options {
+//     margin-right: 5px;
+//   }
+
+//   .create {
+//     display: flex;
+//     width: 100%;
+//     align-items: center;
+//   }
+
+//   .layout-name {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+
+//   .layout-name-info {
+//     font-size: 12px;
+//     font-style: italic;
+//   }
+
+//   .delete {
+//     width: 87%;
+//     margin-top: 5px;
+//   }
+
+//   .container-actions {
+//     display: flex;
+//     justify-content: space-between;
+//   }
+
+//   .add .btn {
+//     margin-right: 5px;
+//   }
+
+//   .grid-container {
+//     height: 100%;
+//     kendo-grid {
+//       height: 100%;
+//     }
+//   }
+
+//   .info-icon {
+//     margin-top: 11px;
+//     color: #3c7cb5;
+//     cursor: pointer;
+//   }
+
+//   .grid {
+//     overflow-x: auto;
+//   }
+
+//   .k-i-loading {
+//     // font-size: 5rem;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     font-size: 64px;
+//     background-color: rgba(255, 255, 255, 0.3);
+//     color: gray;
+//   }
+// }

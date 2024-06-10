@@ -1,0 +1,12 @@
+<app-wfm-grid
+  #companyGrid
+  pageTitle="Companies"
+  [gridConfiguration]="companyGridSettingsConf"
+  [gridData]="gridData"
+  gridAreaType="companies"
+  [actions]="gridActions"
+  showCreateButton="true"
+  (actionEvent)="onActionClick($event)"
+  (createBtnEmitter)="toCreatePage($event)"
+>
+</app-wfm-grid>

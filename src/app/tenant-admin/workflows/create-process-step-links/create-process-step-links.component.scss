@@ -1,0 +1,53 @@
+.card {
+  width: 100%;
+
+  mat-card-content {
+    width: 75%;
+
+    mat-form-field {
+      width: 50%;
+    }
+
+    .tbl button {
+      margin-inline: 0.25em;
+      cursor: default;
+
+      #delBtn {
+        cursor: pointer !important;
+      }
+    }
+  }
+}
+
+.align {
+  text-align: center;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  div {
+    margin-right: 5px;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+  color: blue;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.action-item-flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@media only screen and (max-width: 1260px) {
+  .card {
+    width: auto;
+  }
+}

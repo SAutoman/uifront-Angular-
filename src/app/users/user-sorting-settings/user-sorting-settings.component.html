@@ -1,0 +1,43 @@
+<mat-card class="outline mat-elevation-z0 m-b-16">
+  <mat-card-header class="header">
+    <mat-card-title>{{ 'User Sorting Settings' | translate }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form class="add-form" [formGroup]="sortingSettingForm" (ngSubmit)="onSubmit()">
+      <h4 class="pl-2">{{ 'Select sorting Setting' | translate }}</h4>
+      <mat-radio-group
+        [id]="'radio_' + componentId"
+        formControlName="sortSetting"
+        class="sorting-page-buttons"
+        (change)="userSettingsChanged()"
+      >
+        <mat-radio-button
+          [id]="'newest_' + componentId"
+          color="primary"
+          [value]="sortingSettings.newestFirst"
+          class="sorting-page-btn-radio"
+        >
+          {{ 'Newest first' | translate }}
+        </mat-radio-button>
+        <mat-radio-button
+          [id]="'oldest_' + componentId"
+          color="primary"
+          [value]="sortingSettings.oldestFirst"
+          class="sorting-page-btn-radio"
+        >
+          {{ 'Oldest first' | translate }}
+        </mat-radio-button>
+        <mat-radio-button [id]="'default_' + componentId" color="primary" [value]="sortingSettings.default" class="sorting-page-btn-radio">
+          {{ 'Default' | translate }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div class="submit-wrapper">
+        <button [id]="'save_' + componentId" [disabled]="sortingSettingForm.invalid" mat-flat-button color="primary" type="submit">
+          <app-icon [name]="'save'"></app-icon> {{ 'Save' | translate }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

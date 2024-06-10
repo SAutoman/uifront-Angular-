@@ -1,0 +1,42 @@
+<mat-card class="outline mat-elevation-z0" *ngIf="steps" [formGroup]="actionForm">
+  <h4 class="mb-2">{{ 'Fields to be used in Math Expression' | translate }}</h4>
+
+  <mat-card class="outline mat-elevation-z0 pb-0" *ngFor="let field of expressionFields">
+    <h5 class="mb-2 font-weight-bold">{{ field.fieldKey }}</h5>
+    <app-field-path-generator
+      [fieldPathInput]="field"
+      [workflow]="workflow"
+      [steps]="steps"
+      [allowedFieldTypes]="allowedTypes"
+      (fieldPathEmitter)="expressionFieldPathUpdated($event)"
+    >
+    </app-field-path-generator>
+  </mat-card>
+  <div class="d-flex justify-content-end py-3">
+    <button mat-flat-button color="primary" (click)="addNewExpressionField()" class="btn-sm">
+      <app-icon [name]="'add'">add</app-icon>
+      {{ 'Add Field' | translate }}
+    </button>
+  </div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>{{ 'Type the formula' | translate }}</mat-label>
+    <mat-hint>
+      <div>{{ '+-/*() are supported' | translate }}</div>
+      <div>{{ 'Sample formula:' | translate }} (field1 + field2)/field1 * 100</div>
+    </mat-hint>
+    <input matInput color="primary" formControlName="formula" required />
+    <mat-error> {{ 'Please fill in the formula!' | translate }}</mat-error>
+  </mat-form-field>
+
+  <h4 class="mb-2">{{ 'Where to store the formula result' | translate }}</h4>
+
+  <app-field-path-generator
+    [fieldPathInput]="resultField"
+    [workflow]="workflow"
+    [steps]="steps"
+    [allowedFieldTypes]="allowedTypes"
+    (fieldPathEmitter)="resultFieldPathUpdated($event)"
+  >
+  </app-field-path-generator>
+</mat-card>

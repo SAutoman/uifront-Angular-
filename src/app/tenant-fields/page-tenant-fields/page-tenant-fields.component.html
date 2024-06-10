@@ -1,0 +1,135 @@
+<div class="container-fluid h-100 overflow-auto">
+  <div class="row py-3">
+    <div class="col-md-7 mx-auto">
+      <mat-card class="outline mat-elevation-z0">
+        <mat-card-header class="header mb-0" *ngIf="isDeskTop">
+          <mat-card-title>{{ title | translate }}</mat-card-title>
+        </mat-card-header>
+
+        <div class="py-3 sticky-top">
+          <!-- <h4 class="p-r-16">{{ workflow?.name }}</h4> -->
+          <mat-form-field class="w-50 mb-0" appearance="outline">
+            <mat-label>{{ 'Quick Search' | translate }}</mat-label>
+            <input matInput [(ngModel)]="qsTerm" (input)="filterWorkItems()" class="pl-3" />
+            <app-icon [name]="'search'" matPrefix class="search-icon"></app-icon>
+            <button matSuffix mat-icon-button aria-label="Clear" *ngIf="qsTerm" (click)="filterWorkItems(true)">
+              <app-icon [name]="'delete'" class="primary"></app-icon>
+            </button>
+          </mat-form-field>
+          <button
+            class="mt-1"
+            style="float: right"
+            mat-flat-button
+            color="primary"
+            (click)="openDialogAddField(createTenantFieldTmpl)"
+            [disabled]="disabled"
+          >
+            <app-icon [name]="'add'"></app-icon>
+            {{ 'Add Field' | translate }}
+          </button>
+        </div>
+
+        <mat-card class="outline mat-elevation-z0">
+          <ng-container *ngIf="state$ | async as state">
+            <ng-container *ngIf="!state.loading || state.silent; else loading">
+              <mat-button-toggle-group
+                [disabled]="disabled"
+                name="fontStyle"
+                aria-label="Filtration Type"
+                [value]="selectedType"
+                (change)="onFilterChange($event, state)"
+                class="tab-look"
+              >
+                <mat-button-toggle [value]="type.value" *ngFor="let type of toggleGroup"
+                  >{{ type.viewValue | translate }}
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+
+              <div class="pt-3">
+                <ng-container *ngIf="state.workItems$ | async as items">
+                  <div
+                    *ngIf="items.length > 0"
+                    #listContainer
+                    class="list-container"
+                    cdkDropList
+                    [cdkDropListData]="items"
+                    (cdkDropListDropped)="onDrag($event)"
+                  >
+                    <app-list-item
+                      cdkDrag
+                      class="app-list-item"
+                      *ngFor="let item of filteredWorkItems"
+                      [name]="item.viewName + ' (' + item.fieldName + ')'"
+                      [nameParam]="createParamName(item)"
+                      [useDragEndDrop]="true"
+                      [disabled]="disabled"
+                      [additionalInfo]="item.areaTypeNames"
+                      (edit)="openDialogEditField($event, updateTenantFieldTmpl, item)"
+                      (remove)="onRemove($event, item)"
+                      [fieldType]="selectedType"
+                    >
+                    </app-list-item>
+                  </div>
+
+                  <ng-container *ngIf="!items.length">
+                    {{ 'No items found' | translate }}
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </mat-card>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<ng-template #createTenantFieldTmpl>
+  <h3 mat-dialog-title>{{ 'Create Field' | translate }}</h3>
+  <mat-dialog-content>
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div>Basic Field</div>
+        </ng-template>
+        <ng-template matTabContent>
+          <app-field-editor [hideComputeValueOption]="hideComputeValueOption" (save)="onFieldSave($event)"> </app-field-editor>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div>Connector Field</div>
+        </ng-template>
+
+        <ng-template matTabContent>
+          <app-connector-field-editor (save)="onFieldSave($event)"></app-connector-field-editor>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+</ng-template>
+
+<ng-template #updateTenantFieldTmpl>
+  <h3 mat-dialog-title>{{ 'Update Field' | translate }}</h3>
+  <mat-dialog-content>
+    <app-field-editor
+      *ngIf="updateItem?.type !== connectorFieldType"
+      [hideComputeValueOption]="hideComputeValueOption"
+      (save)="onFieldSave($event)"
+      [field]="updateItem"
+    ></app-field-editor>
+
+    <app-connector-field-editor
+      [field]="updateItem"
+      *ngIf="updateItem?.type === connectorFieldType"
+      (save)="onFieldSave($event)"
+    ></app-connector-field-editor>
+  </mat-dialog-content>
+</ng-template>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

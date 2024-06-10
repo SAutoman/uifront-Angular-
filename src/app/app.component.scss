@@ -1,0 +1,7 @@
+// move out time picker in front of modals
+::ng-deep {
+  .timepicker-overlay,
+  .timepicker-backdrop-overlay {
+    z-index: 1001 !important;
+  }
+}

@@ -1,0 +1,32 @@
+// @import '../../../../node_modules/bootstrap/scss/functions.scss';
+// @import '../../../../node_modules/bootstrap/scss/variables.scss';
+// @import '../../../../node_modules/bootstrap/scss/mixins.scss';
+
+// .cdk-drag-placeholder {
+//   opacity: 0;
+// }
+
+// .list-container.cdk-drop-list-dragging .app-list-item:not(.cdk-drag-placeholder) {
+//   transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// @include media-breakpoint-down(md) {
+//   .footer-toolbar {
+//     padding: 0;
+//     box-shadow: none;
+//   }
+//   .footer-toolbar button {
+//     width: 100%;
+//   }
+// }
+
+@import '../../../assets/styles/variable.scss';
+:host ::ng-deep {
+  mat-button-toggle-group.tab-look {
+    width: calc(100% + 32px) !important;
+    border-bottom: solid thin $dark-dividers !important;
+    margin-left: -16px !important;
+    margin-right: -16px !important;
+    margin-top: -16px !important;
+  }
+}

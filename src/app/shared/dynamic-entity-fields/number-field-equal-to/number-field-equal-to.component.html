@@ -1,0 +1,9 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'Equal To' | translate }}</mat-label>
+  <input [id]="'inputNumber_' + componentId" matInput type="number" [formControl]="equalTo" required />
+  <mat-error *ngIf="equalTo?.touched && !equalTo.value"> {{ 'Equal to value is required' | translate }} </mat-error>
+  <mat-error *ngIf="equalTo?.touched && equalTo.value && equalTo?.hasError('maxLength')">
+    {{ 'Max allowed length is 50' | translate }}
+  </mat-error>
+</mat-form-field>

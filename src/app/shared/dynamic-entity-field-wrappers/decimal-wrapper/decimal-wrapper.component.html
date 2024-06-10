@@ -1,0 +1,13 @@
+<app-decimal-field
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.DecimalField && field.searchFieldModel.searchType == searchTypes.Range"
+>
+</app-decimal-field>
+
+<app-decimal-field-equal-to
+  (isFieldChanged)="onFieldChanged()"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.DecimalField && field.searchFieldModel.searchType == searchTypes.EqualTo"
+>
+</app-decimal-field-equal-to>

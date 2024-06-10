@@ -1,0 +1,28 @@
+<div *ngIf="!isLoading; else loading" class="container-fluid">
+  <div class="row">
+    <div class="col-lg-5 mx-auto py-4">
+      <form [formGroup]="tenantFileSizeForm" (ngSubmit)="onSubmit(tenantFileSizeForm.value)">
+        <mat-card class="outline mat-elevation-z0">
+          <h4 class="mb-3">{{ 'Manage Document File Size' | translate }}</h4>
+
+          <app-tenant-search-auto-complete (tenantEmitter)="onTenantSelected($event)"></app-tenant-search-auto-complete>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'Select File Size' | translate }}</mat-label>
+            <mat-select formControlName="fileSize">
+              <mat-option *ngFor="let size of documentFileSizes" [value]="size">{{ size }} MB</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="text-right">
+            <button [id]="'submit_' + componentId" mat-flat-button color="primary" type="submit">{{ 'Submit' | translate }}</button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

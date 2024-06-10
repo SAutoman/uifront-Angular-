@@ -1,0 +1,17 @@
+<!-- <h2 [id]="'header_' + componentId" mat-dialog-title>Confirm Status Change</h2>
+<mat-dialog-content class="mat-typography">
+  <div *ngFor="let item of rolesPerTenant">
+    <h3 *ngIf="user.tenant.tenant.tenantId === item.tenantId && !message">
+      Are you sure you want to send this case to {{ item.tenantName }}? If you want just to save the data, click on save buttons below for
+      each step / form
+    </h3>
+  </div>
+
+  <h3 *ngIf="message">
+    {{ message }}
+  </h3>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button [id]="'ok_' + componentId" mat-flat-button color="primary" class="mr-2" [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+  <button [id]="'cancel_' + componentId" mat-stroked-button color="primary" [mat-dialog-close]="false">Cancel</button>
+</mat-dialog-actions> -->

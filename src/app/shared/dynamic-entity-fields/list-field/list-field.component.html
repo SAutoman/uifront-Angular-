@@ -1,0 +1,10 @@
+<p class="font-16 font-medium my-2">{{ model.displayName || model.fieldName }}</p>
+<mat-form-field appearance="outline">
+  <mat-label>{{ 'Select item' | translate }}</mat-label>
+
+  <mat-select [id]="'selectList_' + componentId" multiple (selectionChange)="onChange($event)" [(ngModel)]="model.items">
+    <mat-option [id]="item.item + i + '_' + componentId" *ngFor="let item of listItems; let i = index" [value]="item.value">{{
+      item.key
+    }}</mat-option>
+  </mat-select>
+</mat-form-field>

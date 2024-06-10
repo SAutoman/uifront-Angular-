@@ -1,0 +1,16 @@
+<app-date-time-field
+  (isFieldChanged)="onFieldChanged()"
+  [isSystem]="field.isSystem"
+  [model]="field.searchFieldModel"
+  [showDynamicViewOption]="showDynamicViewOption"
+  *ngIf="field.type == fieldTypeIds.DateTimeField && field.searchFieldModel.searchType == searchTypes.Range"
+>
+</app-date-time-field>
+
+<app-date-time-field-equal-to
+  (isFieldChanged)="onFieldChanged()"
+  [isSystem]="field.isSystem"
+  [model]="field.searchFieldModel"
+  *ngIf="field.type == fieldTypeIds.DateTimeField && field.searchFieldModel.searchType == searchTypes.EqualTo"
+>
+</app-date-time-field-equal-to>

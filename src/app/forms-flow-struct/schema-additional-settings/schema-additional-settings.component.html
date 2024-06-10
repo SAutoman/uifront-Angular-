@@ -1,0 +1,59 @@
+<mat-dialog-content>
+  <mat-tab-group>
+    <mat-tab label="{{ 'Schema Validators' | translate }} ({{ schemaValidators?.length || 0 }})" *ngIf="isValidatorsAllowed">
+      <br />
+      <app-schema-validators
+        [fields]="fields"
+        [schemaValidators]="schemaValidators"
+        [schema]="schema"
+        (emitData)="emitSchemaValidatorsOutput($event)"
+      ></app-schema-validators>
+    </mat-tab>
+    <mat-tab label="{{ 'Fields Visibility In Grid' | translate }} ({{ fieldsVisibilty?.length || 0 }})" *ngIf="isFieldSettingAllowed">
+      <br />
+      <app-fields-visibility
+        [fields]="fields"
+        (emitter)="fieldsVisibilityUpdated($event)"
+        [fieldsVisibilitySettings]="fieldsVisibilty"
+      ></app-fields-visibility>
+    </mat-tab>
+    <mat-tab label="{{ 'Conditional Formatting' | translate }} ({{ formattings?.length || 0 }})" *ngIf="isFormattingAllowed">
+      <br />
+      <app-conditional-formatting-list
+        [fields]="fields"
+        [formattings]="formattings"
+        (emitData)="emitFormattingsOutput($event)"
+      ></app-conditional-formatting-list>
+    </mat-tab>
+    <mat-tab label="{{ 'Fast Create Settings' | translate }} ({{ fastCreateSettings ? 1 : 0 }})" *ngIf="isFastCreateAllowed">
+      <br />
+      <app-fast-create-setting
+        [fields]="fields"
+        [fastCreateSettings]="fastCreateSettings"
+        (emitData)="emitFastCreateOutput($event)"
+      ></app-fast-create-setting>
+    </mat-tab>
+    <mat-tab label="{{ 'Link List Fields' | translate }} ({{ linkedListFields?.length || 0 }})" *ngIf="isListsLinksAllowed">
+      <br />
+      <app-linked-list-fields
+        [fields]="fields"
+        [linkedListFields]="linkedListFields"
+        (emitData)="emitLinkedListFieldsOutput($event)"
+      ></app-linked-list-fields>
+    </mat-tab>
+    <mat-tab label="{{ 'Data Lifetime' | translate }} ({{ dataLifetimeSettings ? 1 : 0 }})" *ngIf="isDataLifetimeSettingsAllowed">
+      <br />
+      <app-data-lifetime
+        [fields]="fields"
+        [dataLifetimeSettings]="dataLifetimeSettings"
+        (emitData)="emitDataLifetimeOutput($event)"
+      ></app-data-lifetime>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()" class="mr-2" color="primary">
+    <app-icon name="close"></app-icon> {{ 'Cancel' | translate }}
+  </button>
+  <button mat-flat-button color="primary" [disabled]="!isValid()" (click)="submit()"><app-icon name="save"></app-icon>Save</button>
+</mat-dialog-actions>

@@ -1,0 +1,99 @@
+<div class="form-group-container d-flex flex-column w-100">
+  <ng-container *ngIf="view$ | async as view; else loading">
+    <ng-container *ngIf="useApplyTo">
+      <div class="row">
+        <small class="col mb-0 text-muted">{{ 'Select Field Area' | translate }}</small>
+      </div>
+      <form class="mb-2" [formGroup]="view.useIn.form">
+        <formly-form
+          class="row use-in-form-group"
+          [form]="view.useIn.form"
+          [fields]="view.useIn.fields"
+          [model]="view.useIn.model"
+          (modelChange)="onModelChange($event, view)"
+        ></formly-form>
+      </form>
+    </ng-container>
+    <br />
+    <form [formGroup]="view.field.form">
+      <formly-form class="row" [form]="view.field.form" [fields]="view.field.fields" [model]="view.field.model"> </formly-form>
+    </form>
+
+    <ng-container *ngIf="view.fieldType$ | async as fieldType">
+      <app-file-name-settings
+        *ngIf="isFieldTypeFile(fieldType, view)"
+        [field]="field"
+        (fileNameSettingEmitter)="onFileNameSettingChange($event, view)"
+      ></app-file-name-settings>
+
+      <app-thumbnail-settings *ngIf="isFieldTypeFile(fieldType, view)" [field]="field" (update)="thumbnailSettingsUpdate($event, view)">
+      </app-thumbnail-settings>
+    </ng-container>
+
+    <app-number-field-format
+      *ngIf="addNumberFormatting"
+      [field]="field"
+      [fieldType$]="view.fieldType$"
+      (update)="numberFormatUpdated($event, view)"
+    ></app-number-field-format>
+
+    <app-field-default-value
+      *ngIf="field?.type !== fieldTypes.ListOfLinksField && field?.type !== fieldTypes.SignatureField"
+      [field]="field"
+      [fieldType$]="view.fieldType$"
+      [listId$]="view.listId$"
+      [hideComputeValueOption]="hideComputeValueOption"
+      (update)="defaultValueUpdated($event, view)"
+    >
+    </app-field-default-value>
+
+    <app-field-highlights
+      *ngIf="isSchemaBuilder && field?.type !== fieldTypes.ListOfLinksField"
+      [field]="field"
+      (update)="highlightsConfigUpdated($event, view)"
+    >
+    </app-field-highlights>
+    <ng-container *ngIf="view.fieldType$ | async as fieldType">
+      <app-field-hyperlink-settings
+        *ngIf="isHyperlinkBuilderVisible(fieldType)"
+        [field]="field"
+        (update)="hyperlinkSettingsUpdated($event, view)"
+      >
+      </app-field-hyperlink-settings>
+    </ng-container>
+
+    <ng-container *ngIf="view.fieldType$ | async as fieldType">
+      <app-auto-increment-field
+        *ngIf="isAutoIncrementSettingVisible(fieldType)"
+        [field]="field"
+        (update)="autoIncrementSettingsUpdate($event, view)"
+      >
+      </app-auto-increment-field>
+    </ng-container>
+
+    <app-field-validators
+      *ngIf="field?.type !== fieldTypes.ListOfLinksField"
+      [field]="field"
+      [fieldType]="view.fieldType$"
+      (update)="onValidatorsUpdate($event, view)"
+    >
+    </app-field-validators>
+
+    <div class="button-wrapper">
+      <button class="mr-3" mat-stroked-button color="primary" (click)="onClose(view)">
+        <app-icon [name]="'close'"></app-icon>
+        {{ 'Cancel' | translate }}
+      </button>
+      <button mat-flat-button color="primary" [disabled]="!isValidForm(view) || disableSaveBtn" (click)="onSaveForm(view)">
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #loading>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

@@ -1,0 +1,248 @@
+<div class="canvas-wrapper">
+  <div class="toolbox" *ngIf="canvas">
+    <button
+      mat-icon-button
+      #canvasZoomTrigger="matMenuTrigger"
+      color="primary"
+      (mouseover)="openMenu(canvasZoomTrigger)"
+      [matMenuTriggerFor]="canvasZoom"
+      place
+    >
+      <app-icon [name]="'search'"></app-icon>
+    </button>
+    <mat-menu [overlapTrigger]="true" #canvasZoom="matMenu" yPosition="above" xPosition="after" class="zoom-options">
+      <div
+        (click)="$event.stopPropagation()"
+        (keydown)="$event.stopPropagation()"
+        (mouseleave)="closeMenu(canvasZoomTrigger)"
+        class="d-flex"
+      >
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="resetZoom($event)"
+          matTooltip="{{ 'Reset Zoom' | translate }}"
+          matTooltipPosition="above"
+        >
+          <app-icon [name]="'refresh'"></app-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="zoomOut($event)"
+          matTooltip="{{ 'Zoom Out' | translate }}"
+          matTooltipPosition="above"
+        >
+          <app-icon [name]="'zoom-out'"></app-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="zoomIn($event)"
+          matTooltip="{{ 'Zoom In' | translate }}"
+          matTooltipPosition="above"
+        >
+          <app-icon [name]="'zoom-in'"></app-icon>
+        </button>
+      </div>
+    </mat-menu>
+
+    <div>
+      <button mat-icon-button [ngClass]="canvas && !isDraggingMode ? 'mat-primary' : 'mat-warn'" (click)="toggleDragging()">
+        <app-icon
+          [name]="'pan'"
+          *ngIf="!isDraggingMode"
+          matTooltip="{{ 'Start Dragging' | translate }}"
+          matTooltipPosition="after"
+        ></app-icon>
+        <app-icon
+          [name]="'no-pan'"
+          *ngIf="isDraggingMode"
+          matTooltip="{{ 'Stop Dragging' | translate }}"
+          matTooltipPosition="after"
+          class="danger"
+        ></app-icon>
+      </button>
+      <button
+        mat-icon-button
+        [disabled]="isButtonDisabled('wallpaper')"
+        color="primary"
+        matTooltip="{{ 'Images' | translate }}"
+        matTooltipPosition="after"
+        [matMenuTriggerFor]="imageMenu"
+      >
+        <app-icon [name]="'image'"></app-icon>
+      </button>
+      <mat-menu #imageMenu="matMenu">
+        <button mat-menu-item (click)="removeBackground()" *ngIf="canvas.backgroundImage">{{ 'Clear Background' | translate }}</button>
+
+        <button mat-menu-item (click)="file1.click()">{{ 'Set Background Image' | translate }}</button>
+        <button mat-menu-item (click)="file2.click()">{{ 'Add Image' | translate }}</button>
+      </mat-menu>
+
+      <button
+        mat-icon-button
+        color="primary"
+        matTooltip="{{ 'Shapes' | translate }}"
+        matTooltipPosition="after"
+        [matMenuTriggerFor]="shapeMenu"
+        [disabled]="isButtonDisabled('polygon')"
+      >
+        <app-icon [name]="'poligon'"></app-icon>
+      </button>
+      <mat-menu #shapeMenu="matMenu">
+        <button mat-menu-item (click)="newRect()"><app-icon [name]="'rectangle'"></app-icon> {{ 'Rectangle' | translate }}</button>
+        <button mat-menu-item (click)="newCircle()"><app-icon [name]="'ellipse'"></app-icon> {{ 'Circle' | translate }}</button>
+        <button [disabled]="isButtonDisabled('polygon')" mat-menu-item (click)="newPolygon()">
+          <app-icon [name]="'poligon'"></app-icon> {{ 'Polygon' | translate }}
+        </button>
+      </mat-menu>
+
+      <button
+        [disabled]="isButtonDisabled('color')"
+        mat-icon-button
+        color="primary"
+        matTooltip="{{ 'Color' | translate }}"
+        matTooltipPosition="after"
+        [matMenuTriggerFor]="colorMenu"
+      >
+        <mat-icon>palette</mat-icon>
+      </button>
+      <mat-menu #colorMenu="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="fillColors">{{ 'Fill Color' | translate }}</button>
+        <button mat-menu-item [matMenuTriggerFor]="strokeColors">
+          {{ 'Stroke Color' | translate }}
+        </button>
+
+        <mat-menu #fillColors="matMenu">
+          <button class="colorOption" *ngFor="let color of allowedColors" mat-menu-item (click)="changeFillColor(color.key)">
+            <span class="colorIndicator" [ngStyle]="{ backgroundColor: color.key }"></span>
+
+            {{ color.label | translate }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #strokeColors="matMenu">
+          <button class="colorOption" *ngFor="let color of allowedColors" mat-menu-item (click)="changeStrokeColor(color.key)">
+            <span class="colorIndicator" [ngStyle]="{ backgroundColor: color.key }"></span>
+            {{ color.label | translate }}
+          </button>
+        </mat-menu>
+      </mat-menu>
+
+      <button
+        [disabled]="isButtonDisabled('draw')"
+        mat-icon-button
+        [ngClass]="canvas && !canvas.isDrawingMode ? 'mat-primary' : 'mat-warn'"
+        (click)="toggleDrawing()"
+      >
+        <app-icon
+          [name]="'draw'"
+          *ngIf="canvas && !canvas.isDrawingMode"
+          matTooltip="{{ 'Draw' | translate }}"
+          matTooltipPosition="after"
+        ></app-icon>
+        <app-icon
+          [name]="'no-draw'"
+          *ngIf="canvas && canvas.isDrawingMode"
+          matTooltip="{{ 'Stop Drawing' | translate }}"
+          matTooltipPosition="after"
+          class="danger"
+        ></app-icon>
+      </button>
+
+      <button
+        [disabled]="isButtonDisabled('text')"
+        mat-icon-button
+        color="primary"
+        (click)="addText()"
+        matTooltip="{{ 'Text' | translate }}"
+        matTooltipPosition="after"
+      >
+        <app-icon [name]="'text'"></app-icon>
+      </button>
+
+      <button
+        [disabled]="isButtonDisabled('group')"
+        mat-icon-button
+        color="primary"
+        (click)="groupItems()"
+        matTooltip="{{ 'Group Selection' | translate }}"
+        matTooltipPosition="after"
+      >
+        <app-icon [name]="'group'"></app-icon>
+      </button>
+      <button
+        [disabled]="isButtonDisabled('ungroup')"
+        mat-icon-button
+        color="primary"
+        (click)="ungroupItems()"
+        matTooltip="{{ 'Ungroup' | translate }}"
+        matTooltipPosition="after"
+      >
+        <app-icon [name]="'ungroup'"></app-icon>
+      </button>
+      <button
+        [disabled]="isButtonDisabled('moveTop')"
+        mat-icon-button
+        color="primary"
+        (click)="moveToTop()"
+        matTooltip="{{ 'Move To Top' | translate }}"
+        matTooltipPosition="after"
+      >
+        <app-icon [name]="'move-top'"></app-icon>
+      </button>
+      <button
+        [disabled]="isButtonDisabled('copy')"
+        mat-icon-button
+        color="primary"
+        (click)="copyObject()"
+        matTooltip="{{ 'Copy' | translate }}"
+        matTooltipPosition="after"
+      >
+        <app-icon [name]="'copy'"></app-icon>
+      </button>
+
+      <button
+        [disabled]="isButtonDisabled('remove')"
+        mat-icon-button
+        color="warn"
+        (click)="delete()"
+        matTooltip="{{ 'Remove Selection' | translate }}"
+        matTooltipPosition="after"
+      >
+        <app-icon [name]="'delete'"></app-icon>
+      </button>
+
+      <input
+        #file1
+        hidden
+        type="file"
+        accept=".jpg, .jpeg, .png, .bmp, .gif, .svg"
+        (change)="onUpload($event, true)"
+        (click)="$event.target.value = null"
+      />
+      <input
+        #file2
+        hidden
+        type="file"
+        accept=".jpg, .jpeg, .png, .bmp, .gif, .svg"
+        (change)="onUpload($event, false)"
+        (click)="$event.target.value = null"
+      />
+    </div>
+  </div>
+  <canvas id="yardBuilder"></canvas>
+  <mat-card class="sidebar outline mat-elevation-z0" [hidden]="!selection || selection.type === canvasObjectTypes.SELECTION">
+    <ng-container *ngIf="selection && selection.type !== canvasObjectTypes.SELECTION">
+      <div class="d-flex justify-content-between align-items-center">
+        <h4>{{ 'Unit Properties' | translate }}</h4>
+
+        <button mat-flat-button class="btn-sm" color="primary" (click)="openDataBindings()">{{ 'Unit Bindings' | translate }}</button>
+      </div>
+
+      <app-plan-unit-properties [selection]="selection" [canvas]="canvas"></app-plan-unit-properties>
+    </ng-container>
+  </mat-card>
+</div>

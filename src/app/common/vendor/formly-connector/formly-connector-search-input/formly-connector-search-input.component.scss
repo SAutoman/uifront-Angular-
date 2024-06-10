@@ -1,0 +1,40 @@
+@import '../../../../../assets/styles/variable.scss';
+
+:host {
+  input {
+    max-width: calc(100% - 24px) !important;
+  }
+  app-icon,
+  mat-spinner {
+    position: absolute;
+    right: -8px;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    &.matched {
+      stroke: $darkgreen;
+    }
+
+    &.notMatched {
+      stroke: $red;
+    }
+  }
+  ::ng-deep {
+    mat-spinner {
+      width: 20px !important;
+      height: 20px !important;
+      svg {
+        width: 20px !important;
+        height: 20px !important;
+      }
+    }
+  }
+
+  .selection-info {
+    font-size: 13px;
+  }
+}
+
+small {
+  display: block !important;
+}

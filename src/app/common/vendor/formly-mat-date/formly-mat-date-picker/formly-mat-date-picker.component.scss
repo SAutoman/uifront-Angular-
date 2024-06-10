@@ -1,0 +1,15 @@
+.picker-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: -8px !important;
+  top: -2px !important;
+}
+
+.mat-icon-button {
+  &:disabled {
+    color: grey !important;
+    cursor: default;
+  }
+}

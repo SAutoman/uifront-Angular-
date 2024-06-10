@@ -1,0 +1,32 @@
+<!-- <mat-dialog-content>
+  <ng-container *ngIf="view$ | async as view; else loading">
+    <form [formGroup]="view.form" [@fadeIn]>
+      <formly-form class="add-raw-data-form" [model]="view.model" [fields]="view.fields" [options]="view.options" [form]="view.form">
+      </formly-form>
+    </form>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions" align="end">
+  <ng-container *ngIf="view$ | async as view">
+    <button
+      mat-flat-button
+      [@fadeIn]
+      [disabled]="view.form.invalid || pending"
+      color="primary"
+      cdkFocusInitial
+      (click)="onSave(view)"
+      class="mr-2"
+    >
+      {{ inputButtonText | translate }}
+    </button>
+  </ng-container>
+
+  <button mat-stroked-button color="primary" [mat-dialog-close]="false">{{ 'Cancel' | translate }}</button>
+</mat-dialog-actions>
+
+<ng-template #loading>
+  <div class="spinner-container" [@fadeIn]>
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template> -->

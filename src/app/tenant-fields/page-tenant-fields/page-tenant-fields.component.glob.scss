@@ -1,0 +1,16 @@
+// .page-tenant-fields--create-field-dialog,
+// .page-tenant-fields--edit-field-dialog {
+//   .mat-dialog-container {
+//     padding: 0;
+//   }
+//   .mat-card {
+//     margin: 0;
+//     width: 100%;
+//   }
+// }
+.sticky-top {
+  background-color: $white;
+  z-index: 100;
+  position: sticky;
+  top: -16px;
+}

@@ -1,0 +1,15 @@
+:host ::ng-deep {
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: -0.2em;
+    button {
+      .mat-button-wrapper {
+        font-size: 24px;
+      }
+    }
+  }
+  width: 60%;
+  display: block;
+  @media (max-width: 540px) {
+    width: 100%;
+  }
+}

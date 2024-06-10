@@ -1,0 +1,22 @@
+<form [formGroup]="form">
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>{{ 'Some built in functions' | translate }}</mat-label>
+    <input matInput aria-label="Built in functions" [matAutocomplete]="auto" formControlName="functionGroup" />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="optionSelected($event)">
+      <mat-optgroup *ngFor="let group of formulaGroupOptions | async" [label]="group.group">
+        <mat-option *ngFor="let f of group.formulas" [value]="f.formula">
+          <div class="d-flex justify-content-between align-items-center">
+            <span>{{ f.name }}</span>
+            <button mat-stroked-button color="primary" (click)="toggleDetails($event, f)">
+              <app-icon *ngIf="f.showDetails" [name]="'arrow-up'"></app-icon>
+              <app-icon *ngIf="!f.showDetails" [name]="'arrow-down'"></app-icon>
+            </button>
+          </div>
+          <ng-container *ngIf="f.showDetails">
+            <app-formula-hint [formulaDetails]="f"></app-formula-hint>
+          </ng-container>
+        </mat-option>
+      </mat-optgroup>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

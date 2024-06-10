@@ -1,0 +1,74 @@
+<!-- ============================================================== -->
+<!-- Notification - style you can find in header.scss -->
+<!-- ============================================================== -->
+<!-- <button routerLink="{{notificationLink}}" mat-icon-button class="m-r-10 message">
+    <mat-icon>message</mat-icon>
+</button> -->
+<!-- ============================================================== -->
+<!-- Profile - style you can find in header.scss -->
+<!-- ============================================================== -->
+<!-- <button routerLink="{{messageLink}}" mat-icon-button class="m-r-10 email">
+    <mat-icon>email</mat-icon>
+</button> -->
+<!-- ============================================================== -->
+<!-- Profile - style you can find in header.scss -->
+<!-- ============================================================== -->
+<div class="d-flex align-items-center justify-content-end">
+  <button
+    mat-icon-button
+    color="primary"
+    [matMenuTriggerFor]="workflowMenu"
+    matTooltip="{{ 'Create Case' | translate }}"
+    matTooltipPosition="below"
+    class="mr-2"
+  >
+    <app-icon [name]="'add'"></app-icon>
+  </button>
+  <mat-menu #workflowMenu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item class="language-flex" [disabled]="true">
+        <span>{{ 'Select a Workflow' | translate }}</span>
+      </button>
+      <button mat-menu-item *ngFor="let wf of allWorkflows" class="language-flex" (click)="onWorkflowSelect(wf)">
+        <span>{{ wf?.name }}</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+  <img
+    [matMenuTriggerFor]="languageMenu"
+    *ngIf="selectedLanguage"
+    [src]="selectedLanguage.flag"
+    class="round-flag-img"
+    [matTooltip]="selectedLanguage.title"
+    matTooltipPosition="below"
+  />
+  <mat-menu #languageMenu="matMenu">
+    <button mat-menu-item *ngFor="let language of languageList" class="language-flex" (click)="changeLanguage(language.key)">
+      <img [src]="language.flag" />
+      <span>{{ language.title }}</span>
+    </button>
+  </mat-menu>
+
+  <p class="my-0 mr-3 user-name">{{ userName }}</p>
+  <button [matMenuTriggerFor]="profile" mat-icon-button *ngIf="!isMobileView; else mobile_avatar">
+    <app-avatar [avatar_url]="image"></app-avatar>
+  </button>
+  <ng-template #mobile_avatar>
+    <app-avatar (click)="toggleProfile.emit()" [avatar_url]="image"></app-avatar>
+  </ng-template>
+</div>
+<mat-menu #profile="matMenu" class="mymegamenu">
+  <button mat-menu-item routerLink="{{ userProfileLink }}">
+    <app-icon [name]="'user'"></app-icon>
+    {{ 'Profile' | translate }}
+  </button>
+  <button mat-menu-item (click)="onSignOut()">
+    <app-icon [name]="'logout'"></app-icon>
+    {{ 'Sign Out' | translate }}
+  </button>
+  <button mat-menu-item (click)="reportProblemAction()">
+    <mat-icon>bug_report</mat-icon>
+    {{ 'Report problem' | translate }}
+  </button>
+</mat-menu>

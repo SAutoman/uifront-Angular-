@@ -1,0 +1,14 @@
+<h4>{{ 'Remove entities based on expiration settings' | translate }}</h4>
+<ng-container *ngIf="view?.form">
+  <form class="" [formGroup]="view.form">
+    <formly-form class="w-100 row" [form]="view.form" [fields]="view.fields" [model]="view.model"> </formly-form>
+  </form>
+</ng-container>
+<ng-container *ngIf="view?.form?.get('field')?.value">
+  <small>{{ 'All items having selected field value before the selected period, will be removed' | translate }}</small>
+  <br />
+
+  <small>
+    <b>{{ 'Be aware that data-remove process will get activated as soon as the setting is saved!' | translate }}</b>
+  </small>
+</ng-container>

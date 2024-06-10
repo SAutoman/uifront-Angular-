@@ -1,0 +1,41 @@
+<!-- <div class="case" *ngFor="let case of cases">
+  <div class="title-wrap">{{ case.name }}</div>
+
+  <div class="button-wrapper">
+    <button
+      [id]="'menu_' + componentId"
+      mat-icon-button
+      matTooltip="options"
+      matTooltipPosition="above"
+      [matMenuTriggerFor]="menu"
+      (click)="onCaseOpened(case)"
+      (menuClosed)="menuClosed()"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu" class="menu">
+      <div *ngIf="!isLoaded" class="load" mat-menu-item>
+        <mat-spinner diameter="20"></mat-spinner>
+        <span class="span">Loading...</span>
+      </div>
+
+      <div *ngIf="isLoaded">
+        <button [id]="'redirect_' + componentId" mat-menu-item routerLink="../work-on-case/{{ case.id }}">
+          <mat-icon class="theme-icon">arrow_forward</mat-icon>
+          {{ buttonText }}
+        </button>
+
+        <button [id]="'info_' + componentId" mat-menu-item (click)="onQuickInfo(case.id)">
+          <mat-icon class="theme-icon">info</mat-icon>
+          quick info
+        </button>
+
+        <button [id]="'deleteCase_' + componentId" mat-menu-item *ngIf="canDeleteCase" (click)="onDeleteClicked(case)">
+          <mat-icon color="warn">delete</mat-icon>
+          delete case
+        </button>
+      </div>
+    </mat-menu>
+  </div>
+</div> -->

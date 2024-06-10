@@ -1,0 +1,96 @@
+<ng-container *ngIf="view$ | async as view">
+  <mat-dialog-content>
+    <form class="w-100 d-block" [formGroup]="view.form">
+      <formly-form [form]="view.form" [fields]="view.fields" [model]="view.model" [options]="options"> </formly-form>
+    </form>
+    <div *ngIf="allowActionsFor" class="button-wrapper">
+      <mat-checkbox [(ngModel)]="keepFormOpen" *ngIf="showKeepOpenCheckbox" class="mr-3 mb-2">
+        {{ 'Create Another' | translate }}
+      </mat-checkbox>
+      <ng-container [ngSwitch]="allowActionsFor">
+        <ng-container *ngSwitchCase="areaTypeEnum.rawData">
+          <button mat-stroked-button color="primary" class="mr-3" (click)="onCancel(view)">
+            <app-icon [name]="'close'"></app-icon>
+            {{ 'Cancel' | translate }}
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="onSubmit(view.form, view.model)"
+            [disabled]="!view.form.valid || formSubmitted"
+            *ngIf="(!isUpdate && permissions.add) || (isUpdate && permissions.edit)"
+          >
+            <app-icon [name]="'save'"></app-icon>
+            {{ 'Submit' | translate }}
+          </button>
+        </ng-container>
+        <ng-container *ngSwitchCase="areaTypeEnum.case">
+          <button
+            *ngIf="!createDirectly && !isUpdate && permissions.add && !hideCreateAndProceedBtn"
+            mat-flat-button
+            color="primary"
+            (click)="onCaseProceed(view.form, view.model, true)"
+            [disabled]="!view.form.valid || formSubmitted"
+            class="mr-3"
+          >
+            <app-icon name="save"></app-icon>
+            <span *ngIf="!isUpdate">{{ 'Create and proceed' | translate }}</span>
+          </button>
+
+          <button
+            *ngIf="!createDirectly && !isUpdate && permissions.add && hideCreateAndProceedBtn"
+            mat-flat-button
+            color="primary"
+            (click)="onCaseCreate(view.form, view.model, true)"
+            [disabled]="!view.form.valid || formSubmitted"
+            class="mr-3"
+          >
+            <app-icon name="save"></app-icon>
+            <span *ngIf="!isUpdate">{{ 'Create' | translate }}</span>
+          </button>
+
+          <button
+            *ngIf="!createDirectly && isUpdate && permissions.edit"
+            mat-flat-button
+            color="primary"
+            (click)="onCaseProceed(view.form, view.model, false)"
+            [disabled]="!view.form.valid"
+          >
+            <app-icon name="save"></app-icon>
+            <span *ngIf="isUpdate">{{ 'Update' | translate }}</span>
+          </button>
+
+          <ng-container *ngIf="createDirectly">
+            <button class="mr-3" mat-stroked-button color="primary" (click)="onDialogClose()">
+              <app-icon name="close"></app-icon>
+              {{ 'Close' | translate }}
+            </button>
+            <button
+              *ngIf="!isUpdate && permissions.add"
+              mat-flat-button
+              color="primary"
+              (click)="onSubmit(view.form, view.model)"
+              [disabled]="!view.form.valid || formSubmitted"
+            >
+              <app-icon name="save"></app-icon>
+              {{ 'Create' | translate }}
+            </button>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="areaTypeEnum.comment">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="onSubmit(view.form, view.model)"
+            [disabled]="!view.form.valid || formSubmitted"
+            *ngIf="(!isUpdate && permissions.add) || (isUpdate && permissions.edit)"
+          >
+            <app-icon name="save"></app-icon>
+            {{ 'Submit' | translate }}
+          </button>
+        </ng-container>
+        <div *ngSwitchDefault></div>
+      </ng-container>
+    </div>
+  </mat-dialog-content>
+</ng-container>

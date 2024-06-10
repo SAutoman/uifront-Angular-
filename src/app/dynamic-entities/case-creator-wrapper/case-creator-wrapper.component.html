@@ -1,0 +1,153 @@
+<button matRipple mat-icon-button color="primary" (click)="toggleCreator()" class="close">
+  <app-icon [name]="'close'"></app-icon>
+</button>
+
+<mat-tab-group>
+  <mat-tab label="{{ 'Create Case' | translate }}">
+    <div *ngIf="addToNewLoading" class="k-i-loading"></div>
+    <div *ngIf="addToNewFailures?.length && (newWorkflow || selectedWorkflows?.length)">
+      <button class="ml-2 mt-2" mat-stroked-button color="warn" (click)="showFailedRuleInDialog()">
+        {{ 'Failed workflow(s)' }} : {{ addToNewFailures?.length }}
+      </button>
+    </div>
+    <div class="px-3 pb-3">
+      <!-- For Failed Workflows -->
+      <ng-container *ngIf="addToNewFailures?.length && !newWorkflow && !selectedWorkflows?.length">
+        <div class="no-workflow-message">
+          <h4>{{ "Case can't be created. No matching workflow found for the selection." | translate }}</h4>
+          <mat-slide-toggle class="ml-2" [checked]="showWorkflowFailedDetails" (change)="onToggle($event)">
+            {{ 'Show Details' | translate }}
+          </mat-slide-toggle>
+        </div>
+        <ng-container [ngTemplateOutlet]="failedRuleTemplate" [ngTemplateOutletContext]="{ failures: addToNewFailures }"></ng-container>
+      </ng-container>
+      <mat-form-field appearance="outline" *ngIf="addToNewWorkflows && addToNewWorkflows?.length > 1">
+        <mat-label>{{ 'Select Workflow' | translate }}</mat-label>
+        <mat-select [formControl]="addToNewWorkflowMultipleSelector" multiple>
+          <mat-option *ngFor="let wf of addToNewWorkflows" [value]="wf.workflowSchemaId">
+            {{ wf.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- For Single Selected Workflows -->
+      <ng-container *ngIf="newWorkflow">
+        <h4>{{ newWorkflow.name }}</h4>
+        <app-dynamic-entity-creator
+          [workflow]="newWorkflow"
+          [schemaId]="newCaseSchemaId"
+          [areaTypeFromGrid]="areaTypeEnum.case"
+          [allowActionsFor]="areaTypeEnum.case"
+          [rows]="rawDataDeItems"
+          [selectedGridItems]="selectedGridItems"
+          [rawDataColumns]="rawDataColumns"
+          [userId]="userId"
+          [hideCreateAndProceedBtn]="false"
+          (closeCreator)="toggleCreator()"
+        ></app-dynamic-entity-creator>
+      </ng-container>
+
+      <!-- For Multiple Selected Workflows -->
+      <ng-container *ngIf="selectedWorkflows?.length">
+        <ng-container *ngFor="let workflow of selectedWorkflows">
+          <mat-expansion-panel class="mat-elevation-z0 mb-3" [disabled]="workflow.disable" [expanded]="workflow.disable ? false : true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>{{ workflow?.workflowName }}</mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-container>
+              <app-dynamic-entity-creator
+                [workflow]="workflow.schema"
+                [schemaId]="workflow.schemaId"
+                [areaTypeFromGrid]="areaTypeEnum.case"
+                [allowActionsFor]="areaTypeEnum.case"
+                [rows]="rawDataDeItems"
+                [selectedGridItems]="selectedGridItems"
+                [rawDataColumns]="rawDataColumns"
+                [userId]="userId"
+                [hideCreateAndProceedBtn]="true"
+                (closeCreator)="toggleCreator()"
+                (caseForMultipleWorkflow)="onCaseCreatedForMultipleWorkflow($event)"
+              ></app-dynamic-entity-creator>
+            </ng-container>
+          </mat-expansion-panel>
+        </ng-container>
+      </ng-container>
+    </div>
+  </mat-tab>
+  <mat-tab label="{{ 'Add to case' | translate }}">
+    <div *ngIf="addToExistingLoading" class="k-i-loading"></div>
+    <div class="p-3">
+      <mat-form-field appearance="outline" *ngIf="addToExistingWorkflows && addToExistingWorkflows?.length > 1">
+        <mat-label>{{ 'Select Workflow' | translate }}</mat-label>
+        <mat-select [formControl]="addToExistingWorkflowSelector">
+          <mat-option *ngFor="let wf of addToExistingWorkflows" [value]="wf.workflowSchemaId">
+            {{ wf.workflowSchemaName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <ng-container *ngIf="!existingWorkflow || !caseOptions || !caseOptions.length">
+        <div class="no-workflow-message">
+          <h4>{{ "Can't add to case. No matching workflow found for the selection." | translate }}</h4>
+          <mat-slide-toggle class="ml-2" [checked]="showWorkflowFailedDetails" (change)="onToggle($event)">
+            {{ 'Show Details' | translate }}
+          </mat-slide-toggle>
+        </div>
+        <ng-container
+          [ngTemplateOutlet]="failedRuleTemplate"
+          [ngTemplateOutletContext]="{ failures: addToExistingFailures }"
+        ></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="existingWorkflow">
+        <h5>{{ existingWorkflow.workflowSchemaName }}</h5>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Available Cases' | translate }}</mat-label>
+          <mat-select (selectionChange)="onCaseSelected(caseRef)" #caseRef>
+            <div>
+              <input
+                class="mx-2 my-1"
+                type="text"
+                [placeholder]="'Search cases' | translate"
+                matInput
+                autocomplete="off"
+                [formControl]="casesSearchTerm"
+                (click)="$event.stopPropagation()"
+                (keydown)="$event.stopPropagation()"
+              />
+            </div>
+            <mat-option *ngIf="!caseOptionsListForDisplay?.length" disabled>{{ 'No Item(s) found' | translate }}</mat-option>
+            <mat-option *ngFor="let case of caseOptionsListForDisplay" [value]="case.id">
+              <div class="d-flex justify-content-between align-items-center">
+                <span [matTooltip]="case.title">{{ case?.title }}</span>
+                <button mat-stroked-button class="btn-sm" (click)="$event.stopPropagation(); showCasePreview(case.id, existingWorkflow)">
+                  {{ 'Review' | translate }}
+                </button>
+              </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="button-wrapper">
+          <button mat-flat-button color="primary" [disabled]="!caseId" (click)="updateCaseRawDataItems()">
+            {{ 'Update' | translate }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<ng-template #failedRuleTemplate let-failures="failures">
+  <app-failed-rules *ngIf="showWorkflowFailedDetails" [failures]="failures"></app-failed-rules>
+</ng-template>
+
+<ng-template #failedRulesDialog>
+  <mat-dialog-content>
+    <app-failed-rules [failures]="addToNewFailures || addToExistingFailures"></app-failed-rules>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" (click)="close()"><app-icon name="close"></app-icon>{{ 'Close' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -1,0 +1,12 @@
+<div class="history-wrapper">
+  <span>{{ 'There are no history yet on this case.' | translate }}</span>
+  <div class="spinner-wrapper">
+    <!-- <mat-spinner [diameter]="30" *ngIf="eventsUI.length == 0"></mat-spinner> -->
+  </div>
+
+  <div class="history-header-meta" *ngFor="let item of eventsUI">
+    <div class="history-header-icon"><app-icon [name]="'user'"></app-icon></div>
+    <div class="history-header-name">{{ item.userFirstName }} {{ item.userLastName }}</div>
+    <div class="history-header-date">{{ item.caseHistoryEventTypeUI }} - {{ item.date }}</div>
+  </div>
+</div>

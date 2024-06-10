@@ -1,0 +1,26 @@
+<!-- <mat-card class="card">
+  <mat-card-header class="header">
+    <mat-card-title>{{ 'Switch External Key Required' | translate }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <ng-container *ngIf="view$ | async as view">
+      <form class="p-2" [formGroup]="view.form">
+        <div class="setting-label">{{ 'Turn on/off External Key Required' | translate }}</div>
+        <formly-form [form]="view.form" [fields]="view.fields" [model]="view.model"></formly-form>
+
+        <div class="submit-wrapper">
+          <button
+            [id]="'save_' + componentId"
+            [disabled]="view.form.invalid || view.form.pristine"
+            mat-raised-button
+            color="primary"
+            (click)="onSubmit(view)"
+          >
+            <i class="material-icons">save</i>
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </mat-card-content>
+</mat-card> -->

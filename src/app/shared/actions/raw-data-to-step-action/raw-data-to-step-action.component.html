@@ -1,0 +1,31 @@
+<mat-form-field>
+  <mat-select placeholder="{{ 'Type of Copying' | translate }}" [formControl]="copyType">
+    <mat-option [value]="copyActionType.Aggregation">
+      {{ 'Aggregation' | translate }}
+    </mat-option>
+    <mat-option [value]="copyActionType.CopyRepeatable" *ngIf="showRepeatableCopy">
+      {{ 'Copy To Repeatable Step' | translate }}
+    </mat-option>
+  </mat-select>
+
+  <mat-hint *ngIf="copyType?.value === copyActionType.Aggregation">
+    {{ 'Supported for regular steps (non repeatable)' | translate }}
+  </mat-hint>
+
+  <mat-hint *ngIf="copyType?.value === copyActionType.CopyRepeatable">
+    {{ 'Copy Fields From Linked RawData' | translate }}
+  </mat-hint>
+</mat-form-field>
+<div *ngIf="isRepeatable">
+  <app-copy-to-repeatable [actionDto]="copyToRepeatableData" [workflow]="workflow" (outputEmitter)="copyToRepeatableUpdated($event)">
+  </app-copy-to-repeatable>
+</div>
+
+<div *ngIf="!isRepeatable">
+  <app-aggregation-action
+    [aggregationEventType]="aggregationEventType.RawDataToStep"
+    [actionDto]="aggregationData?.data"
+    (outputEmitter)="aggregationDataUpdated($event)"
+    [workflow]="workflow"
+  ></app-aggregation-action>
+</div>

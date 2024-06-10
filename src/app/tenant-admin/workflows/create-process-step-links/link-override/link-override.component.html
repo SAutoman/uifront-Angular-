@@ -1,0 +1,113 @@
+<h3 *ngIf="!isDefaultOverride" mat-dialog-title>{{ 'Specific Condition' | translate }}</h3>
+
+<mat-dialog-content>
+  <br />
+  <form [formGroup]="overrideForm">
+    <mat-form-field *ngIf="!isDefaultOverride">
+      <mat-select [placeholder]="'Select Status' | translate" formControlName="status">
+        <mat-option value="all">{{ 'All' | translate }}</mat-option>
+        <mat-option *ngFor="let status of statuses" [value]="status.id">{{ status?.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="!isDefaultOverride">
+      <input type="text" matInput [placeholder]="'Condition Name' | translate" formControlName="name" required />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        type="number"
+        matInput
+        [placeholder]="'How many steps can be added' | translate"
+        formControlName="numberOfInstances"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select [placeholder]="getAllowedRightsPlaceholder() | translate" multiple formControlName="rights">
+        <mat-option *ngFor="let right of allowedRightOptions" [value]="right.value" [disabled]="right.isDisabled">{{
+          right?.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select [placeholder]="getDisallowedRightsPlaceholder() | translate" multiple formControlName="disallowedRights">
+        <mat-option *ngFor="let right of disallowedRightOptions" [value]="right.value" [disabled]="right.isDisabled">{{
+          right?.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="!isDefaultOverride">
+      <app-expression-builder
+        [workflowStateSchemasData]="workflowStateSchemasData"
+        [expressionConfig]="expressionConfig"
+        [expressionDto]="expression?.data"
+        [schema]="stepSchema"
+        (expressionUpdated)="expressionUpdated($event)"
+      ></app-expression-builder>
+    </div>
+  </form>
+  <mat-card class="outline mat-elevation-z0" *ngIf="processStep">
+    <div class="d-flex align-items-center justify-content-between">
+      <h4 class="mb-2 mt-0">{{ 'Postactions Added' | translate }}</h4>
+    </div>
+    <mat-divider></mat-divider>
+    <br />
+    <ng-container *ngFor="let areaActionsData of actionsByArea">
+      <mat-card
+        *ngIf="areaActionsData.actions.length"
+        class="outline mat-elevation-z0 mb-3 pb-0"
+        cdkDropList
+        [cdkDropListData]="areaActionsData.actions"
+        (cdkDropListDropped)="onActionDrag($event, areaActionsData)"
+      >
+        <h5 class="mb-2 font-bold">{{ areaActionsData.label | translate }}</h5>
+        <mat-divider></mat-divider>
+        <div class="drag-wrapper">
+          <div
+            *ngFor="let action of areaActionsData.actions; let i = index"
+            cdkDrag
+            class="d-flex justify-content-start align-items-center"
+          >
+            <button class="move" mat-icon-button color="primary" cdkDragHandle>
+              <app-icon [name]="'drag-indicator'"></app-icon>
+            </button>
+            <p class="flex-1">
+              <b>{{ i + 1 }}. {{ action.name }}</b> (type: {{ getEventName(action.eventType) | translate }})
+            </p>
+            <div class="d-flex justify-content-end pr-3">
+              <button
+                mat-stroked-button
+                color="primary"
+                class="btn-icon mr-2 btn-sm"
+                (click)="openAction(action, i, areaActionsData.subArea)"
+              >
+                <app-icon [name]="'edit'"></app-icon>
+              </button>
+              <button mat-stroked-button color="warn" (click)="removeAction(areaActionsData.subArea, i)" class="btn-icon btn-sm">
+                <app-icon [name]="'trash'"></app-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </ng-container>
+
+    <mat-divider></mat-divider>
+    <br />
+    <div class="d-flex justify-content-end" *ngIf="processStep">
+      <button mat-flat-button color="primary" (click)="openAction()" *ngIf="processStep" class="btn-sm">
+        <app-icon name="add"></app-icon> {{ 'Add Actions' | translate }}
+      </button>
+    </div>
+  </mat-card>
+  <br
+/></mat-dialog-content>
+
+<mat-dialog-actions align="end" *ngIf="!isDefaultOverride">
+  <button mat-stroked-button class="mr-3" color="primary" (click)="close()">
+    <app-icon name="close"></app-icon>{{ 'Close' | translate }}
+  </button>
+  <button mat-flat-button color="primary" (click)="saveAndClose()" [disabled]="!overrideForm.valid || (expression && !expression.isValid)">
+    <app-icon name="save"></app-icon>{{ 'Save' | translate }}
+  </button>
+</mat-dialog-actions>

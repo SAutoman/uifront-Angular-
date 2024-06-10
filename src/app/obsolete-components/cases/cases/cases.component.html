@@ -1,0 +1,427 @@
+<!-- <div class="col-12 checkbox-area" data-area="status checkboxes">
+  <mat-checkbox
+    [id]="'open_' + componentId + '_' + status"
+    color="primary"
+    (change)="showHide($event, 'open')"
+    [checked]="userSettings?.open?.state"
+  >
+    {{ 'Open' | translate }}
+  </mat-checkbox>
+  <mat-checkbox
+    [id]="'inProgress_' + componentId + '_' + status"
+    color="primary"
+    (change)="showHide($event, 'inProgress')"
+    [checked]="userSettings?.inProgress?.state"
+  >
+    {{ 'In Progress' | translate }}
+  </mat-checkbox>
+  <mat-checkbox
+    [id]="'done_' + componentId + '_' + status"
+    color="primary"
+    (change)="showHide($event, 'done')"
+    [checked]="userSettings?.done?.state"
+  >
+    {{ 'Done' | translate }}
+  </mat-checkbox>
+  <mat-checkbox
+    [id]="'approved_' + componentId + '_' + status"
+    color="primary"
+    (change)="showHide($event, 'approved')"
+    [checked]="userSettings?.approved?.state"
+  >
+    {{ 'Approved' | translate }}
+  </mat-checkbox>
+  <mat-checkbox
+    [id]="'reopened_' + componentId + '_' + status"
+    color="primary"
+    (change)="showHide($event, 'reopened')"
+    [checked]="userSettings?.reopened?.state"
+  >
+    {{ 'Reopened' | translate }}
+  </mat-checkbox>
+
+  <a (click)="changeContainerSize()" class="sizeIcons mr-2">
+    <img *ngIf="!lgScreen" class="imageIcons" src="../../../assets/images/icon/icon-grid-2x2.png" />
+    <img *ngIf="lgScreen" class="imageIcons" src="../../../assets/images/icon/icon-grid-3x3.png" />
+  </a>
+</div>
+
+<div class="col-12 full" data-area="search field">
+  <mat-form-field class="col-xl-4 px-0 mr-2">
+    <input
+      [id]="'inputExternalKey_' + componentId"
+      matInput
+      placeholder="Filter by name"
+      type="text"
+      [(ngModel)]="searchParam"
+      #searchTerm="ngModel"
+      (keyup)="filterCases()"
+    />
+    <button mat-button *ngIf="searchParam" matSuffix mat-icon-button aria-label="Clear" (click)="searchParam = ''; filterCases()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <div class="layout-container">
+    <mat-form-field class="form">
+      <mat-label>Choose Layout</mat-label>
+      <mat-select [id]="'select_' + componentId" (selectionChange)="applyLayout($event.value)">
+        <mat-option [id]="layout.name + '_' + componentId" *ngFor="let layout of userLayouts" [value]="layout">
+          <div class="layout-name">
+            <span>{{ layout.name }} </span>
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <form [formGroup]="caseViewLayoutForm" (ngSubmit)="onCreateLayoutClicked(caseViewLayoutForm.value)" class="form" *ngIf="isSaveClicked">
+      <mat-form-field>
+        <mat-label>{{ 'Layout Name' | translate }}</mat-label>
+        <input [id]="'inputLayoutNameSave_' + componentId + '_' + status" matInput color="primary" formControlName="name" required />
+        <mat-error> {{ 'This field is required!' | translate }}</mat-error>
+      </mat-form-field>
+
+      <button
+        [id]="'saveName_' + componentId + '_' + status"
+        mat-icon-button
+        color="primary"
+        type="submit"
+        [disabled]="caseViewLayoutForm.invalid"
+        matTooltip="save layout"
+        matTooltipPosition="below"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
+    </form>
+
+    <form [formGroup]="caseViewLayoutFormUpdate" (ngSubmit)="onUpdateLayoutClicked()" class="form" *ngIf="isUpdateClicked">
+      <mat-form-field>
+        <mat-label>{{ 'selectedLayout.name' | translate }}</mat-label>
+        <input
+          [id]="'inputLayoutNameUpdate_' + componentId"
+          matInput
+          color="primary"
+          formControlName="updateName"
+          [(ngModel)]="layoutName"
+          required
+        />
+        <mat-error> {{ 'This field is required!' | translate }}</mat-error>
+      </mat-form-field>
+
+      <button
+        [id]="'updateName_' + componentId + '_' + status"
+        mat-icon-button
+        color="primary"
+        type="submit"
+        [disabled]="caseViewLayoutFormUpdate.invalid"
+        matTooltip="update layout"
+        matTooltipPosition="below"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
+    </form>
+
+    <div class="btn-wrapper">
+      <div style="display: flex">
+        <button
+          [id]="'options_' + componentId + '_' + status"
+          style="margin-right: 5px"
+          mat-stroked-button
+          color="primary"
+          [matMenuTriggerFor]="options"
+          type="button"
+        >
+          {{ 'Options' | translate }}
+        </button>
+
+        <button
+          [id]="'clear_' + componentId + '_' + status"
+          mat-stroked-button
+          color="primary"
+          (click)="clearAllCases()"
+          matTooltip="clears the selected layout"
+        >
+          {{ 'Clear' | translate }}
+        </button>
+      </div>
+
+      <mat-menu #options="matMenu" class="menu">
+        <div>
+          <button [id]="'create_' + componentId + '_' + status" mat-menu-item (click)="onSaveBtnClicked()">
+            <mat-icon class="primary">save</mat-icon>
+            {{ 'Create Layout' | translate }}
+          </button>
+
+          <button [id]="'delete_' + componentId + '_' + status" *ngIf="selectedLayout.id" mat-menu-item (click)="onDeleteButtonClicked()">
+            <mat-icon color="warn">delete_forever</mat-icon>
+            {{ 'Delete Layout' | translate }}
+          </button>
+
+          <button [id]="'update_' + componentId + '_' + status" *ngIf="selectedLayout.id" mat-menu-item (click)="onUpdateButtonClicked()">
+            <mat-icon class="info">create</mat-icon>
+            {{ 'Update Layout' | translate }}
+          </button>
+        </div>
+      </mat-menu>
+    </div>
+  </div>
+</div>
+
+<div class="cases-container" *ngIf="userSettings">
+  <div
+    *ngIf="userSettings?.open?.state"
+    [style.width]="userSettings?.open?.width"
+    class="resizableContainer"
+    mwlResizable
+    [enableGhostResize]="true"
+    (resizeEnd)="onResizeEnd($event, 'open')"
+  >
+    <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    <mat-card style="width: 100%">
+      <div class="case-status">
+        <h3 *ngIf="lgScreen" class="full">
+          {{ 'Open' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.open"></div>
+        </h3>
+        <h4 *ngIf="!lgScreen" class="full">
+          {{ 'Open' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.open"></div>
+        </h4>
+        <app-filter class="btn-right-menu" *ngIf="!isLoading.open" (event)="nameEventHandler($event)" [status]="'open'"></app-filter>
+        <button
+          *ngIf="!isLoading.open"
+          [id]="'refreshOpen_' + componentId + '_' + status"
+          mat-icon-button
+          (click)="onRefreshClicked('open')"
+          matTooltip="refresh cases"
+          matTooltipPosition="above"
+          class="btn-right-menu"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <app-filter-options
+        #openComp
+        *ngIf="status === 'open'"
+        [isName]="isName"
+        [isDate]="isDate"
+        [isCreator]="isCreator"
+        [filterStatus]="status"
+        (update)="onCasesFilterEvent($event)"
+        (loading)="caseLoading($event, 'open')"
+      ></app-filter-options>
+
+      <app-expanded-case [cases]="openCases" (onDeleteCase)="onDeleteClicked($event)"></app-expanded-case>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="userSettings?.inProgress?.state"
+    [style.width]="userSettings?.inProgress?.width"
+    class="resizableContainer"
+    mwlResizable
+    [enableGhostResize]="true"
+    (resizeEnd)="onResizeEnd($event, 'inProgress')"
+  >
+    <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    <mat-card style="width: 100%">
+      <div class="case-status">
+        <h3 *ngIf="lgScreen" class="full">
+          {{ 'In Progress' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.inProgress"></div>
+        </h3>
+        <h4 *ngIf="!lgScreen" class="full">
+          {{ 'In Progress' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.inProgress"></div>
+        </h4>
+        <app-filter
+          class="btn-right-menu"
+          *ngIf="!isLoading.inProgress"
+          (event)="nameEventHandler($event)"
+          [status]="'inProgress'"
+        ></app-filter>
+        <button
+          *ngIf="!isLoading.inProgress"
+          [id]="'refreshInProgress_' + componentId + '_' + status"
+          mat-icon-button
+          (click)="onRefreshClicked('inProgress')"
+          matTooltip="refresh cases"
+          matTooltipPosition="above"
+          class="btn-right-menu"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <app-filter-options
+        #inProgressComp
+        *ngIf="status === 'inProgress'"
+        [isName]="isName"
+        [isDate]="isDate"
+        [isCreator]="isCreator"
+        [filterStatus]="status"
+        (update)="onCasesFilterEvent($event)"
+        (loading)="caseLoading($event, 'inProgress')"
+      ></app-filter-options>
+
+      <app-expanded-case [cases]="inProgressCases" (onDeleteCase)="onDeleteClicked($event)"></app-expanded-case>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="userSettings?.done?.state"
+    [style.width]="userSettings?.done?.width"
+    class="resizableContainer"
+    mwlResizable
+    [enableGhostResize]="true"
+    (resizeEnd)="onResizeEnd($event, 'done')"
+  >
+    <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    <mat-card style="width: 100%">
+      <div class="case-status">
+        <h3 *ngIf="lgScreen" class="full">
+          {{ 'Done' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.done"></div>
+        </h3>
+        <h4 *ngIf="!lgScreen" class="full">
+          {{ 'Done' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.done"></div>
+        </h4>
+        <app-filter class="btn-right-menu" *ngIf="!isLoading.done" (event)="nameEventHandler($event)" [status]="'done'"></app-filter>
+        <button
+          *ngIf="!isLoading.done"
+          [id]="'refreshDone_' + componentId + '_' + status"
+          mat-icon-button
+          (click)="onRefreshClicked('done')"
+          matTooltip="refresh cases"
+          matTooltipPosition="above"
+          class="btn-right-menu"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <app-filter-options
+        #doneComp
+        *ngIf="status === 'done'"
+        [isName]="isName"
+        [isDate]="isDate"
+        [isCreator]="isCreator"
+        [filterStatus]="status"
+        (update)="onCasesFilterEvent($event)"
+        (loading)="caseLoading($event, 'done')"
+      ></app-filter-options>
+
+      <app-expanded-case [cases]="doneCases" (onDeleteCase)="onDeleteClicked($event)"></app-expanded-case>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="userSettings?.approved?.state"
+    [style.width]="userSettings?.approved?.width"
+    class="resizableContainer"
+    mwlResizable
+    [enableGhostResize]="true"
+    (resizeEnd)="onResizeEnd($event, 'approved')"
+  >
+    <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    <mat-card style="width: 100%">
+      <div class="case-status">
+        <h3 *ngIf="lgScreen" class="full">
+          {{ 'Approved' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.approved"></div>
+        </h3>
+        <h4 *ngIf="!lgScreen" class="full">
+          {{ 'Approved' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.approved"></div>
+        </h4>
+
+        <app-filter
+          class="btn-right-menu"
+          *ngIf="!isLoading.approved"
+          (event)="nameEventHandler($event)"
+          [status]="'approved'"
+          class="btn-right-menu"
+        ></app-filter>
+        <button
+          *ngIf="!isLoading.approved"
+          [id]="'refreshApproved_' + componentId + '_' + status"
+          mat-icon-button
+          (click)="onRefreshClicked('approved')"
+          matTooltip="refresh cases"
+          matTooltipPosition="above"
+          class="btn-right-menu"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <app-filter-options
+        #approvedComp
+        *ngIf="status === 'approved'"
+        [isName]="isName"
+        [isDate]="isDate"
+        [isCreator]="isCreator"
+        [filterStatus]="status"
+        (update)="onCasesFilterEvent($event)"
+        (loading)="caseLoading($event, 'approved')"
+      ></app-filter-options>
+
+      <app-expanded-case [cases]="approvedCases" (onDeleteCase)="onDeleteClicked($event)"></app-expanded-case>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="userSettings?.reopened?.state"
+    [style.width]="userSettings?.reopened?.width"
+    class="resizableContainer"
+    mwlResizable
+    [enableGhostResize]="true"
+    (resizeEnd)="onResizeEnd($event, 'ReOpen')"
+  >
+    <div class="resize-handle-right" mwlResizeHandle [resizeEdges]="{ right: true }"></div>
+    <mat-card style="width: 100%">
+      <div class="case-status">
+        <h3 *ngIf="lgScreen" class="full">
+          {{ 'Reopened' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.reopened"></div>
+        </h3>
+        <h4 *ngIf="!lgScreen" class="full">
+          {{ 'Reopened' | translate }}
+          <div class="k-i-loading" *ngIf="isLoading.reopened"></div>
+        </h4>
+        <app-filter
+          class="btn-right-menu"
+          *ngIf="!isLoading.reopened"
+          (event)="nameEventHandler($event)"
+          [status]="'reopened'"
+        ></app-filter>
+        <button
+          *ngIf="!isLoading.reopened"
+          [id]="'refreshReopened_' + componentId + '_' + status"
+          mat-icon-button
+          (click)="onRefreshClicked('reopened')"
+          matTooltip="refresh cases"
+          matTooltipPosition="above"
+          class="btn-right-menu"
+        >
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <app-filter-options
+        #reopenedComp
+        *ngIf="status === 'reopened'"
+        [isName]="isName"
+        [isDate]="isDate"
+        [isCreator]="isCreator"
+        [filterStatus]="status"
+        (update)="onCasesFilterEvent($event)"
+        (loading)="caseLoading($event, 'reopened')"
+      ></app-filter-options>
+
+      <app-expanded-case [cases]="reOpenCases" (onDeleteCase)="onDeleteClicked($event)"></app-expanded-case>
+    </mat-card>
+  </div>
+</div> -->

@@ -1,0 +1,23 @@
+<ng-container *ngIf="gridConfigBase">
+  <app-wfm-grid
+    #formGrid
+    [gridConfiguration]="gridConfigBase"
+    [gridData]="gridData"
+    [selectorValue]="areaType"
+    [pageTitle]="'Schemas Overview'"
+    [gridAreaType]="gridAreaType"
+    [actions]="gridActions"
+    showCreateButton="true"
+    [selectorData]="areaSelectorData"
+    [lastGridState]="state"
+    [loading]="isLoading"
+    (sortChange)="onSortChange($event)"
+    (actionEvent)="onActionClick($event)"
+    (createBtnEmitter)="toCreatePage($event)"
+    (gridSelectorEmitter)="onAreaChange($event)"
+    (paginationChange)="onPaginationChange($event)"
+  ></app-wfm-grid>
+</ng-container>
+<ng-template *ngIf="isLoading">
+  <div class="k-i-loading"></div>
+</ng-template>

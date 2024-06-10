@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>{{ headerTxt | translate }} {{ stepName }}</h2>
+
+<mat-dialog-content>
+  <mat-form-field *ngIf="resolutionOptions?.length > 1">
+    <mat-label>{{ 'Select Step Resolution:' | translate }}</mat-label>
+    <mat-select [formControl]="resolutionControl">
+      <mat-option *ngFor="let option of resolutionOptions" [value]="option.name">
+        {{ option.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-checkbox *ngIf="resolutionOptions?.length === 1" [(ngModel)]="checked"> {{ 'Remember my choice' | translate }} </mat-checkbox>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" (click)="cancel()" class="mr-2">{{ declineTxt | translate }}</button>
+  <button mat-flat-button color="primary" (click)="submit()">{{ acceptTxt | translate }}</button>
+</mat-dialog-actions>

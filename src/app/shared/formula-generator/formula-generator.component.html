@@ -1,0 +1,118 @@
+<form [formGroup]="form" *ngIf="form">
+  <h5 *ngIf="dynamicFields?.controls?.length && fields.length">Fields (optional)</h5>
+  <button *ngIf="!dynamicFields?.controls?.length && fields.length" mat-button color="primary" (click)="addDynamicFieldGroup()">
+    Add Field
+  </button>
+
+  <div formArrayName="dynamicFields">
+    <div *ngFor="let group of dynamicFields.controls; let i = index">
+      <mat-card [formGroupName]="i" class="outline mat-elevation-z0 mb-3">
+        <mat-chip>{{ group?.controls['key']?.value }}</mat-chip>
+        <button color="warn" (click)="removeDynamicFieldGroup(i)" class="close-btn">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+
+        <ng-container *ngIf="fieldsTreeNodes">
+          <mat-expansion-panel class="mt-1 mat-elevation-z0">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="font-bold">
+                {{ getFieldLabel(group) }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-tree-selectbox
+              [selectedItems]="[group?.controls['selectedFieldForTree']?.value]"
+              [rawDatasource]="fieldsTreeNodes"
+              [parentSelectionAllowed]="false"
+              [multipleSelection]="false"
+              (selectionEmitter)="fieldSelected($event, i)"
+            >
+            </app-tree-selectbox>
+          </mat-expansion-panel>
+        </ng-container>
+
+        <div *ngIf="group?.controls['sampleValueForm']?.value as view">
+          <form [formGroup]="view.form">
+            <formly-form
+              class="row"
+              [form]="view.form"
+              [fields]="view.fields"
+              [model]="view.model"
+              (modelChange)="sampleValueUpdate($event)"
+            ></formly-form>
+          </form>
+        </div>
+      </mat-card>
+    </div>
+    <div class="d-flex justify-content-end" *ngIf="dynamicFields?.controls?.length">
+      <button mat-button color="primary" (click)="addDynamicFieldGroup()">{{ 'Add Field' | translate }}</button>
+    </div>
+  </div>
+  <hr />
+
+  <h5 *ngIf="namedExpressions?.controls?.length">{{ 'Expressions (optional)' | translate }}</h5>
+
+  <button *ngIf="!namedExpressions?.controls?.length" mat-button color="primary" (click)="addNamedExpressionGroup()">
+    {{ 'Add Expression' | translate }}
+  </button>
+
+  <div formArrayName="namedExpressions" cdkDropList [cdkDropListData]="namedExpressions.controls" (cdkDropListDropped)="onDrag($event)">
+    <div *ngFor="let group of namedExpressions.controls; let i = index" cdkDrag>
+      <mat-card [formGroupName]="i" class="outline mat-elevation-z0 mb-3">
+        <mat-chip>{{ i + 1 }}</mat-chip>
+        <button *ngIf="namedExpressions.controls.length" color="warn" (click)="removeNamedExpressionGroup(i)" class="close-btn">
+          <app-icon [name]="'trash'"></app-icon>
+        </button>
+        <button *ngIf="namedExpressions.controls.length" color="warn" class="drag-btn">
+          <app-icon [name]="'drag-indicator'"></app-icon>
+        </button>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Expression Name' | translate }}</mat-label>
+          <input value="todayDate" matInput type="text" formControlName="key" />
+          <mat-error *ngIf="group.controls['key'].touched && group.controls['key'].hasError('pattern')">
+            {{ 'Please use only letters, underscores, min 1, max 255 symbols' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'Formula' | translate }}</mat-label>
+          <input matInput type="text" formControlName="formula" />
+        </mat-form-field>
+      </mat-card>
+    </div>
+    <mat-error *ngIf="namedExpressions.errors">
+      {{ namedExpressions.errors.error }}
+    </mat-error>
+    <div class="d-flex justify-content-end" *ngIf="namedExpressions?.controls?.length">
+      <button mat-button color="primary" (click)="addNamedExpressionGroup()">{{ 'Add Expression' | translate }}</button>
+    </div>
+  </div>
+  <div class="final-formula-container">
+    <mat-form-field appearance="outline" class="margin-bottom">
+      <mat-label>{{ 'Formula' | translate }}</mat-label>
+      <textarea matInput formControlName="finalExpression" rows="5"></textarea>
+      <mat-hint>
+        {{
+          'Use field placeholder (e.g. A1, B1) and expressions names to reference their values in the formula (formulas and names are case-insensitive).'
+            | translate
+        }}
+        <div>
+          {{ hintForExit | translate }}
+        </div>
+      </mat-hint>
+    </mat-form-field>
+  </div>
+
+  <!-- expressionResult can be false,0, "", so we are checking for null/undefined -->
+  <p *ngIf="resultReturned && !expressionResult?.type" class="result">
+    {{ 'The formula value:' | translate }} <b>{{ expressionResult }}</b>
+  </p>
+
+  <p class="errorResult" *ngIf="resultReturned && expressionResult?.type">{{ 'Error' | translate }}: {{ expressionResult | json }}</p>
+</form>
+<div class="action-buttons">
+  <div class="functions">
+    <app-formula-autocomplete (formulaEmitter)="finalFormulaEmitter($event)"></app-formula-autocomplete>
+  </div>
+  <button mat-stroked-button color="primary" (click)="tryIt()">{{ 'Try it' | translate }}</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="!form.valid" *ngIf="isDialog">{{ 'Submit' | translate }}</button>
+</div>

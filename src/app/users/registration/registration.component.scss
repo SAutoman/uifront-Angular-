@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+}
+
+form {
+  margin-top: 20px;
+}
+
+button[disabled] {
+  background-color: grey !important;
+  cursor: default;
+}
+.mat-form-field {
+  min-width: 0 !important;
+}

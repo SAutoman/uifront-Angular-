@@ -1,0 +1,22 @@
+<mat-dialog-content>
+  <div [formGroup]="dateTimeForm">
+    <mat-calendar [selected]="dateControlValue" (selectedChange)="updateSelectedDate($event)"></mat-calendar>
+    <mat-form-field class="timePicker">
+      <mat-label>{{ 'Time' | translate }}</mat-label>
+      <input matInput type="text" formControlName="timeControl" />
+      <mat-error *ngIf="timeControl.value && timeControl.hasError('time')"> {{ 'Invalid Time' | translate }}</mat-error>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="processPickerDateTime()"
+    [disabled]="!dateControlValue || !timeControl.value || !timeControl.valid"
+  >
+    <app-icon name="save"></app-icon>
+    {{ 'Save' | translate }}
+  </button>
+</mat-dialog-actions>

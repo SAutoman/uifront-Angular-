@@ -1,0 +1,18 @@
+kendo-signature {
+  width: 100%;
+  aspect-ratio: 16/6;
+  min-height: 0 !important;
+  .k-signature-actions-top {
+    display: none;
+  }
+
+  .k-signature-actions-bottom {
+    position: absolute !important;
+    top: 4px;
+    right: 4px;
+  }
+  canvas {
+    aspect-ratio: 16/6 !important;
+    height: auto !important;
+  }
+}

@@ -1,0 +1,15 @@
+<mat-expansion-panel class="mat-elevation-z0 mb-3">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <h4>{{ key }}</h4>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <form [formGroup]="appSettingsForm" (ngSubmit)="onSubmit()">
+    <div class="mb-2">
+      <mat-checkbox formControlName="enabled">Enabled</mat-checkbox>
+    </div>
+    <div class="text-right">
+      <button mat-flat-button color="primary" type="submit">Save</button>
+    </div>
+  </form>
+</mat-expansion-panel>

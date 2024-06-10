@@ -1,0 +1,107 @@
+@import '../../../assets/styles/variable';
+:host {
+  display: block;
+}
+.slide-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.canvas-wrapper {
+  position: relative;
+}
+.zoom-info {
+  padding: 12px 16px;
+  app-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+  }
+}
+.k-i-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 64px;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(3px);
+  color: gray;
+  z-index: 10;
+}
+.sub-title-bar {
+  height: 32px;
+  border-bottom: solid thin $border;
+  justify-content: center;
+  display: flex;
+  position: relative;
+  background-color: $white;
+
+  label {
+    font-size: 14px;
+    line-height: 32px;
+  }
+  > .mx-auto {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+  }
+  .rename {
+    height: 32px;
+    line-height: 32px;
+    max-width: auto !important;
+    width: auto !important;
+    font-size: 14px;
+    text-align: center;
+    background-color: $bodycolor;
+    padding: 0 16px;
+  }
+  // input {
+  //   border: none !important;
+  //   background-color: transparent !important;
+  //   height: 32px;
+  //   max-width: auto !important;
+  //   width: auto !important;
+  //   font-size: 14px;
+  //   text-align: center;
+  // }
+  .tools {
+    display: flex;
+    margin-left: auto;
+  }
+  ::ng-deep {
+    button {
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      min-height: 32px !important;
+      width: 32px !important;
+      span {
+        app-icon {
+          margin: 0 !important;
+        }
+      }
+      &.selected {
+        background-color: $themecolor;
+        span {
+          app-icon {
+            stroke: $white !important;
+          }
+        }
+      }
+      &.last-active {
+        background-color: rgba($themecolor, 0.3) !important;
+        span {
+          app-icon {
+            stroke: $white !important;
+          }
+        }
+      }
+    }
+  }
+}

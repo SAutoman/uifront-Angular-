@@ -1,0 +1,84 @@
+<mat-card class="mb-3 mat-elevation-z0 outline">
+  <h4 *ngIf="expressionConfig.title">{{ expressionConfig.title }}</h4>
+  <div *ngIf="view">
+    <div *ngIf="expressionConfig.userRolesLabel && view.userRoles?.form">
+      <form class="" [formGroup]="view.userRoles.form">
+        <formly-form
+          class="d-flex w-100"
+          [form]="view.userRoles.form"
+          [fields]="view.userRoles.fields"
+          [model]="view.userRoles.model"
+        ></formly-form>
+      </form>
+    </div>
+
+    <div *ngIf="expressionConfig.userGroupsLabel && view.userGroups?.form">
+      <form class="" [formGroup]="view.userGroups.form">
+        <formly-form
+          class="d-flex w-100"
+          [form]="view.userGroups.form"
+          [fields]="view.userGroups.fields"
+          [model]="view.userGroups.model"
+        ></formly-form>
+      </form>
+    </div>
+
+    <mat-tab-group class="m-t-10" *ngIf="expressionConfig.rules">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div class="tab-title">{{ 'Field Rules' | translate }}</div>
+          <div class="circle" *ngIf="view.rules?.length">{{ view.rules.length }}</div>
+        </ng-template>
+        <div class="m-t-10">
+          <form class="" [formGroup]="view.condition.form">
+            <formly-form
+              class="d-flex w-100"
+              [form]="view.condition.form"
+              [fields]="view.condition.fields"
+              [model]="view.condition.model"
+            ></formly-form>
+          </form>
+          <ng-container *ngFor="let rule of view.rules">
+            <form class="" [formGroup]="rule.form">
+              <formly-form [form]="rule.form" [fields]="rule.fields" [model]="rule.model"></formly-form>
+            </form>
+          </ng-container>
+
+          <button class="mb-3 btn-sm" (click)="addRule(1)" mat-stroked-button color="primary">
+            <app-icon [name]="'add'"></app-icon>
+            {{ 'Add Rule' | translate }}
+          </button>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <div>{{ 'Step Resolution Rules' | translate }}</div>
+          <div class="circle" *ngIf="view.stepResolutionRules?.length">{{ view.stepResolutionRules.length }}</div>
+        </ng-template>
+        <div class="m-t-10">
+          <form class="" [formGroup]="view.resolutionsCondition.form">
+            <formly-form
+              class="d-flex w-100"
+              [form]="view.resolutionsCondition.form"
+              [fields]="view.resolutionsCondition.fields"
+              [model]="view.resolutionsCondition.model"
+            ></formly-form>
+          </form>
+          <ng-container *ngFor="let rule of view.stepResolutionRules">
+            <form class="" [formGroup]="rule.form">
+              <formly-form [form]="rule.form" [fields]="rule.fields" [model]="rule.model"></formly-form>
+            </form>
+          </ng-container>
+          <button class="mb-3 btn-sm" (click)="addRule(2)" mat-stroked-button color="primary">
+            <app-icon [name]="'add'"></app-icon>
+            {{ 'Add Resolution Rule' | translate }}
+          </button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <button *ngIf="expressionConfig.buttons" mat-raised-button color="primary" (click)="onSubmit()">
+    {{ 'Save' | translate }}
+  </button>
+</mat-card>

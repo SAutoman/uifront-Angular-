@@ -1,0 +1,45 @@
+@import '../../../../assets/styles/variable.scss';
+:host {
+  ::ng-deep {
+    .mat-dialog-container .mat-dialog-content .button-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .button-wrapper {
+      position: sticky;
+      bottom: 0;
+      padding: 16px;
+      background-color: white;
+      z-index: 100;
+      border-top: solid thin $dark-dividers;
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+  }
+}
+
+app-field-editor {
+  .use-in-form-group {
+    .mat-form-field-infix {
+      padding: 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    .mat-form-field-label-wrapper {
+      padding-top: 0;
+    }
+  }
+
+  app-formly-right-button-addon {
+    width: 100%;
+  }
+  .form-group-container {
+    max-width: 420px;
+    min-height: 300px;
+    // todo overflow scroll
+  }
+}

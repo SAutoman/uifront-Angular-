@@ -1,0 +1,97 @@
+<div *ngIf="isLoading" class="spinner-container">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+
+<div class="canvas-wrapper">
+  <div class="tools">
+    <button
+      mat-icon-button
+      #canvasZoomTrigger="matMenuTrigger"
+      color="primary"
+      (mouseover)="openMenu(canvasZoomTrigger)"
+      [matMenuTriggerFor]="canvasZoom"
+      place
+    >
+      <app-icon [name]="'search'"></app-icon>
+    </button>
+    <mat-menu [overlapTrigger]="true" #canvasZoom="matMenu" yPosition="above" xPosition="after" class="zoom-options">
+      <div
+        (click)="$event.stopPropagation()"
+        (keydown)="$event.stopPropagation()"
+        (mouseleave)="closeMenu(canvasZoomTrigger)"
+        class="d-flex"
+      >
+        <button mat-icon-button color="primary" (click)="zoomOut()" matTooltip="{{ 'Zoom Out' | translate }}" matTooltipPosition="above">
+          <app-icon [name]="'zoom-out'"></app-icon>
+        </button>
+
+        <button mat-icon-button color="primary" (click)="zoomIn()" matTooltip="{{ 'Zoom In' | translate }}" matTooltipPosition="above">
+          <app-icon [name]="'zoom-in'"></app-icon>
+        </button>
+      </div>
+    </mat-menu>
+
+    <!-- <button mat-icon-button [ngClass]="canvas && !isDraggingMode ? 'mat-primary' : 'mat-warn'" (click)="toggleDragging()">
+      <app-icon
+        [name]="'move'"
+        *ngIf="!isDraggingMode"
+        matTooltip="{{ 'Start Dragging' | translate }}"
+        matTooltipPosition="after"
+      ></app-icon>
+      <app-icon
+        [name]="'move'"
+        *ngIf="isDraggingMode"
+        matTooltip="{{ 'Stop Dragging' | translate }}"
+        matTooltipPosition="after"
+        class="danger"
+      ></app-icon>
+    </button> -->
+  </div>
+
+  <canvas id="yardViewer"></canvas>
+
+  <mat-card *ngIf="!isLoading && mappedWorkflowStates" class="mat-elevation-z0 outline case-sidebar">
+    <button mat-icon-button color="warn" (click)="hideMappedCases()" class="position-absolute" style="top: 0; right: 0; z-index: 2">
+      <app-icon [name]="'close'"></app-icon>
+    </button>
+    <h4 class="mt-1">
+      {{ 'Cases mapped to' | translate }} <u>{{ selectedUnit.name }}</u>
+    </h4>
+    <div *ngIf="!mappedWorkflowStates.length">
+      <small>
+        {{ 'No cases mapped to your company' | translate }}
+      </small>
+    </div>
+    <ng-container *ngIf="mappedWorkflowStates.length">
+      <div *ngFor="let item of mappedWorkflowStates; let i = index" class="caseWrapper">
+        <div class="workflowStateItem" [matTooltip]="item?.titleHint">
+          {{ i + 1 }}.
+          <span [innerHTML]="item.caseNameField | sanitize: 'html'"></span>
+        </div>
+        <button
+          mat-stroked-button
+          color="primary"
+          class="btn-sm"
+          (click)="processWorkflowState(item, false)"
+          matTooltip="{{ 'Process' | translate }}"
+          matTooltipPosition="before"
+          *ngIf="showProcessButton"
+        >
+          <app-icon [name]="'workflow'"></app-icon>
+        </button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          class="btn-sm ml-1"
+          (click)="processWorkflowState(item, true)"
+          matTooltip="{{ 'Edit' | translate }}"
+          matTooltipPosition="before"
+          *ngIf="showEditButton"
+        >
+          <app-icon [name]="'edit'"></app-icon>
+        </button>
+      </div>
+    </ng-container>
+  </mat-card>
+</div>

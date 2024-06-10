@@ -1,0 +1,141 @@
+<!-- <app-form-image *ngIf="useUploadImageSection" (onUpload)="onUpload($event)" [image]="image"></app-form-image>
+<mat-card>
+  <div class="field-selector-container">
+    <h2>Select Field</h2>
+    <mat-form-field class="example-full-width">
+      <input
+        [id]="'inputFormName_' + componentId"
+        matInput
+        placeholder="Form name"
+        [(ngModel)]="formName"
+        #formNameInput="ngModel"
+        required
+        class="form-name"
+      />
+      <mat-error *ngIf="formNameInput.invalid && (formNameInput.dirty || formNameInput.touched)"> Name is required.</mat-error>
+    </mat-form-field>
+    <mat-slide-toggle [id]="'toggleFieldsList_' + componentId" color="primary" (change)="onToggleChecked($event)"
+      >Show {{ showTextToggle }}</mat-slide-toggle
+    >
+
+    <mat-form-field *ngIf="!isLists && searchFieldFields">
+      <input [id]="'searchFields_' + componentId" matInput type="text" placeholder="Search" [formControl]="searchFieldFields" />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isLists && searchFieldLists">
+      <input [id]="'searchLists_' + componentId" matInput type="text" placeholder="Search" [formControl]="searchFieldLists" />
+    </mat-form-field>
+
+    <div
+      [id]="'sourceFields_' + componentId"
+      cdkDropList
+      #selectList="cdkDropList"
+      [cdkDropListData]="interChangeableFields"
+      [cdkDropListConnectedTo]="[selectedList]"
+      class="fields-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div cdkDrag [cdkDragData]="item" class="fields-box" *ngFor="let item of interChangeableFields">
+        {{ item.name }}
+        <div class="remove-btn-wrapper">
+          <button mat-icon-button color="warn" [id]="item.name + '_' + componentId" (click)="onSelectableFieldsAdd(item)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+    </mat-paginator>
+    <app-custom-field [isNew]="true" (onFieldCreated)="onCreate($event)"></app-custom-field>
+  </div>
+
+  <div class="field-selector-container">
+    <h2>Selected Fields</h2>
+
+    <div
+      [id]="selectedFormFieldsId"
+      cdkDropList
+      #selectedList="cdkDropList"
+      [cdkDropListData]="formFields"
+      [cdkDropListConnectedTo]="[selectList]"
+      class="fields-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="fields-box" *ngFor="let item of formFields; let i = index" cdkDrag [cdkDragData]="item">
+        <div class="name" *ngIf="item.name.length < 35; else longName">{{ item.name }}</div>
+        <ng-template #longName>
+          <div class="name" [matTooltip]="item.name" matTooltipPosition="before">{{ item.name.slice(0, 20) }}..... details</div>
+        </ng-template>
+        <mat-accordion>
+          <mat-expansion-panel [id]="'panelFieldsInfo_' + componentId" class="field-info mat-elevation-z0 mb-3">
+            <mat-expansion-panel-header>
+              <mat-panel-title *ngIf="fieldTypeViewMap.hasValue(item.type)">{{ fieldTypeViewMap.getValue(item.type) }}</mat-panel-title>
+              <mat-panel-description> Enter details for this field </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <app-render-field-wrapper
+              [fieldType]="item.type"
+              [model]="item.model"
+              [renderType]="item.model.renderType"
+              [fieldId]="item.id"
+            ></app-render-field-wrapper>
+            <app-custom-field
+              [field]="item"
+              [listItems]="item.listItems"
+              [isNew]="false"
+              [isCustom]="item.model.isCustom"
+            ></app-custom-field>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div class="remove-btn-wrapper">
+          <button
+            [id]="'close_' + i + '_' + componentId"
+            mat-icon-button
+            color="warn"
+            (click)="onSelectedFieldRemove(item)"
+            matTooltip="Remove Field"
+            matTooltipPosition="after"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="useBuildFunction">
+    <mat-accordion *ngIf="functionFields.length > 0">
+      <mat-expansion-panel
+        [id]="'panelFunctions_' + componentId"
+        (opened)="isFuncBuilderExpanded = true"
+        (closed)="isFuncBuilderExpanded = false"
+        [expanded]="isFuncBuilderExpanded"
+        class="mat-elevation-z0 mb-3"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>Build Functions</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <app-function-builder-wrapper
+          *ngIf="isFuncBuilderExpanded"
+          [items]="functionFields"
+          [tenant]="tenant"
+          [functions]="functions"
+        ></app-function-builder-wrapper>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
+</mat-card>
+
+<mat-card>
+  <mat-tab-group>
+    <mat-tab label="Form Preview">
+      <app-form-canvas
+        [name]="formName"
+        [formFields]="formFields"
+        *ngIf="formFields.length > 0 && formName"
+        (isFormSubmited)="onFormSubmited()"
+        (isCopySubmited)="onCopySubmited()"
+      ></app-form-canvas>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card> -->

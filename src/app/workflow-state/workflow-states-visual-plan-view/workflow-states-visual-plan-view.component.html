@@ -1,0 +1,227 @@
+<div class="k-i-loading" *ngIf="loading$ | async"></div>
+
+<div class="title-bar">
+  <div class="tools" *ngIf="workflow">
+    <h4 class="px-3">{{ workflow?.name }}</h4>
+    <mat-form-field *ngIf="allVisualPlanConfigs?.length" class="select-with-label">
+      <mat-label>{{ 'Select Visual' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedVisualPlanConfigId" (selectionChange)="onVisualSelection($event)">
+        <mat-option *ngFor="let plan of allVisualPlanConfigs" [value]="plan.workflowVisualPlanId">{{ plan.name }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      class="tool-button"
+      matRipple
+      (click)="createVisual()"
+      matTooltip="{{ 'New Visual' | translate }}"
+      *ngIf="userRole === roles.TenantAdmin"
+    >
+      <app-icon [name]="'add'"></app-icon>
+    </button>
+  </div>
+
+  <div class="tools">
+    <div class="zoom-info">
+      <app-icon class="info-icon" [name]="'info'" matTooltip="{{ zoomMessage | translate }}" matTooltipPosition="after"></app-icon>
+    </div>
+  </div>
+</div>
+
+<div class="sub-title-bar" *ngIf="userRole === roles.TenantAdmin">
+  <div class="mx-auto d-flex align-items-center">
+    <label *ngIf="!activeRename && selectedVisualPlanConfig">{{ newPlanName | translate }}</label>
+    <div
+      #newPlanNameElement
+      class="rename"
+      contenteditable="true"
+      focus="true"
+      [(textContent)]="newPlanName"
+      (keyup)="planNameInputKeyup($event)"
+      *ngIf="activeRename && (selectedVisualPlanConfig || isSetupMode)"
+    ></div>
+
+    <button
+      mat-icon-button
+      color="primary"
+      class="btn-sm"
+      (click)="saveVisualPlanConfig()"
+      matTooltip="{{ 'Save' | translate }}"
+      matTooltipPosition="below"
+      *ngIf="selectedVisualPlanConfig && activeRename"
+    >
+      <app-icon [name]="'check'" class="disable"></app-icon>
+    </button>
+
+    <button
+      *ngIf="(selectedVisualPlanConfig || isSetupMode) && !mobileQuery.matches"
+      mat-icon-button
+      color="primary"
+      [matMenuTriggerFor]="smallScreenMenu"
+      place
+      style="max-height: 32px"
+    >
+      <app-icon [name]="'more'" style="width: 16px; height: 16px"></app-icon>
+    </button>
+    <mat-menu #smallScreenMenu="matMenu" class="visual-menu-options">
+      <button
+        mat-menu-item
+        color="warn"
+        class="saveBtn btn-sm mr-1"
+        (click)="resetCanvasClicked()"
+        *ngIf="(isSetupMode || isEditMode || selectedVisualPlanConfig) && !activeView"
+      >
+        <app-icon [name]="'refresh-layout'"></app-icon>
+        {{ 'Reset Visual' | translate }}
+      </button>
+
+      <button
+        mat-menu-item
+        class="saveBtn btn-sm"
+        (click)="saveVisualPlanConfig()"
+        [disabled]="!newPlanName"
+        *ngIf="isSetupMode || (isEditMode && selectedVisualPlanConfig)"
+      >
+        <app-icon [name]="'save'"></app-icon>
+        {{ 'Save' | translate }}
+      </button>
+
+      <button
+        mat-menu-item
+        *ngIf="isEditMode && selectedVisualPlanConfig"
+        isStepTwoReady
+        class="saveBtn btn-sm mr-1"
+        (click)="deleteVisualPlan()"
+      >
+        <app-icon [name]="'trash'"></app-icon>
+        {{ 'Delete' | translate }}
+      </button>
+
+      <button
+        *ngIf="selectedVisualPlanConfig"
+        mat-menu-item
+        [class]="activeEdit ? 'selected' : ''"
+        class="saveBtn btn-sm mr-2"
+        (click)="toggleEdit()"
+      >
+        <app-icon [name]="'edit'"></app-icon>
+        {{ 'Edit' | translate }}
+      </button>
+      <button
+        *ngIf="selectedVisualPlanConfig"
+        mat-menu-item
+        [class]="activeView ? 'selected' : ''"
+        class="saveBtn btn-sm mr-1"
+        (click)="toggleViewCanvas()"
+      >
+        <app-icon [name]="'eye'"></app-icon>
+        {{ 'View' | translate }}
+      </button>
+
+      <button
+        mat-menu-item
+        *ngIf="isEditMode && selectedVisualPlanConfig"
+        [class]="activeRename ? 'selected' : ''"
+        class="saveBtn btn-sm mr-1"
+        (click)="renameVisualPlan()"
+      >
+        <app-icon [name]="'rename'"></app-icon>
+        {{ 'Rename' | translate }}
+      </button>
+    </mat-menu>
+  </div>
+
+  <div class="tools" *ngIf="(selectedVisualPlanConfig || isSetupMode) && mobileQuery.matches">
+    <button
+      mat-icon-button
+      color="warn"
+      class="saveBtn btn-sm mr-1"
+      matTooltip="{{ 'Reset Visual' | translate }}"
+      (click)="resetCanvasClicked()"
+      *ngIf="(isSetupMode || isEditMode || selectedVisualPlanConfig) && !activeView"
+    >
+      <app-icon [name]="'refresh-layout'"></app-icon>
+    </button>
+    <button
+      mat-icon-button
+      color="primary"
+      class="saveBtn btn-sm"
+      (click)="saveVisualPlanConfig()"
+      matTooltip="{{ 'Save Changes' | translate }}"
+      matTooltipPosition="below"
+      [disabled]="!newPlanName"
+      *ngIf="isSetupMode || (isEditMode && selectedVisualPlanConfig)"
+    >
+      <app-icon [name]="'save'"></app-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      *ngIf="isEditMode && selectedVisualPlanConfig"
+      color="warn"
+      class="saveBtn btn-sm mr-1"
+      (click)="deleteVisualPlan()"
+      matTooltip="{{ 'Delete' | translate }}"
+      matTooltipPosition="below"
+    >
+      <app-icon [name]="'trash'"></app-icon>
+    </button>
+
+    <button
+      *ngIf="selectedVisualPlanConfig"
+      mat-icon-button
+      [class]="activeEdit ? 'selected' : lastActiveEdit ? 'last-active' : ''"
+      class="saveBtn btn-sm mr-2"
+      (click)="toggleEdit()"
+      matTooltip="{{ 'Edit' | translate }}"
+      matTooltipPosition="below"
+    >
+      <app-icon [name]="'edit'" class="disable"></app-icon>
+    </button>
+    <button
+      mat-icon-button
+      [class]="activeView ? 'selected' : lastActiveView ? 'last-active' : ''"
+      class="saveBtn btn-sm mr-1"
+      (click)="toggleViewCanvas()"
+      matTooltip="{{ 'View' | translate }}"
+      matTooltipPosition="below"
+      *ngIf="selectedVisualPlanConfig"
+    >
+      <app-icon [name]="'eye'" class="disable"></app-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      *ngIf="isEditMode && selectedVisualPlanConfig"
+      [class]="activeRename ? 'selected' : ''"
+      class="saveBtn btn-sm mr-1"
+      (click)="renameVisualPlan()"
+      matTooltip="{{ 'Rename' | translate }}"
+      matTooltipPosition="below"
+    >
+      <app-icon [name]="'rename'" class="disable"></app-icon>
+    </button>
+  </div>
+</div>
+
+<div class="canvas-wrapper" *ngIf="selectedVisualPlanConfig || isSetupMode">
+  <app-plan-editor-canvas
+    *ngIf="userRole === roles.TenantAdmin && (isEditMode || isSetupMode)"
+    [workflow]="workflow"
+    [schema]="schema"
+    [visualPlanConfig$]="selectedVisualPlanConfig$"
+    [saveClickEvent]="saveClicked$"
+    [resetCanvas$]="resetVisualPlan$"
+    (updateListEmitter)="updateList($event)"
+    #canvasTools
+  >
+  </app-plan-editor-canvas>
+  <app-plan-viewer
+    *ngIf="(!isSetupMode && !isEditMode) || isViewMode"
+    [showProcessButton]="showProcessButton"
+    [showEditButton]="showEditButton"
+    [workflow]="workflow"
+    [visualPlanConfig$]="selectedVisualPlanConfig$"
+    [caseSchema]="schema"
+  >
+  </app-plan-viewer>
+</div>

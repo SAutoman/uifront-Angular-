@@ -1,0 +1,55 @@
+<ng-container [ngSwitch]="triggerType">
+  <form [formGroup]="actionEventForm">
+    <ng-container *ngSwitchCase="eventTypes.ProcessStepResolution">
+      <mat-form-field>
+        <mat-select
+          [placeholder]="'Select Process Step' | translate"
+          formControlName="processStepLinkId"
+          (selectionChange)="onStepChange($event)"
+        >
+          <mat-option *ngFor="let step of source?.processStepLinks" [value]="step.refName">{{ step?.refName }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          [placeholder]="'Select Resolutions' | translate"
+          formControlName="stepResolutions"
+          (selectionChange)="emitValue()"
+          multiple
+          [disabled]="!actionEventForm.get('processStepLinkId')?.value"
+        >
+          <mat-option *ngFor="let resolution of resolutionsList" [value]="resolution.name">{{ resolution?.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="eventTypes.StatusChange">
+      <mat-form-field>
+        <mat-select formControlName="statusTransition" (selectionChange)="emitValue()" [placeholder]="'Select Status' | translate">
+          <mat-option *ngFor="let status of statusTransitionsList" [value]="status.id">{{ status?.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="eventTypes.CaseUpdate">
+      <div *ngIf="sourceCaseSchema">
+        <app-rules-builder
+          [expressionConfig]="caseExpressionConfig"
+          (expressionUpdated)="expressionUpdated($event)"
+          [schema]="sourceCaseSchema"
+          [expressionDto]="expression?.data"
+        ></app-rules-builder>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="eventTypes.CaseCreate">
+      <div *ngIf="sourceCaseSchema">
+        <app-rules-builder
+          [expressionConfig]="caseExpressionConfig"
+          (expressionUpdated)="expressionUpdated($event)"
+          [schema]="sourceCaseSchema"
+          [expressionDto]="expression?.data"
+        ></app-rules-builder>
+      </div>
+    </ng-container>
+  </form>
+</ng-container>
